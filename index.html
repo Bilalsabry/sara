@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Sara Raelle Mehrotra 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rose: #f4a7b9;
+      --deep-rose: #c2647a;
+      --blush: #fce4ec;
+      --cream: #fff9f9;
+      --mauve: #8b4b6b;
+      --text: #3d2030;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(255,249,249,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(244,167,185,0.3);
+      display: flex; justify-content: center; gap: 2rem;
+      padding: 1rem 2rem;
+    }
+    nav a {
+      text-decoration: none; color: var(--mauve);
+      font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--deep-rose); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      background: linear-gradient(160deg, #ffe0e9 0%, #fff0f5 50%, #fce4ec 100%);
+      position: relative; overflow: hidden;
+      padding-top: 5rem;
+    }
+    #heart-canvas {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-inner .eyebrow {
+      font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--deep-rose); margin-bottom: 1rem;
+    }
+    .hero-inner h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      color: var(--mauve); line-height: 1.1;
+    }
+    .hero-inner h1 em { color: var(--deep-rose); font-style: italic; }
+    .hero-inner p {
+      margin-top: 1.5rem; font-size: 1.15rem;
+      color: #7a4060; max-width: 480px;
+      font-weight: 300; line-height: 1.7;
+    }
+    .scroll-hint {
+      margin-top: 3rem; font-size: 1.8rem;
+      animation: bounce 1.8s infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translateY(0)}50%{transform:translateY(8px)} }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 2rem; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--mauve); text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .section-sub {
+      text-align: center; color: var(--deep-rose);
+      font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── LETTER ── */
+    #letter { background: var(--blush); }
+    .letter-card {
+      max-width: 700px; margin: 0 auto;
+      background: white; border-radius: 2rem;
+      padding: 3rem 3.5rem;
+      box-shadow: 0 8px 40px rgba(194,100,122,0.12);
+      border: 1px solid rgba(244,167,185,0.4);
+      font-size: 1.05rem; line-height: 1.9; color: #4a2535;
+    }
+    .letter-card .date {
+      font-size: 0.85rem; color: var(--deep-rose);
+      text-transform: uppercase; letter-spacing: 0.15em;
+      margin-bottom: 1.5rem;
+    }
+    .letter-card p { margin-bottom: 1.2rem; }
+    .letter-card .sign { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem; color: var(--mauve); margin-top: 2rem; }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--cream); }
+    .gallery-upload-note {
+      text-align: center; color: var(--deep-rose);
+      background: white; border: 2px dashed var(--rose);
+      border-radius: 1.5rem; padding: 2rem;
+      max-width: 700px; margin: 0 auto 2rem;
+      font-size: 0.95rem; line-height: 1.7;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem; max-width: 1000px; margin: 0 auto;
+    }
+    .gallery-card {
+      border-radius: 1.2rem; overflow: hidden;
+      aspect-ratio: 4/5;
+      background: linear-gradient(135deg, #f9d0dc, #fce4ec);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 16px rgba(194,100,122,0.15);
+      position: relative;
+    }
+    .gallery-card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 12px 32px rgba(194,100,122,0.25); }
+    .gallery-card img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-card .placeholder-label {
+      position: absolute; bottom: 0.8rem; left: 0; right: 0;
+      text-align: center; font-size: 0.75rem; font-family: 'Lato', sans-serif;
+      color: var(--deep-rose); letter-spacing: 0.08em;
+    }
+    #photo-input { display: none; }
+    .upload-btn {
+      display: block; margin: 1.5rem auto 0;
+      background: var(--deep-rose); color: white;
+      border: none; border-radius: 2rem; padding: 0.8rem 2rem;
+      font-size: 0.95rem; cursor: pointer; transition: background 0.2s;
+    }
+    .upload-btn:hover { background: var(--mauve); }
+
+    /* ── TIMELINE ── */
+    #timeline { background: linear-gradient(180deg, #fff0f5, var(--blush)); }
+    .timeline-wrap { max-width: 700px; margin: 0 auto; position: relative; }
+    .timeline-wrap::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(180deg, var(--rose), var(--deep-rose));
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      display: flex; gap: 2rem; margin-bottom: 2.5rem;
+      align-items: flex-start;
+    }
+    .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+    .tl-dot {
+      flex-shrink: 0; width: 1rem; height: 1rem;
+      background: var(--deep-rose); border-radius: 50%;
+      border: 3px solid white; box-shadow: 0 0 0 3px var(--rose);
+      margin-top: 0.4rem; position: relative; z-index: 1;
+      align-self: flex-start;
+    }
+    .tl-card {
+      background: white; border-radius: 1.2rem;
+      padding: 1.4rem 1.8rem; flex: 1;
+      box-shadow: 0 4px 20px rgba(194,100,122,0.1);
+      border: 1px solid rgba(244,167,185,0.3);
+    }
+    .tl-card .tl-date {
+      font-size: 0.78rem; color: var(--deep-rose);
+      text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.4rem;
+    }
+    .tl-card h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--mauve); margin-bottom: 0.4rem; }
+    .tl-card p { font-size: 0.9rem; color: #6a4050; line-height: 1.6; }
+    .tl-card .tl-emoji { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+
+    /* ── GAMES ── */
+    #games { background: var(--cream); }
+    .games-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem; max-width: 900px; margin: 0 auto;
+    }
+    .game-panel {
+      background: white; border-radius: 1.5rem;
+      padding: 2rem; text-align: center;
+      box-shadow: 0 4px 24px rgba(194,100,122,0.12);
+      border: 1px solid rgba(244,167,185,0.3);
+    }
+    .game-panel h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--mauve); margin-bottom: 0.5rem; }
+    .game-panel p { font-size: 0.9rem; color: #7a4060; margin-bottom: 1.2rem; line-height: 1.6; }
+
+    /* catch hearts */
+    #catch-canvas { border-radius: 1rem; background: linear-gradient(180deg,#ffe0e9,#fff0f5); display: block; margin: 0 auto; cursor: none; }
+    #catch-score { font-size: 1.1rem; font-weight: 700; color: var(--deep-rose); margin-top: 0.8rem; }
+
+    /* quiz */
+    .quiz-q { font-size: 1.05rem; color: var(--mauve); margin-bottom: 1rem; line-height: 1.5; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+    .quiz-opt {
+      background: var(--blush); border: 2px solid transparent;
+      border-radius: 2rem; padding: 0.6rem 1.2rem;
+      cursor: pointer; transition: all 0.2s; font-size: 0.9rem; color: var(--text);
+    }
+    .quiz-opt:hover { border-color: var(--rose); background: white; }
+    .quiz-opt.correct { background: #d4f5e2; border-color: #4caf82; color: #1a5c3a; }
+    .quiz-opt.wrong { background: #fde2e2; border-color: #e07070; color: #7a1f1f; }
+    #quiz-result { margin-top: 1rem; font-weight: 700; font-size: 1rem; color: var(--mauve); }
+    .quiz-next {
+      margin-top: 1rem; background: var(--deep-rose); color: white;
+      border: none; border-radius: 2rem; padding: 0.6rem 1.5rem;
+      cursor: pointer; font-size: 0.9rem; display: none;
+    }
+    .quiz-next:hover { background: var(--mauve); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: linear-gradient(135deg, #f4a7b9, #c2647a);
+      color: white; text-align: center; padding: 3rem 2rem;
+    }
+    footer h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 0.5rem; }
+    footer p { opacity: 0.85; font-size: 0.95rem; }
+
+    /* floating hearts on scroll */
+    .float-heart {
+      position: fixed; pointer-events: none; z-index: 999;
+      font-size: 1.2rem; animation: floatUp 2s ease forwards;
+    }
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+    }
+
+    @media(max-width:600px){
+      .timeline-wrap::before { left: 1.2rem; }
+      .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; padding-left: 3rem; }
+      .tl-dot { position: absolute; left: 0.7rem; }
+      .timeline-item { position: relative; }
+      nav { gap: 1rem; flex-wrap: wrap; font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero">Home</a>
+  <a href="#letter">Letter</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#timeline">Us</a>
+  <a href="#games">Games</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="heart-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="eyebrow">Made with love, just for you</div>
+    <h1>For<br/><em>Sara Raelle Mehrotra</em></h1>
+    <p>A little corner of the internet that's entirely, completely, and forever yours. 💕</p>
+    <div class="scroll-hint">↓</div>
+  </div>
+</section>
+
+<!-- LETTER -->
+<section id="letter">
+  <h2 class="section-title">A Letter For You</h2>
+  <p class="section-sub">From my heart to yours</p>
+  <div class="letter-card">
+    <div class="date">July 2026</div>
+    <p>My dearest Sara,</p>
+    <p>There are a thousand ways I could begin this letter, and I've probably written it a hundred times in my head — but nothing I imagine quite captures what I feel when I think about you.</p>
+    <p>You are the kind of person who makes ordinary moments feel extraordinary. The way you laugh, the way you see the world, the way you've somehow made every day brighter just by being in it — I notice all of it. I cherish all of it.</p>
+    <p>I built this little space for you because you deserve to know how much you mean to me. Not just in texts or quick moments, but in something that lasts. Something you can come back to whenever you need a reminder that you are deeply, completely loved.</p>
+    <p>Every photo here, every memory, every silly game — it's all for you. Because you are worth every effort and then some.</p>
+    <p>I love you, Sara. More than I know how to say — so I made a whole website instead. 💕</p>
+    <div class="sign">Always yours,<br/>Bilal</div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <h2 class="section-title">Our Gallery</h2>
+  <p class="section-sub">Moments frozen in time</p>
+  <div class="gallery-upload-note">
+    📸 Upload your photos together and they'll appear here forever.<br/>
+    Click <strong>Add Photos</strong> below to get started.
+  </div>
+  <div class="gallery-grid" id="gallery-grid">
+    <div class="gallery-card"><span>🌸</span><span class="placeholder-label">Our first photo</span></div>
+    <div class="gallery-card"><span>🌹</span><span class="placeholder-label">A special day</span></div>
+    <div class="gallery-card"><span>✨</span><span class="placeholder-label">Together</span></div>
+    <div class="gallery-card"><span>💕</span><span class="placeholder-label">My favourite</span></div>
+    <div class="gallery-card"><span>🌙</span><span class="placeholder-label">A night to remember</span></div>
+    <div class="gallery-card"><span>🌊</span><span class="placeholder-label">Adventures</span></div>
+  </div>
+  <input type="file" id="photo-input" accept="image/*" multiple />
+  <button class="upload-btn" onclick="document.getElementById('photo-input').click()">+ Add Photos</button>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <h2 class="section-title">Our Story</h2>
+  <p class="section-sub">Every chapter matters</p>
+  <div class="timeline-wrap" id="timeline-wrap">
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <span class="tl-emoji">✨</span>
+        <div class="tl-date">The Beginning</div>
+        <h3>The Day We Met</h3>
+        <p>The universe conspired to put us in the same place at the same time. And everything changed.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <span class="tl-emoji">💌</span>
+        <div class="tl-date">First Conversations</div>
+        <h3>Getting to Know You</h3>
+        <p>Late nights talking about everything and nothing. I already knew you were someone special.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <span class="tl-emoji">🌹</span>
+        <div class="tl-date">A Special Moment</div>
+        <h3>Our First Date</h3>
+        <p>I was nervous. You were radiant. I don't think I stopped smiling the entire time.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <span class="tl-emoji">💑</span>
+        <div class="tl-date">Official</div>
+        <h3>Us, Together</h3>
+        <p>The moment I got to call you mine. One of the best days of my life — no contest.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <span class="tl-emoji">🌍</span>
+        <div class="tl-date">Adventures</div>
+        <h3>Exploring Together</h3>
+        <p>Every trip, every spontaneous plan, every new place — better because you're there.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <span class="tl-emoji">⭐</span>
+        <div class="tl-date">Right Now</div>
+        <h3>Today & Every Day After</h3>
+        <p>This chapter is still being written. I can't wait for everything that's still ahead of us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section id="games">
+  <h2 class="section-title">Just For Fun</h2>
+  <p class="section-sub">Play a little, smile a lot</p>
+  <div class="games-grid">
+    <!-- CATCH HEARTS GAME -->
+    <div class="game-panel">
+      <h3>Catch My Heart 💘</h3>
+      <p>Move your cursor to catch the falling hearts before they escape — like I couldn't let you escape my life.</p>
+      <canvas id="catch-canvas" width="280" height="240"></canvas>
+      <div id="catch-score">Score: 0</div>
+    </div>
+    <!-- QUIZ GAME -->
+    <div class="game-panel">
+      <h3>How Well Do We Know Each Other? 💕</h3>
+      <p>A little quiz about us. No pressure — there are no wrong answers (except the wrong ones).</p>
+      <div id="quiz-container">
+        <div class="quiz-q" id="quiz-q"></div>
+        <div class="quiz-options" id="quiz-opts"></div>
+        <div id="quiz-result"></div>
+        <button class="quiz-next" id="quiz-next" onclick="nextQuestion()">Next →</button>
+      </div>
+      <div id="quiz-final" style="display:none;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--mauve);margin-top:1rem;"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <h2>Sara Raelle Mehrotra 💕</h2>
+  <p>Made with every bit of love I have. This website, like my heart, is yours.</p>
+  <p style="margin-top:0.5rem;opacity:0.7;font-size:0.8rem;">— Bilal</p>
+</footer>
+
+<script>
+/* ── HERO FLOATING HEARTS ── */
+(function(){
+  const canvas = document.getElementById('heart-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  const hearts = Array.from({length:28}, () => ({
+    x: Math.random()*innerWidth,
+    y: Math.random()*innerHeight,
+    size: 10+Math.random()*22,
+    speed: 0.3+Math.random()*0.6,
+    opacity: 0.15+Math.random()*0.35,
+    wobble: Math.random()*Math.PI*2,
+    wobbleSpeed: 0.02+Math.random()*0.02
+  }));
+
+  function drawHeart(ctx, x, y, size, opacity){
+    ctx.save(); ctx.globalAlpha=opacity; ctx.fillStyle='#e8728a';
+    ctx.beginPath();
+    ctx.moveTo(x, y+size*0.3);
+    ctx.bezierCurveTo(x, y, x-size, y, x-size, y+size*0.4);
+    ctx.bezierCurveTo(x-size, y+size*0.8, x, y+size*1.1, x, y+size*1.4);
+    ctx.bezierCurveTo(x, y+size*1.1, x+size, y+size*0.8, x+size, y+size*0.4);
+    ctx.bezierCurveTo(x+size, y, x, y, x, y+size*0.3);
+    ctx.fill(); ctx.restore();
+  }
+
+  function tick(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    hearts.forEach(h=>{
+      h.y -= h.speed;
+      h.wobble += h.wobbleSpeed;
+      const wx = h.x + Math.sin(h.wobble)*18;
+      if(h.y+h.size*2 < 0){ h.y=canvas.height+h.size; h.x=Math.random()*canvas.width; }
+      drawHeart(ctx, wx, h.y, h.size, h.opacity);
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ── GALLERY UPLOAD ── */
+document.getElementById('photo-input').addEventListener('change', function(){
+  const grid = document.getElementById('gallery-grid');
+  Array.from(this.files).forEach(file=>{
+    const url = URL.createObjectURL(file);
+    const card = document.createElement('div');
+    card.className='gallery-card';
+    const img = document.createElement('img');
+    img.src=url; img.alt='Our photo';
+    card.appendChild(img);
+    grid.appendChild(card);
+  });
+  this.value='';
+});
+
+/* ── SCROLL FLOAT HEARTS ── */
+let lastScroll=0;
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  if(y>lastScroll+60){
+    lastScroll=y;
+    const h=document.createElement('div');
+    h.className='float-heart';
+    h.textContent=['💕','💗','💖','💝','🌸'][Math.floor(Math.random()*5)];
+    h.style.left=Math.random()*90+'vw';
+    h.style.top=(y+window.innerHeight*0.8)+'px';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),2100);
+  }
+});
+
+/* ── CATCH HEARTS GAME ── */
+(function(){
+  const canvas=document.getElementById('catch-canvas');
+  const ctx=canvas.getContext('2d');
+  let score=0, lives=3, gameOver=false;
+  let basketX=canvas.width/2;
+  const basketW=60, basketH=16;
+
+  const falling=[];
+  function spawnHeart(){
+    falling.push({
+      x:20+Math.random()*(canvas.width-40),
+      y:-20,
+      size:10+Math.random()*8,
+      speed:1.5+Math.random()*2,
+      color:['#e8728a','#c2647a','#f4a7b9','#ff8fa3'][Math.floor(Math.random()*4)]
+    });
+  }
+  let spawnTimer=0;
+
+  canvas.addEventListener('mousemove',e=>{
+    const r=canvas.getBoundingClientRect();
+    basketX=e.clientX-r.left;
+  });
+  canvas.addEventListener('touchmove',e=>{
+    e.preventDefault();
+    const r=canvas.getBoundingClientRect();
+    basketX=e.touches[0].clientX-r.left;
+  },{passive:false});
+
+  function drawHeart(x,y,size,color){
+    ctx.save(); ctx.fillStyle=color;
+    ctx.beginPath();
+    ctx.moveTo(x, y+size*0.3);
+    ctx.bezierCurveTo(x, y, x-size, y, x-size, y+size*0.4);
+    ctx.bezierCurveTo(x-size, y+size*0.8, x, y+size*1.1, x, y+size*1.4);
+    ctx.bezierCurveTo(x, y+size*1.1, x+size, y+size*0.8, x+size, y+size*0.4);
+    ctx.bezierCurveTo(x+size, y, x, y, x, y+size*0.3);
+    ctx.fill(); ctx.restore();
+  }
+
+  function loop(){
+    if(gameOver){ drawGameOver(); return; }
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    spawnTimer++;
+    if(spawnTimer>45){ spawnHeart(); spawnTimer=0; }
+
+    // basket
+    ctx.fillStyle='#c2647a';
+    ctx.beginPath();
+    ctx.roundRect(basketX-basketW/2, canvas.height-basketH-4, basketW, basketH, 8);
+    ctx.fill();
+
+    // hearts
+    for(let i=falling.length-1;i>=0;i--){
+      const h=falling[i];
+      h.y+=h.speed;
+      drawHeart(h.x, h.y, h.size, h.color);
+      const bx=basketX, by=canvas.height-basketH-4;
+      if(h.y+h.size*1.4>by && h.y<by+basketH && h.x>bx-basketW/2-h.size && h.x<bx+basketW/2+h.size){
+        falling.splice(i,1); score++;
+        document.getElementById('catch-score').textContent='Score: '+score;
+      } else if(h.y>canvas.height+20){
+        falling.splice(i,1); lives--;
+        if(lives<=0){ gameOver=true; }
+      }
+    }
+
+    // lives
+    ctx.fillStyle='#e8728a'; ctx.font='14px sans-serif';
+    ctx.fillText('❤️'.repeat(lives), 8, 20);
+
+    requestAnimationFrame(loop);
+  }
+
+  function drawGameOver(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='rgba(244,167,185,0.3)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--mauve')||'#8b4b6b';
+    ctx.font="bold 22px 'Playfair Display',serif";
+    ctx.textAlign='center';
+    ctx.fillText('Game Over! 💕', canvas.width/2, canvas.height/2-20);
+    ctx.font='16px Lato,sans-serif';
+    ctx.fillText('Score: '+score, canvas.width/2, canvas.height/2+10);
+    ctx.fillStyle='#c2647a';
+    ctx.beginPath(); ctx.roundRect(canvas.width/2-45,canvas.height/2+30,90,32,8); ctx.fill();
+    ctx.fillStyle='white'; ctx.font='14px Lato,sans-serif';
+    ctx.fillText('Play again', canvas.width/2, canvas.height/2+51);
+    canvas.onclick=()=>{ score=0; lives=3; gameOver=false; falling.length=0; canvas.onclick=null; loop(); };
+  }
+
+  loop();
+})();
+
+/* ── QUIZ ── */
+const questions=[
+  {
+    q:"What's the first thing that made Bilal fall for Sara?",
+    opts:["Her laugh","Her kindness","The way she sees the world","All of the above"],
+    answer:3,
+    response:"All of the above — obviously. 💕"
+  },
+  {
+    q:"If Sara and Bilal could go anywhere right now, where would it be?",
+    opts:["Paris, France","Bali, Indonesia","Tokyo, Japan","Somewhere just for two"],
+    answer:3,
+    response:"Anywhere, as long as it's together. 🌍"
+  },
+  {
+    q:"What does Bilal think about every single day?",
+    opts:["Food","Work","Sara","Sleep"],
+    answer:2,
+    response:"Sara. Always Sara. 💗"
+  },
+  {
+    q:"How long will Bilal love Sara?",
+    opts:["A really long time","Forever","Even longer than forever","There isn't a number big enough"],
+    answer:3,
+    response:"There's no word for it. It just doesn't stop. 💖"
+  },
+  {
+    q:"What's the best part of Bilal's day?",
+    opts:["Morning coffee","Getting a message from Sara","A good workout","When Sara smiles"],
+    answer:1,
+    response:"A message from Sara beats everything. 📱💕"
+  }
+];
+let qIndex=0, quizScore=0;
+
+function renderQuestion(){
+  const qEl=document.getElementById('quiz-q');
+  const optsEl=document.getElementById('quiz-opts');
+  const resEl=document.getElementById('quiz-result');
+  const nextBtn=document.getElementById('quiz-next');
+  resEl.textContent=''; nextBtn.style.display='none';
+  if(qIndex>=questions.length){
+    document.getElementById('quiz-container').style.display='none';
+    document.getElementById('quiz-final').style.display='block';
+    document.getElementById('quiz-final').innerHTML=
+      `You got ${quizScore}/${questions.length}! 💕<br/><span style="font-size:0.9rem;font-family:Lato,sans-serif;color:#7a4060">Every answer is basically "I love Sara" — and that's the whole game.</span>`;
+    return;
+  }
+  const q=questions[qIndex];
+  qEl.textContent=q.q;
+  optsEl.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='quiz-opt'; btn.textContent=opt;
+    btn.onclick=()=>{
+      Array.from(optsEl.children).forEach(b=>b.onclick=null);
+      if(i===q.answer){ btn.classList.add('correct'); quizScore++; }
+      else{ btn.classList.add('wrong'); optsEl.children[q.answer].classList.add('correct'); }
+      resEl.textContent=q.response;
+      nextBtn.style.display='inline-block';
+    };
+    optsEl.appendChild(btn);
+  });
+}
+function nextQuestion(){ qIndex++; renderQuestion(); }
+renderQuestion();
+</script>
+</body>
+</html>
