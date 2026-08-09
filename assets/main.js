@@ -392,17 +392,22 @@ function openPage(key, trigger) {
 }
 
 function closePage() {
-  const finish = () => {
-    reader.dataset.open = 'false';
-    reader.innerHTML === '' || null;
-    lockBackground(false);
-    currentPage = null;
-    lastTrigger?.focus();
-    history.replaceState(null, '', location.pathname);
-  };
-  if (REDUCED || !window.gsap) return finish();
+  if (!currentPage) return;
+
+  /* Restore interactivity synchronously. The fade below is cosmetic only —
+     if it stalls (backgrounded tab pauses rAF) the page must still be usable,
+     so nothing that matters may depend on the tween completing. */
+  lockBackground(false);
+  currentPage = null;
+  history.replaceState(null, '', location.pathname);
+  lastTrigger?.focus();
+
+  const hide = () => { reader.dataset.open = 'false'; };
+  if (REDUCED || !window.gsap) return hide();
+
   gsap.to('#reader-head, #reader-body > *',
-    { opacity: 0, y: -8, duration: .26, ease: 'power2.in', onComplete: finish });
+    { opacity: 0, y: -8, duration: .26, ease: 'power2.in', onComplete: hide });
+  setTimeout(hide, 600);   // guard: never leave the overlay stuck open
 }
 
 /* Background is inert while the overlay is open: no tab-through, no scroll. */
