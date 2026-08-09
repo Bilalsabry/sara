@@ -205,10 +205,14 @@ body::before {
 }
 
 /* Right panel — the photographic field, cut by an organic torn edge. */
+/* The photographic field. Deep and desaturated so the pale paper objects
+   read against it — not a flat brown block, not a washed-out panel. */
 .cover__right {
   position: relative;
   overflow: hidden;
-  background: var(--paper-deep);
+  background:
+    radial-gradient(ellipse 78% 66% at 44% 36%, rgba(120,112,92,.30), transparent 68%),
+    linear-gradient(158deg, #2A2C26 0%, #34352C 44%, #3F3B30 100%);
   -webkit-clip-path: url(#tear-clip);
   clip-path: url(#tear-clip);
 }
@@ -314,11 +318,23 @@ body::before {
     linear-gradient(#000 0 0) bottom left / 16px 16px no-repeat,
     linear-gradient(#000 0 0) bottom right/ 16px 16px no-repeat;
 }
-/* On the dark cover panel the label inverts. */
+/* On the dark cover panel the proofing frame inverts. */
 .cover__right .frame,
 .cover__right .frame--empty { background: transparent; }
-.cover__right .frame__label { color: rgba(243,238,228,.42); }
-.cover__right .frame__label::before { border-color: rgba(243,238,228,.16); }
+.cover__right .frame--empty {
+  background-image: repeating-linear-gradient(
+    45deg, transparent 0 11px, rgba(243,238,228,.035) 11px 12px);
+}
+.cover__right .frame__label { color: rgba(243,238,228,.58); }
+.cover__right .frame__label::before { border-color: rgba(243,238,228,.26); }
+/* The taped snapshot sits on the dark panel but is itself paper. */
+.cover__snapshot .frame--empty {
+  background: var(--paper-edge);
+  background-image: repeating-linear-gradient(
+    45deg, transparent 0 11px, rgba(35,38,31,.03) 11px 12px);
+}
+.cover__snapshot .frame__label { color: var(--graphite-lt); }
+.cover__snapshot .frame__label::before { border-color: rgba(35,38,31,.14); }
 
 /* ══════════════════════════════════════════════════════════════════════════
    CHAPTER INDEX — a book's contents page, not a card grid
