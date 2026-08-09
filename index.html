@@ -971,7 +971,7 @@ const PAGES={
     <br/><button class="ep-restart" id="ep-restart">Return to the beginning</button>
    </div>
    <div class="ep-art">
-    <svg viewBox="0 0 360 400" fill="none" stroke="rgba(37,35,31,.42)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="max-width:80%" aria-hidden="true">
+    <svg viewBox="0 0 360 400" fill="none" stroke="rgba(37,35,31,.62)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:82%;height:auto" aria-hidden="true">
      <path d="M20 390 C60 340 90 320 118 300 C150 278 176 268 210 262 C250 256 290 268 330 300 C348 316 356 350 350 390"/>
      <path d="M60 360 C90 342 120 336 150 340 M200 300 C240 296 276 306 304 326"/>
      <path d="M110 340 C130 326 156 320 180 322"/>
@@ -1011,10 +1011,12 @@ function openPage(k){
   const v=document.getElementById('page');
   v.style.display='block'; v.scrollTop=0;
   lenis.stop(); document.body.style.overflow='hidden';
+  /* keep the overlay fully opaque so the index never shows through;
+     animate only the contents */
+  gsap.set(v,{opacity:1});
   if(!REDUCED){
-    gsap.fromTo(v,{opacity:0},{opacity:1,duration:.55,ease:'power2.out'});
     gsap.fromTo('#pg-head, #pg-in > *',{opacity:0,y:20},
-      {opacity:1,y:0,duration:1,stagger:.07,delay:.1,ease:'power3.out'});
+      {opacity:1,y:0,duration:1,stagger:.07,delay:.05,ease:'power3.out'});
   }
   hydrate(k);
   document.getElementById('pg-back').focus();
@@ -1022,10 +1024,11 @@ function openPage(k){
 }
 function closePage(){
   const v=document.getElementById('page');
-  const done=()=>{v.style.display='none';document.body.style.overflow='';lenis.start();current=null;
+  const done=()=>{v.style.display='none';gsap.set(v,{opacity:1});
+    document.body.style.overflow='';lenis.start();current=null;
     if(lastFocus)lastFocus.focus();history.replaceState(null,'',location.pathname);};
   if(REDUCED){done();return;}
-  gsap.to(v,{opacity:0,duration:.4,ease:'power2.in',onComplete:done});
+  gsap.to('#pg-head, #pg-in > *',{opacity:0,y:-10,duration:.3,ease:'power2.in',onComplete:done});
 }
 document.getElementById('pg-back').addEventListener('click',closePage);
 document.getElementById('pg-prev').addEventListener('click',()=>{
