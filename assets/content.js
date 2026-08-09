@@ -20,29 +20,29 @@
 export const IMAGES = {
   coverPortrait: {
     id: 'cover-portrait',
-    src: null,
-    alt: 'Sara at work',
+    src: 'assets/images/cover-portrait.jpg',
+    alt: 'Sara laughing, seated in a candlelit room with stained glass behind her',
     label: 'HER PHOTOGRAPH',
     ratio: null,          // fills the cover panel
-    focal: '50% 42%',
+    focal: '58% 38%',
     fit: 'cover',
   },
   coverSnapshot: {
     id: 'cover-snapshot',
-    src: null,
+    src: 'assets/images/cover-snapshot.jpg',
     alt: '',
     label: 'ADD PHOTO',
     ratio: '4 / 3',
-    focal: '50% 50%',
+    focal: '50% 30%',
     fit: 'cover',
   },
   letterPlate: {
     id: 'letter-plate',
-    src: null,
+    src: 'assets/images/letter-plate.jpg',
     alt: '',
     label: 'ADD PHOTO',
     ratio: '4 / 5',
-    focal: '50% 45%',
+    focal: '50% 28%',
     fit: 'cover',
   },
 };
