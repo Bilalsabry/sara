@@ -359,7 +359,12 @@ body::before {
   position: absolute; left: calc(-1 * clamp(.6rem, 1.2vw, 1.3rem));
   top: 12%; bottom: 12%; width: 1px; background: var(--rule);
 }
-.chapter-link__folio { margin-bottom: .8rem; transition: color .4s var(--ease); }
+.chapter-link__folio { display: block; margin-bottom: .8rem; transition: color .4s var(--ease); }
+/* These are spans so the whole card can be one button — force block flow. */
+.chapter-link__body,
+.chapter-link__title,
+.chapter-link__blurb,
+.chapter-link__rule { display: block; }
 .chapter-link__title {
   font-family: var(--display); font-weight: 400;
   font-size: 1.12rem; line-height: 1.28;
@@ -440,10 +445,11 @@ body::before {
 }
 .colophon__more button:hover { color: var(--forest); }
 .colophon__more button:hover::after { transform: scaleX(1); }
-.colophon__credit {
+/* Selector matches `.colophon p` specificity so the credit stays small. */
+.colophon p.colophon__credit {
   margin-top: 2.6rem;
-  font-family: var(--sans); font-size: .6rem; letter-spacing: .1em;
-  color: var(--graphite-lt);
+  font-family: var(--sans); font-size: .62rem; line-height: 1.6;
+  letter-spacing: .1em; color: var(--graphite-lt);
 }
 .colophon__credit a { text-decoration: underline; text-underline-offset: 2px; }
 
