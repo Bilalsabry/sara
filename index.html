@@ -1,1224 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F3EEE4">
 <title>A Kingdom Made for Her</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cormorant:wght@300;400;500;600&family=Italianno&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<style>
-:root{
-  --paper:#F3EEE4; --ivory:#E9E0D2; --ivory-d:#DDD3C1;
-  --charcoal:#25231F; --forest:#243D35; --forest-d:#18291F;
-  --ox:#6F2F2B; --brass:#A4854D; --graphite:#766F66;
-  --hair:rgba(37,35,31,.13);
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --disp:'Cormorant',Georgia,serif;
-  --script:'Italianno',cursive;
-  --sans:'Inter',system-ui,sans-serif;
-  font-size:18px;
-}
-@media(max-width:760px){:root{font-size:17px}}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--serif);background:var(--paper);color:var(--charcoal);
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.62;font-size:1rem}
-::selection{background:var(--forest);color:var(--paper)}
-::-webkit-scrollbar{width:0}
-img{display:block;max-width:100%}
-canvas{display:block;max-width:100%}
-button{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--forest);outline-offset:3px}
 
-#grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.4;mix-blend-mode:multiply}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=Italianno&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
 
-/* ─── type ─── */
-.kicker{font-family:var(--disp);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--graphite)}
-.ttl{font-family:var(--disp);font-weight:400;font-size:clamp(1.7rem,3.2vw,2.4rem);
-  letter-spacing:.06em;line-height:1.2;color:var(--charcoal)}
-.script{font-family:var(--script);color:var(--graphite);line-height:1.2}
-.orn{display:flex;align-items:center;justify-content:center;gap:.5rem}
-.orn i{height:1px;background:var(--brass);opacity:.5;flex:1;max-width:42px}
-.orn svg{flex-shrink:0;color:var(--brass)}
-.torn-l{clip-path:polygon(3.6% 0,100% 0,100% 100%,2.4% 100%,3.1% 97%,1.4% 94.2%,2.2% 91%,4.1% 88.4%,3.2% 85%,1.6% 82.6%,2.9% 79%,4.4% 76.2%,3.1% 73%,1.5% 70.4%,2.6% 67%,4.6% 64.2%,3.4% 61%,1.8% 58.4%,2.4% 55%,4.2% 52.2%,3.0% 49%,1.4% 46.4%,2.8% 43%,4.7% 40.2%,3.3% 37%,1.7% 34.4%,2.5% 31%,4.3% 28.2%,3.2% 25%,1.6% 22.4%,2.7% 19%,4.5% 16.2%,3.4% 13%,1.9% 10.4%,2.6% 7%,4.0% 4.2%)}
-
-/* ═══════ COVER ═══════ */
-#cover{display:grid;grid-template-columns:1.02fr 1.08fr;min-height:78vh;position:relative;background:var(--paper)}
-.cov-left{padding:5rem 4rem;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;position:relative;z-index:2}
-.bot{position:absolute;pointer-events:none;color:var(--charcoal);opacity:.17}
-.bot-a{left:1.4rem;top:12%;width:118px}
-.bot-b{left:2rem;bottom:8%;width:92px}
-.stagmark{margin-bottom:1.8rem;opacity:0}
-.cov-t1{font-family:var(--disp);font-weight:400;font-size:clamp(2rem,4.2vw,3.2rem);
-  letter-spacing:.16em;text-transform:uppercase;color:var(--forest);line-height:1.06;display:block;opacity:0}
-.cov-t2{font-family:var(--serif);font-style:italic;font-weight:300;
-  font-size:clamp(1.35rem,2.9vw,2.1rem);color:var(--forest);display:block;margin-top:.12em;opacity:0}
-.cov-orn{margin:1.3rem auto 1.6rem;max-width:158px;opacity:0}
-.cov-sub{font-size:1rem;line-height:1.7;color:var(--charcoal);max-width:26ch;opacity:0}
-.cov-cta{margin-top:2rem;background:var(--forest);border:1px solid var(--forest);cursor:pointer;
-  font-family:var(--disp);font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--paper);padding:1rem 2.5rem;transition:background .35s,color .35s;opacity:0}
-.cov-cta:hover{background:transparent;color:var(--forest)}
-.cov-star{margin-top:1.5rem;opacity:0;color:var(--brass)}
-.cov-right{position:relative;overflow:hidden;background:linear-gradient(160deg,#2A2823,#3A362C 46%,#4B4335)}
-.cov-right>.ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.cov-right>.ph img{width:100%;height:100%;object-fit:cover}
-.cov-right>.ph .empty{font-family:var(--sans);font-size:.62rem;letter-spacing:.24em;
-  text-transform:uppercase;color:rgba(243,238,228,.34)}
-.cov-right::after{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 72% 60% at 44% 38%,rgba(222,208,180,.13),transparent 72%)}
-.cov-note{position:absolute;top:7%;right:5%;width:154px;z-index:3;background:var(--paper);
-  padding:1.5rem 1.15rem;box-shadow:0 16px 38px rgba(0,0,0,.32);transform:rotate(1.6deg);
-  clip-path:polygon(0 2%,100% 0,98.5% 100%,1.5% 98%)}
-.cov-note .script{font-size:1.4rem;text-align:left;color:var(--charcoal)}
-.cov-frame{position:absolute;bottom:13%;right:6%;width:112px;z-index:3;background:var(--ivory);
-  padding:.6rem;box-shadow:0 14px 32px rgba(0,0,0,.4);transform:rotate(-1.4deg)}
-.cov-frame .in{border:1px solid rgba(37,35,31,.2);padding:.9rem .4rem;display:flex;
-  align-items:center;justify-content:center;background:linear-gradient(170deg,#E9E3D6,#D6CEBD)}
-.cov-small{position:absolute;bottom:21%;right:22%;width:104px;z-index:2;background:var(--ivory);
-  padding:.38rem;box-shadow:0 12px 26px rgba(0,0,0,.38);transform:rotate(2.4deg)}
-.cov-small .im{aspect-ratio:4/3;background:linear-gradient(150deg,#6E6355,#443C33);
-  display:flex;align-items:center;justify-content:center}
-.cov-small .im span{font-family:var(--sans);font-size:.44rem;letter-spacing:.16em;
-  color:rgba(243,238,228,.45);text-transform:uppercase}
-
-/* ═══════ CHAPTER INDEX ═══════ */
-#chapters{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--hair);
-  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
-.ch{background:var(--paper);border:none;cursor:pointer;text-align:center;
-  padding:2.6rem 1.4rem 2rem;display:flex;flex-direction:column;align-items:center;
-  transition:background .45s;font-family:var(--serif)}
-.ch:hover{background:var(--ivory)}
-.ch .num{font-family:var(--disp);font-size:.74rem;letter-spacing:.2em;color:var(--brass);margin-bottom:.7rem}
-.ch h3{font-family:var(--disp);font-weight:400;font-size:1.06rem;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--charcoal);line-height:1.3;margin-bottom:.85rem}
-.ch .orn{max-width:64px;margin-bottom:1rem}
-.ch .blurb{font-size:.9rem;line-height:1.7;color:var(--graphite);margin-bottom:1.8rem;max-width:25ch}
-.ch .art{width:100%;flex:1;min-height:210px;margin-bottom:1.3rem;display:flex;
-  align-items:center;justify-content:center;position:relative;overflow:hidden}
-.ch .lnk{font-family:var(--script);font-size:1.34rem;color:var(--graphite);
-  display:flex;align-items:center;gap:.5rem;transition:color .3s}
-.ch:hover .lnk{color:var(--forest)}
-.ch .lnk .ar{display:block;width:34px;height:1px;background:currentColor;opacity:.55;
-  position:relative;transition:width .35s}
-.ch:hover .lnk .ar{width:44px}
-.ch .lnk .ar::after{content:'';position:absolute;right:0;top:-2px;width:5px;height:5px;
-  border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}
-/* card art */
-.a-letter{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-.a-paper{width:76%;aspect-ratio:3/4;background:linear-gradient(160deg,#E4DAC2,#D3C8AC);
-  transform:rotate(-3deg);box-shadow:0 8px 22px rgba(37,35,31,.17);padding:1rem .9rem;
-  clip-path:polygon(0 1%,100% 0,99% 99%,1% 100%)}
-.a-paper .ln{height:1px;background:rgba(37,35,31,.18);margin-bottom:.4rem}
-.a-arch{width:100%;height:100%;position:relative}
-.a-ph{position:absolute;background:var(--paper);padding:.28rem;box-shadow:0 8px 20px rgba(37,35,31,.2)}
-.a-ph .im{width:100%;height:100%}
-
-/* ═══════ FOOTLINE ═══════ */
-#footline{padding:3rem 2rem 3.4rem;text-align:center;position:relative}
-#footline p{font-size:.98rem;line-height:1.8;color:var(--graphite)}
-#footline .sig{font-family:var(--script);font-size:1.7rem;color:var(--charcoal);margin-top:.7rem;display:block}
-#footline .more{margin-top:2.2rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
-#footline .more button{background:none;border:none;cursor:pointer;font-family:var(--disp);
-  font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--graphite);
-  padding-bottom:.35rem;border-bottom:1px solid var(--hair);transition:color .25s}
-#footline .more button:hover{color:var(--forest)}
-
-/* ═══════ PAGE VIEW ═══════ */
-#page{position:fixed;inset:0;z-index:600;background:var(--paper);overflow-y:auto;display:none}
-.pg-bar{position:sticky;top:0;z-index:8;background:rgba(243,238,228,.94);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;
-  padding:1rem 2.6rem}
-.pg-back{background:none;border:none;cursor:pointer;font-family:var(--disp);font-size:.68rem;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--graphite);display:flex;
-  align-items:center;gap:.7rem;transition:color .25s}
-.pg-back:hover{color:var(--forest)}
-.pg-back .a{display:block;width:26px;height:1px;background:currentColor;position:relative}
-.pg-back .a::after{content:'';position:absolute;left:0;top:-2px;width:5px;height:5px;
-  border-bottom:1px solid currentColor;border-left:1px solid currentColor;transform:rotate(45deg)}
-.pg-name{font-family:var(--disp);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--forest)}
-.pg-nav{display:flex;gap:1.4rem}
-.pg-nav button{background:none;border:none;cursor:pointer;font-family:var(--disp);font-size:.64rem;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--graphite);transition:color .25s}
-.pg-nav button:hover{color:var(--forest)}
-.pg-nav button[disabled]{opacity:.25;cursor:default}
-.pg-head{text-align:center;padding:5rem 2rem 0}
-.pg-head .kicker{display:block;margin-bottom:.9rem}
-.pg-head .orn{max-width:140px;margin:1.2rem auto 0}
-.pg-in{padding:3.5rem 3rem 8rem;max-width:1180px;margin:0 auto}
-
-/* letter page */
-.lt-spread{display:grid;grid-template-columns:1fr .92fr;gap:5rem;align-items:center}
-.lt-col{max-width:440px;margin:0 auto;position:relative}
-.lt-col p{font-size:1rem;line-height:1.95;margin-bottom:1.35rem;color:var(--charcoal)}
-.lt-sign{margin-top:1.8rem;display:block}
-.lt-sign .a{display:block;font-size:1rem}
-.lt-sign .m{font-family:var(--script);font-size:2.6rem;color:var(--charcoal);display:block;line-height:1;margin-top:.25rem}
-.lt-rail{position:absolute;left:-4.5rem;top:0;font-family:var(--disp);font-size:.76rem;
-  letter-spacing:.16em;color:var(--graphite);line-height:2;text-align:center}
-.lt-art{position:relative;min-height:460px;background:linear-gradient(165deg,#2F3A2C,#46503A 50%,#5C6244);
-  display:flex;align-items:center;justify-content:center;overflow:hidden}
-.lt-art .empty{font-family:var(--sans);font-size:.6rem;letter-spacing:.22em;
-  text-transform:uppercase;color:rgba(243,238,228,.3)}
-.lt-seal{position:absolute;top:6%;left:-30px;z-index:4}
-.lt-note{position:absolute;bottom:9%;left:7%;width:170px;z-index:4;background:var(--paper);
-  padding:1.4rem 1.1rem;box-shadow:0 16px 36px rgba(0,0,0,.3);transform:rotate(-1.8deg);
-  clip-path:polygon(0 2%,100% 0,98.5% 100%,1.5% 98%)}
-.lt-note .script{font-size:1.34rem;color:var(--charcoal)}
-
-/* archive page */
-.ar-grid{display:grid;grid-template-columns:1.32fr 1fr;gap:2.6rem;align-items:start}
-.ar-main .fr{background:var(--ivory);border:1px solid var(--hair);aspect-ratio:4/3;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
-.ar-main .fr img{width:100%;height:100%;object-fit:cover}
-.ar-main .fr .empty{font-family:var(--sans);font-size:.6rem;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--graphite)}
-.ar-cap{margin-top:1.1rem;text-align:center}
-.ar-cap .it{font-style:italic;font-size:.95rem;color:var(--graphite);display:block}
-.ar-cap .script{font-size:1.24rem;display:block;margin-top:.15rem}
-.ar-scatter{position:relative;min-height:380px}
-.ar-note{position:absolute;right:0;top:-1.6rem;width:132px;text-align:right;z-index:5}
-.ar-note .script{font-size:1.3rem}
-.pol{position:absolute;background:var(--paper);padding:.4rem .4rem 1.5rem;
-  box-shadow:0 10px 26px rgba(37,35,31,.22);cursor:pointer;transition:transform .4s,box-shadow .4s}
-.pol:hover{transform:scale(1.04) rotate(0deg)!important;box-shadow:0 16px 38px rgba(37,35,31,.3);z-index:9}
-.pol .im{width:100%;aspect-ratio:1/1;overflow:hidden}
-.pol .im img{width:100%;height:100%;object-fit:cover}
-.ar-add{text-align:center;margin-top:3rem}
-.ar-add button{background:none;border:none;cursor:pointer;font-family:var(--disp);font-size:.66rem;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--graphite);padding-bottom:.35rem;
-  border-bottom:1px solid var(--hair);transition:color .25s}
-.ar-add button:hover{color:var(--forest)}
-#photo-input{display:none}
-#extra{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.5rem;margin-top:2.6rem}
-#extra .pol{position:static;transform:none!important}
-
-/* map page */
-#map-svg{width:100%;height:auto}
-.mp{cursor:pointer}
-.mp circle.d{fill:var(--ox);transition:r .3s}
-.mp:hover circle.d,.mp.on circle.d{r:5}
-.mp circle.h{fill:none;stroke:var(--ox);stroke-width:.8;opacity:0;transition:opacity .3s}
-.mp:hover circle.h,.mp.on circle.h,.mp:focus-visible circle.h{opacity:.5}
-.mp-l{font-family:var(--script);font-size:20px;fill:var(--ox)}
-.mp-s{font-family:var(--serif);font-size:12px;fill:var(--graphite)}
-.mp-foot{display:flex;justify-content:space-between;align-items:flex-start;margin-top:1.6rem;gap:3rem}
-.mp-foot .script{font-size:1.3rem;line-height:1.35;flex-shrink:0}
-.mp-read{max-width:460px;text-align:right;min-height:84px}
-.mp-read .rt{font-style:italic;font-size:1.28rem;color:var(--forest);margin-bottom:.4rem}
-.mp-read .rb{font-size:.94rem;line-height:1.72;color:var(--graphite)}
-
-/* constellation page */
-.cn-stage{display:grid;grid-template-columns:1.5fr .82fr;gap:3rem;align-items:center}
-.cn-wrap{position:relative}
-#cn-svg{position:absolute;inset:0;width:100%;height:100%}
-.st{cursor:pointer}
-.st circle.s{fill:#D8C08A;transition:r .3s,fill .3s}
-.st:hover circle.s,.st.on circle.s,.st:focus-visible circle.s{r:4.6;fill:#F4E9CE}
-.st text{font-family:var(--serif);font-size:16px;fill:rgba(243,238,228,.9);letter-spacing:.05em}
-.cn-card{background:var(--paper);padding:2rem 1.6rem;box-shadow:0 18px 44px rgba(0,0,0,.4);
-  transform:rotate(1.2deg);position:relative;clip-path:polygon(0 1.5%,100% 0,99% 100%,1% 98.5%)}
-.cn-card::before{content:'';position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(-2deg);
-  width:66px;height:24px;background:rgba(164,133,77,.3);border:1px solid rgba(164,133,77,.28)}
-.cn-card .ct{font-family:var(--disp);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;
-  text-align:center;margin-bottom:1rem;color:var(--charcoal)}
-.cn-card .cb{font-size:.96rem;line-height:1.8;color:var(--graphite)}
-.cn-hint{text-align:center;margin-top:2rem;font-style:italic;font-size:.94rem;color:rgba(243,238,228,.45)}
-
-/* fireheart page */
-.fh-spread{display:grid;grid-template-columns:1fr 1.06fr;gap:4.5rem;align-items:center}
-.fh-txt p{font-size:1.02rem;line-height:1.9;margin-bottom:1.25rem;color:var(--charcoal)}
-.fh-txt p.hi{color:var(--ox);font-style:italic}
-.fh-art{position:relative;min-height:520px;overflow:hidden;background:var(--ivory)}
-#fh-canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.fh-note{position:absolute;top:9%;right:5%;width:142px;text-align:right;z-index:4}
-.fh-note .script{font-size:1.32rem;color:var(--charcoal)}
-.fh-crest{position:absolute;top:6%;left:6%;color:var(--brass);opacity:.6;z-index:4}
-
-/* library */
-.lb-shelf{display:flex;align-items:flex-end;justify-content:center;gap:.5rem;margin-top:2.6rem;flex-wrap:wrap}
-.bk{width:84px;border-radius:1px 3px 3px 1px;padding:1.4rem .6rem;display:flex;flex-direction:column;
-  align-items:center;justify-content:space-between;box-shadow:2px 4px 14px rgba(0,0,0,.3);
-  transition:transform .45s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
-.bk:hover{transform:translateY(-14px)}
-.bk::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(255,255,255,.14),transparent 22%,transparent 78%,rgba(0,0,0,.28))}
-.bk .t{font-family:var(--disp);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;
-  color:rgba(243,238,228,.95);line-height:1.35;text-align:center;position:relative;z-index:2}
-.bk .a{font-family:var(--disp);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(243,238,228,.62);line-height:1.4;position:relative;z-index:2}
-.bk .o{color:rgba(212,186,132,.85);position:relative;z-index:2}
-.lb-plank{height:9px;background:linear-gradient(180deg,#6B5B44,#4A3E2E);max-width:800px;
-  margin:0 auto;box-shadow:0 8px 18px rgba(0,0,0,.22)}
-.lb-foot{margin-top:2.2rem;text-align:center}
-.lb-foot .script{font-size:1.36rem}
-
-/* marginalia */
-.mg-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2.6rem;margin-top:2rem}
-.mg-c{background:var(--ivory);padding:2.6rem 1.7rem 2.1rem;position:relative;
-  box-shadow:0 10px 26px rgba(37,35,31,.14);text-align:center}
-.mg-c:nth-child(1){transform:rotate(-1.4deg)}
-.mg-c:nth-child(2){transform:rotate(.8deg);background:#E5DCC6}
-.mg-c:nth-child(3){transform:rotate(-.6deg)}
-.mg-c::before{content:'';position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(-2deg);
-  width:70px;height:26px;background:rgba(164,133,77,.28);border:1px solid rgba(164,133,77,.26)}
-.mg-c .q{font-family:var(--script);font-size:1.6rem;line-height:1.35;color:var(--charcoal);margin-bottom:1rem}
-.mg-c .q-serif{font-family:var(--serif);font-style:italic;font-size:1.02rem;
-  line-height:1.7;margin-bottom:.9rem}
-.mg-c .attr{font-family:var(--disp);font-size:.66rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--graphite)}
-.mg-c .ic{margin-top:1.2rem;color:var(--graphite);opacity:.45;display:flex;justify-content:center}
-.mg-foot{margin-top:2.6rem;text-align:center}
-.mg-foot .script{font-size:1.32rem}
-
-/* soundtrack */
-.st-spread{display:grid;grid-template-columns:1.04fr 1fr;gap:4rem;align-items:center}
-.st-card{background:var(--ivory);padding:2.4rem 2.2rem;box-shadow:0 12px 30px rgba(37,35,31,.14);
-  transform:rotate(-.8deg);max-width:420px}
-.st-list{list-style:none;counter-reset:s}
-.st-list li{font-family:var(--script);font-size:1.46rem;color:var(--graphite);line-height:1.75;
-  counter-increment:s;display:flex;gap:.6rem}
-.st-list li::before{content:counter(s) ".";flex-shrink:0}
-.st-more{font-family:var(--script);font-size:1.32rem;color:var(--graphite);text-align:right;
-  display:block;margin-top:1rem}
-.st-art{position:relative;min-height:440px;overflow:hidden;
-  background:linear-gradient(155deg,#3B3529,#524936 55%,#6A5C42);display:flex;
-  align-items:center;justify-content:center}
-.st-note{position:absolute;left:6%;bottom:8%;width:152px;z-index:4}
-.st-note .script{font-size:1.32rem;color:rgba(243,238,228,.85)}
-
-/* little things */
-.lt-grid{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--hair);
-  border-left:1px solid var(--hair);margin-top:2rem}
-.lt-cell{border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
-  padding:2rem 1rem 1.7rem;display:flex;flex-direction:column;align-items:center;
-  text-align:center;gap:1rem;transition:background .4s}
-.lt-cell:hover{background:var(--ivory)}
-.lt-cell .ic{color:var(--graphite);opacity:.8}
-.lt-cell p{font-size:.88rem;line-height:1.55;color:var(--graphite)}
-
-/* epilogue */
-.ep-spread{display:grid;grid-template-columns:1.04fr 1fr;gap:4rem;align-items:center}
-.ep-txt{text-align:center}
-.ep-txt p{font-size:1rem;line-height:1.9;margin-bottom:1.3rem;color:var(--charcoal)}
-.ep-sign .a{display:block;font-size:1rem}
-.ep-sign .m{font-family:var(--script);font-size:2.7rem;color:var(--charcoal);display:block;line-height:1;margin-top:.2rem}
-.ep-date{font-family:var(--disp);font-size:.68rem;letter-spacing:.2em;color:var(--graphite);
-  margin-top:1.3rem;display:block}
-.ep-restart{margin-top:2.6rem;background:none;border:none;cursor:pointer;font-family:var(--disp);
-  font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--forest);
-  padding-bottom:.35rem;border-bottom:1px solid var(--hair)}
-.ep-art{position:relative;display:flex;align-items:center;justify-content:center;min-height:460px}
-.ep-note{position:absolute;right:2%;bottom:8%;width:124px;text-align:right;z-index:4}
-.ep-note .script{font-size:1.34rem}
-
-/* lightbox */
-#lb{position:fixed;inset:0;z-index:800;background:rgba(30,28,24,.95);display:flex;
-  align-items:center;justify-content:center;flex-direction:column;gap:1.6rem;
-  opacity:0;pointer-events:none;transition:opacity .4s;padding:3rem}
-#lb.open{opacity:1;pointer-events:all}
-#lb img{max-width:84vw;max-height:72vh;object-fit:contain}
-#lb-meta{text-align:center;max-width:46ch}
-#lb-meta .t{font-family:var(--disp);font-size:.96rem;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(243,238,228,.92);margin-bottom:.5rem}
-#lb-meta .d{font-family:var(--sans);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(243,238,228,.45);margin-bottom:.8rem}
-#lb-meta .n{font-style:italic;font-size:.96rem;color:rgba(243,238,228,.7);line-height:1.7}
-#lb-x{position:absolute;top:2rem;right:2.2rem;background:none;border:none;cursor:pointer;
-  font-family:var(--disp);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(243,238,228,.6)}
-#lb-x:hover{color:var(--paper)}
-
-/* audio */
-#audio{position:fixed;bottom:1.4rem;left:1.4rem;z-index:700;background:none;border:none;cursor:pointer;
-  font-family:var(--disp);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--graphite);display:flex;align-items:center;gap:.5rem;transition:color .25s}
-#audio:hover{color:var(--forest)}
-#audio .mk{width:5px;height:5px;border-radius:50%;border:1px solid currentColor}
-#audio.playing .mk{background:currentColor}
-
-.rv{opacity:0}
-
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
-  .rv{opacity:1!important;transform:none!important}
-}
-
-@media(max-width:1180px){
-  #chapters{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:1000px){
-  #cover{grid-template-columns:1fr}
-  .cov-right{min-height:52vh;order:-1}
-  .cov-left{padding:4rem 1.6rem}
-  .bot{display:none}
-  .lt-spread,.ar-grid,.cn-stage,.fh-spread,.st-spread,.ep-spread{grid-template-columns:1fr;gap:2.6rem}
-  .lt-rail{position:static;display:flex;gap:.6rem;justify-content:center;margin-bottom:1.4rem;line-height:1}
-  .lt-seal,.lt-note,.ar-note,.fh-note,.fh-crest,.st-note,.ep-note{position:static;width:auto;
-    transform:none;margin:1.4rem auto 0;text-align:center;box-shadow:none;clip-path:none}
-  .cov-note,.cov-frame,.cov-small{display:none}
-  .ar-scatter{min-height:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
-  .pol{position:static!important;transform:none!important}
-  .lt-grid{grid-template-columns:repeat(2,1fr)}
-  .mg-row{grid-template-columns:1fr}
-  .mp-foot{flex-direction:column;gap:1.4rem}
-  .mp-read{text-align:left;max-width:none}
-  .pg-in{padding:2.6rem 1.6rem 5rem}
-  .pg-bar{padding:.9rem 1.4rem}
-  .pg-nav{display:none}
-}
-@media(max-width:700px){
-  #chapters{grid-template-columns:1fr}
-  .ch .art{min-height:170px}
-}
-</style>
+<!-- Animation is an enhancement: the page renders fully without it. -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script defer type="module" src="assets/main.js"></script>
 </head>
+
 <body>
 
-<svg id="grain" aria-hidden="true"><filter id="gf"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#gf)" opacity=".14"/></svg>
+<!-- Restrained paper grain -->
+<svg id="grain" aria-hidden="true" focusable="false">
+  <filter id="grainFilter">
+    <feTurbulence type="fractalNoise" baseFrequency=".84" numOctaves="4" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grainFilter)" opacity=".13"/>
+</svg>
 
-<!-- ═══════ COVER ═══════ -->
-<header id="cover">
-  <div class="cov-left">
-    <svg class="bot bot-a" viewBox="0 0 120 190" fill="none" stroke="currentColor" stroke-width=".8" stroke-linecap="round" aria-hidden="true">
-      <path d="M62 188 C58 150 52 120 44 96 M44 96 C40 78 34 62 26 50"/>
-      <path d="M52 140 C40 134 30 136 22 144 M52 140 C48 128 40 122 30 120"/>
-      <path d="M56 160 C68 154 78 156 86 164 M56 160 C60 148 68 142 78 140"/>
-      <g><circle cx="26" cy="46" r="4"/><path d="M26 42 C22 34 24 26 30 22 C34 28 34 38 26 42"/>
-      <path d="M22 46 C14 44 8 38 8 30 C16 30 22 38 22 46"/><path d="M30 48 C38 48 44 42 46 34 C38 34 32 40 30 48"/>
-      <path d="M24 51 C18 58 18 66 22 72 C28 68 30 58 24 51"/><path d="M30 51 C36 56 38 64 36 70 C30 68 26 58 30 51"/></g>
-      <g><circle cx="86" cy="90" r="3.4"/><path d="M86 87 C83 80 85 73 90 70 C93 75 92 84 86 87"/>
-      <path d="M83 90 C76 88 71 83 71 76 C78 77 83 83 83 90"/><path d="M89 92 C96 92 101 87 103 80 C96 80 91 85 89 92"/>
-      <path d="M84 94 C79 100 79 107 83 112 C88 108 89 99 84 94"/></g>
-      <path d="M100 30 C94 24 94 14 100 8 C97 18 98 24 100 30"/>
-    </svg>
-    <svg class="bot bot-b" viewBox="0 0 90 130" fill="none" stroke="currentColor" stroke-width=".8" stroke-linecap="round" aria-hidden="true">
-      <path d="M44 128 C42 100 40 76 36 56 M36 56 C34 42 30 30 24 20"/>
-      <path d="M40 96 C30 92 22 94 16 100 M42 110 C52 106 60 108 66 114"/>
-      <g><circle cx="24" cy="17" r="3"/><path d="M24 14 C21 8 23 3 27 0 M21 17 C15 15 11 11 11 5 M27 19 C33 19 37 15 38 9 M22 21 C18 26 18 32 21 36 M27 21 C31 25 32 31 30 35"/></g>
-      <g><circle cx="66" cy="60" r="2.6"/><path d="M66 57 C64 52 65 48 68 45 M63 60 C58 59 55 55 55 51 M69 62 C73 62 77 59 78 54 M65 64 C61 68 61 73 64 76"/></g>
-    </svg>
+<!-- ══════════════════════════════════════════════════════════════════════
+     COVER
+     ══════════════════════════════════════════════════════════════════════ -->
+<header class="cover" id="cover">
+  <div class="cover__left">
+    <span class="cover__botanical cover__botanical--stem"  id="cover-stem"  aria-hidden="true"></span>
+    <span class="cover__botanical cover__botanical--sprig" id="cover-sprig" aria-hidden="true"></span>
 
-    <div class="stagmark" id="stag" aria-hidden="true">
-      <svg width="108" height="94" viewBox="0 0 88 76" fill="none" stroke="var(--forest)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M44 66 C39.5 66 36.5 62 36 57 C35.6 52.5 37 47 39 43.5 C40.6 40.7 42.2 39 44 39 C45.8 39 47.4 40.7 49 43.5 C51 47 52.4 52.5 52 57 C51.5 62 48.5 66 44 66 Z"/>
-        <path d="M41 50.5 C41.6 50.5 41.9 51 41.9 51.6 M46.1 50.5 C46.7 50.5 47 51 47 51.6" stroke-width="1.5"/>
-        <path d="M42.6 60.5 C43.2 61.3 44.8 61.3 45.4 60.5"/>
-        <path d="M37 45 C33 43 29.5 43.5 27 45.5 C29.5 47.5 33.5 47.8 36.2 46.6"/>
-        <path d="M51 45 C55 43 58.5 43.5 61 45.5 C58.5 47.5 54.5 47.8 51.8 46.6"/>
-        <path d="M39 40 C36.5 34 34 29 30 24 M36.6 32.6 C33 31 29.5 30.4 26 30.8 M34.2 27.4 C31.4 24.6 28 22.8 24.2 22 M30 24 C29 19.5 27.6 15.6 25.4 12 M30.6 25.6 C27 25 23.4 25.6 20.4 27.4 M25.4 12 C23.4 13.8 21.8 16 20.8 18.6"/>
-        <path d="M49 40 C51.5 34 54 29 58 24 M51.4 32.6 C55 31 58.5 30.4 62 30.8 M53.8 27.4 C56.6 24.6 60 22.8 63.8 22 M58 24 C59 19.5 60.4 15.6 62.6 12 M57.4 25.6 C61 25 64.6 25.6 67.6 27.4 M62.6 12 C64.6 13.8 66.2 16 67.2 18.6"/>
-        <g stroke-width=".8" opacity=".8">
-          <path d="M16 34 l1.3 3.2 l3.2 1.3 l-3.2 1.3 l-1.3 3.2 l-1.3 -3.2 l-3.2 -1.3 l3.2 -1.3 z"/>
-          <path d="M72 34 l1.3 3.2 l3.2 1.3 l-3.2 1.3 l-1.3 3.2 l-1.3 -3.2 l-3.2 -1.3 l3.2 -1.3 z"/>
-          <path d="M78 20 l.8 2 l2 .8 l-2 .8 l-.8 2 l-.8 -2 l-2 -.8 l2 -.8 z"/>
-          <path d="M10 22 l.8 2 l2 .8 l-2 .8 l-.8 2 l-.8 -2 l-2 -.8 l2 -.8 z"/>
-        </g>
-      </svg>
-    </div>
+    <div class="cover__mark anim-in" id="cover-mark" aria-hidden="true"></div>
 
-    <h1><span class="cov-t1" id="ct1">A Kingdom</span><span class="cov-t2" id="ct2">made for her</span></h1>
-    <div class="orn cov-orn" id="corn" aria-hidden="true"><i></i>
-      <svg width="26" height="9" viewBox="0 0 26 9" fill="none" stroke="currentColor" stroke-width=".9">
-        <path d="M13 1.2 L15.6 4.5 L13 7.8 L10.4 4.5 Z"/><path d="M4 4.5 L9.6 4.5 M16.4 4.5 L22 4.5"/>
-        <circle cx="2" cy="4.5" r="1"/><circle cx="24" cy="4.5" r="1"/></svg><i></i></div>
-    <p class="cov-sub" id="csub">A private collection of things<br/>I never want us to forget.</p>
-    <button class="cov-cta" id="ccta">Open the Book</button>
-    <div class="cov-star" id="cstar" aria-hidden="true">
-      <svg width="14" height="14" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 0 L9 6 L15 7.5 L9 9 L7.5 15 L6 9 L0 7.5 L6 6 Z"/></svg>
-    </div>
+    <h1 class="cover__title anim-in" id="cover-title">
+      <span class="cover__title-top"    id="cover-title-top"></span>
+      <span class="cover__title-bottom" id="cover-title-bottom"></span>
+    </h1>
+
+    <div class="cover__orn anim-in" id="cover-orn"></div>
+    <p class="cover__blurb anim-in" id="cover-blurb"></p>
+
+    <button class="cover__cta anim-in" id="cover-cta" type="button"></button>
+    <div class="cover__star anim-in" id="cover-star" aria-hidden="true"></div>
   </div>
 
-  <div class="cov-right torn-l">
-    <div class="ph" id="cover-photo"><span class="empty">Her photograph</span></div>
-    <div class="cov-note"><span class="script">To the stars<br/>who listen and<br/>the dreams that<br/>are answered.</span></div>
-    <div class="cov-frame"><div class="in">
-      <svg width="54" height="58" viewBox="0 0 88 76" fill="none" stroke="rgba(37,35,31,.55)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M44 66 C39.5 66 36.5 62 36 57 C35.6 52.5 37 47 39 43.5 C40.6 40.7 42.2 39 44 39 C45.8 39 47.4 40.7 49 43.5 C51 47 52.4 52.5 52 57 C51.5 62 48.5 66 44 66 Z"/>
-        <path d="M37 45 C33 43 29.5 43.5 27 45.5 M51 45 C55 43 58.5 43.5 61 45.5"/>
-        <path d="M39 40 C36.5 34 34 29 30 24 M36.6 32.6 C33 31 29.5 30.4 26 30.8 M30 24 C29 19.5 27.6 15.6 25.4 12"/>
-        <path d="M49 40 C51.5 34 54 29 58 24 M51.4 32.6 C55 31 58.5 30.4 62 30.8 M58 24 C59 19.5 60.4 15.6 62.6 12"/>
-      </svg></div></div>
-    <div class="cov-small"><div class="im"><span>Add photo</span></div></div>
+  <div class="cover__right">
+    <div class="cover__photo" id="cover-photo"></div>
+    <div class="cover__aside anim-in" id="cover-aside">
+      <div class="cover__note"     id="cover-note"></div>
+      <div class="cover__frame"    id="cover-frame"></div>
+      <div class="cover__snapshot" id="cover-snapshot"></div>
+    </div>
   </div>
 </header>
 
-<!-- ═══════ CHAPTER INDEX ═══════ -->
-<nav id="chapters" aria-label="Chapters"></nav>
+<!-- ══════════════════════════════════════════════════════════════════════
+     CONTENTS
+     ══════════════════════════════════════════════════════════════════════ -->
+<nav class="contents" id="contents" aria-label="Chapters"></nav>
 
-<!-- ═══════ FOOTLINE ═══════ -->
-<footer id="footline">
-  <p>There are still pages missing.<br/>I hope there always will be.</p>
-  <span class="sig">— for sara, always ♡</span>
-  <div class="more">
-    <button data-open="library">The Library</button>
-    <button data-open="marginalia">Marginalia</button>
-    <button data-open="soundtrack">Soundtrack</button>
-    <button data-open="little">The Little Things</button>
-    <button data-open="notes">Notes From Me</button>
-    <button data-open="epilogue">Epilogue</button>
+<!-- ══════════════════════════════════════════════════════════════════════
+     COLOPHON
+     ══════════════════════════════════════════════════════════════════════ -->
+<footer class="colophon" id="colophon">
+  <p id="colophon-lines"></p>
+  <span class="colophon__sig" id="colophon-sig"></span>
+
+  <div class="colophon__more">
+    <button type="button" data-open="library">The Library</button>
+    <button type="button" data-open="marginalia">Marginalia</button>
+    <button type="button" data-open="soundtrack">Soundtrack</button>
+    <button type="button" data-open="little">The Little Things</button>
+    <button type="button" data-open="notes">Notes From Me</button>
+    <button type="button" data-open="epilogue">Epilogue</button>
   </div>
+
+  <p class="colophon__credit" id="colophon-credit"></p>
 </footer>
 
-<!-- ═══════ PAGE VIEW ═══════ -->
-<div id="page" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="pg-name">
-  <div class="pg-bar">
-    <button class="pg-back" id="pg-back"><span class="a"></span> Back to the book</button>
-    <span class="pg-name" id="pg-name"></span>
-    <div class="pg-nav">
-      <button id="pg-prev">← Prev</button>
-      <button id="pg-next">Next →</button>
+<!-- ══════════════════════════════════════════════════════════════════════
+     READER — chapter overlay. Opaque before content animates.
+     ══════════════════════════════════════════════════════════════════════ -->
+<div class="reader" id="reader" role="dialog" aria-modal="true"
+     aria-labelledby="reader-label" data-open="false">
+  <div class="reader__bar">
+    <button class="reader__back" id="reader-back" type="button">
+      <i aria-hidden="true"></i> Back to the book
+    </button>
+    <span class="reader__label" id="reader-label"></span>
+    <div class="reader__nav">
+      <button id="reader-prev" type="button">Prev</button>
+      <button id="reader-next" type="button">Next</button>
     </div>
   </div>
-  <div class="pg-head" id="pg-head"></div>
-  <div class="pg-in" id="pg-in"></div>
+  <div class="reader__head" id="reader-head"></div>
+  <div class="reader__body" id="reader-body"></div>
 </div>
 
-<button id="audio"><span class="mk" aria-hidden="true"></span><span id="audio-label">Sound</span></button>
-
-<div id="lb" data-lenis-prevent role="dialog" aria-modal="true">
-  <button id="lb-x">Close</button>
-  <img id="lb-img" src="" alt=""/>
-  <div id="lb-meta"></div>
+<!-- ══════════════════════════════════════════════════════════════════════
+     LIGHTBOX — warm cream, never a black modal
+     ══════════════════════════════════════════════════════════════════════ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true"
+     aria-label="Artwork detail" data-open="false">
+  <button class="lightbox__close" id="lightbox-close" type="button">Close</button>
+  <div class="lightbox__stage" id="lightbox-stage"></div>
+  <div class="lightbox__meta"  id="lightbox-meta"></div>
+  <div class="lightbox__controls">
+    <button id="lightbox-prev" type="button">Previous</button>
+    <button id="lightbox-next" type="button">Next</button>
+  </div>
 </div>
 
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const lenis = new Lenis({lerp:.075, smoothWheel:!REDUCED});
-gsap.ticker.add(t=>lenis.raf(t*1000));
-gsap.ticker.lagSmoothing(0);
-
-/* Lenis binds wheel/touch on window. Stop those events inside the overlays
-   during bubble so they never reach it — native scrolling then works. */
-['page','lb'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el)return;
-  ['wheel','touchmove','touchstart'].forEach(evt=>
-    el.addEventListener(evt,e=>e.stopPropagation(),{passive:true}));
-});
-
-const ORN = `<div class="orn" aria-hidden="true"><i></i><svg width="26" height="9" viewBox="0 0 26 9" fill="none" stroke="currentColor" stroke-width=".9"><path d="M13 1.2 L15.6 4.5 L13 7.8 L10.4 4.5 Z"/><path d="M4 4.5 L9.6 4.5 M16.4 4.5 L22 4.5"/><circle cx="2" cy="4.5" r="1"/><circle cx="24" cy="4.5" r="1"/></svg><i></i></div>`;
-const ORN_S = `<div class="orn" aria-hidden="true"><i></i><svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor"><path d="M4.5 0 L5.6 3.4 L9 4.5 L5.6 5.6 L4.5 9 L3.4 5.6 L0 4.5 L3.4 3.4 Z"/></svg><i></i></div>`;
-const STAG_SM = `<svg width="52" height="46" viewBox="0 0 88 76" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M44 66 C39.5 66 36.5 62 36 57 C35.6 52.5 37 47 39 43.5 C40.6 40.7 42.2 39 44 39 C45.8 39 47.4 40.7 49 43.5 C51 47 52.4 52.5 52 57 C51.5 62 48.5 66 44 66 Z"/><path d="M37 45 C33 43 29.5 43.5 27 45.5 M51 45 C55 43 58.5 43.5 61 45.5"/><path d="M39 40 C36.5 34 34 29 30 24 M36.6 32.6 C33 31 29.5 30.4 26 30.8 M30 24 C29 19.5 27.6 15.6 25.4 12"/><path d="M49 40 C51.5 34 54 29 58 24 M51.4 32.6 C55 31 58.5 30.4 62 30.8 M58 24 C59 19.5 60.4 15.6 62.6 12"/></svg>`;
-
-/* seeded rng — art is stable between loads */
-function mkRnd(s){let x=s;return()=>{x=(x*16807)%2147483647;return(x-1)/2147483646;};}
-
-/* ═══════ COVER ENTRANCE ═══════ */
-if(!REDUCED){
-  gsap.to('#stag',{opacity:1,duration:1.5,delay:.3,ease:'power2.out'});
-  gsap.to('#ct1',{opacity:1,y:0,duration:1.3,delay:.7,ease:'power3.out',from:{y:16}});
-  gsap.to('#ct2',{opacity:1,y:0,duration:1.2,delay:.95,ease:'power3.out',from:{y:12}});
-  gsap.to('#corn',{opacity:1,duration:1,delay:1.25});
-  gsap.to('#csub',{opacity:1,y:0,duration:1.1,delay:1.4,ease:'power3.out',from:{y:10}});
-  gsap.to('#ccta',{opacity:1,y:0,duration:1,delay:1.65,ease:'power3.out',from:{y:10}});
-  gsap.to('#cstar',{opacity:1,duration:.9,delay:1.9});
-}else{
-  ['#stag','#ct1','#ct2','#corn','#csub','#ccta','#cstar'].forEach(s=>gsap.set(s,{opacity:1}));
-}
-document.getElementById('ccta').addEventListener('click',()=>{
-  lenis.scrollTo('#chapters',{offset:-10,duration:REDUCED?0:1.5});
-});
-
-/* ═══════ CHAPTER INDEX ═══════ */
-const INDEX=[
-  {k:'letter',n:'I.',t:'The Letter',b:'Some things are hard to say out loud. So I wrote them here. For you. For us. For every version of our story.',l:'Read the letter'},
-  {k:'archive',n:'II.',t:"An Artist's Archive",b:'The colours she loves. The things she creates. The world through her eyes.',l:'Browse the archive'},
-  {k:'map',n:'III.',t:'The Map',b:'Every place. Every moment. Every chapter of us.',l:'Explore the map'},
-  {k:'constellation',n:'IV.',t:'Her Constellation',b:'A universe of everything that makes her, her.',l:'Explore her stars'},
-  {k:'fireheart',n:'V.',t:'Fireheart',b:'She is fire and starlight. A rare combination. A force of her own.',l:'Read this chapter'},
-];
-const CARD_ART={
-  letter:`<div class="a-letter"><div class="a-paper">${
-    [88,96,82,92,70,90,86,60,94,76,88,44].map(w=>`<div class="ln" style="width:${w}%"></div>`).join('')
-  }</div></div>`,
-  archive:`<div class="a-arch">
-    <div class="a-ph" style="left:4%;top:8%;width:52%;aspect-ratio:3/4;transform:rotate(-4deg)"><div class="im" style="height:100%;background:linear-gradient(165deg,#1E2A38,#2E3F52 40%,#4A5468)"></div></div>
-    <div class="a-ph" style="right:6%;top:26%;width:44%;aspect-ratio:1/1;transform:rotate(5deg)"><div class="im" style="height:100%;background:linear-gradient(150deg,#5B6152,#7C7A64 55%,#9A9078)"></div></div>
-    <div class="a-ph" style="left:20%;bottom:4%;width:46%;aspect-ratio:4/3;transform:rotate(-2deg)"><div class="im" style="height:100%;background:linear-gradient(140deg,#8A7A62,#6E6350 60%,#514936)"></div></div>
-  </div>`,
-  map:`<canvas class="card-canvas" data-art="map" width="460" height="420"></canvas>`,
-  constellation:`<canvas class="card-canvas" data-art="con" width="460" height="420"></canvas>`,
-  fireheart:`<canvas class="card-canvas" data-art="fire" width="460" height="420"></canvas>`,
-};
-(function buildIndex(){
-  const wrap=document.getElementById('chapters');
-  INDEX.forEach(c=>{
-    const b=document.createElement('button');
-    b.className='ch'; b.dataset.open=c.k;
-    b.setAttribute('aria-label',`Open chapter ${c.n} ${c.t}`);
-    b.innerHTML=`<span class="num">${c.n}</span><h3>${c.t}</h3>${ORN_S}
-      <p class="blurb">${c.b}</p><div class="art">${CARD_ART[c.k]}</div>
-      <span class="lnk">${c.l} <span class="ar" aria-hidden="true"></span></span>`;
-    wrap.appendChild(b);
-  });
-})();
-
-/* ═══════ CARD ART ═══════ */
-function cardMap(c){
-  const x=c.getContext('2d'),W=c.width,H=c.height;
-  x.clearRect(0,0,W,H);
-  x.strokeStyle='rgba(37,35,31,.44)';x.lineWidth=1;x.lineCap='round';x.lineJoin='round';
-  const rg=[[.10,.42,.20],[.34,.30,.24],[.60,.44,.20],[.20,.66,.18],[.62,.70,.16]];
-  rg.forEach(([px,py,s])=>{
-    const bx=px*W,by=py*H,w=s*W;
-    x.beginPath();
-    x.moveTo(bx,by);x.lineTo(bx+w*.34,by-w*.52);x.lineTo(bx+w*.56,by-w*.20);
-    x.lineTo(bx+w*.74,by-w*.42);x.lineTo(bx+w,by);x.stroke();
-    x.beginPath();x.moveTo(bx+w*.22,by);x.lineTo(bx+w*.36,by-w*.30);x.lineTo(bx+w*.50,by-w*.06);x.stroke();
-  });
-  x.strokeStyle='rgba(164,133,77,.8)';x.setLineDash([2,5]);x.lineWidth=1;
-  x.beginPath();
-  x.moveTo(W*.14,H*.36);x.bezierCurveTo(W*.34,H*.30,W*.52,H*.42,W*.72,H*.40);
-  x.bezierCurveTo(W*.86,H*.39,W*.90,H*.56,W*.76,H*.66);
-  x.bezierCurveTo(W*.58,H*.78,W*.36,H*.74,W*.28,H*.86);
-  x.stroke();x.setLineDash([]);
-  x.fillStyle='rgba(111,47,43,.85)';
-  [[.14,.36],[.72,.40],[.76,.66],[.28,.86],[.44,.36]].forEach(([px,py])=>{
-    x.beginPath();x.arc(px*W,py*H,2.6,0,7);x.fill();
-  });
-  // castle
-  x.strokeStyle='rgba(37,35,31,.5)';
-  const cx=W*.46,cy=H*.92,u=W*.024;
-  x.beginPath();
-  x.moveTo(cx,cy);x.lineTo(cx,cy-u*4);x.lineTo(cx+u,cy-u*4);x.lineTo(cx+u,cy-u*5.4);
-  x.lineTo(cx+u*2,cy-u*5.4);x.lineTo(cx+u*2,cy-u*4);x.lineTo(cx+u*3.2,cy-u*4);
-  x.lineTo(cx+u*3.2,cy-u*6.4);x.lineTo(cx+u*4.2,cy-u*6.4);x.lineTo(cx+u*4.2,cy-u*4);
-  x.lineTo(cx+u*5.4,cy-u*4);x.lineTo(cx+u*5.4,cy-u*5.4);x.lineTo(cx+u*6.4,cy-u*5.4);
-  x.lineTo(cx+u*6.4,cy-u*4);x.lineTo(cx+u*7.4,cy-u*4);x.lineTo(cx+u*7.4,cy);
-  x.closePath();x.stroke();
-  x.font=`italic ${Math.round(W*.042)}px 'Italianno',cursive`;
-  x.fillStyle='rgba(111,47,43,.72)';
-  x.fillText('where we met',W*.02,H*.26);
-  x.fillText('the distance',W*.60,H*.60);
-  x.fillText('where we are now',W*.20,H*.98);
-}
-/* ── ink helpers ── */
-function blobPath(x,cx,cy,rad,rnd,rough,squash){
-  const n=30,pts=[];
-  for(let i=0;i<n;i++){
-    const a=i/n*Math.PI*2;
-    const w=1-rough*.5+rough*(.35*Math.sin(a*3+rnd()*.4)+.35*Math.sin(a*7)+.3*rnd());
-    pts.push([cx+Math.cos(a)*rad*w, cy+Math.sin(a)*rad*w*(squash||1)]);
-  }
-  x.beginPath();
-  const m0=[(pts[n-1][0]+pts[0][0])/2,(pts[n-1][1]+pts[0][1])/2];
-  x.moveTo(m0[0],m0[1]);
-  for(let i=0;i<n;i++){
-    const p=pts[i],q=pts[(i+1)%n];
-    x.quadraticCurveTo(p[0],p[1],(p[0]+q[0])/2,(p[1]+q[1])/2);
-  }
-  x.closePath();
-}
-/* dense ink mass: solid core + feathered rim */
-function inkMass(x,cx,cy,rad,rgb,rnd,{core=.72,squash=1,rough=.34,feather=340}={}){
-  x.save();
-  blobPath(x,cx,cy,rad,rnd,rough,squash);
-  const g=x.createRadialGradient(cx,cy,0,cx,cy,rad);
-  g.addColorStop(0,`rgba(${rgb},${core})`);
-  g.addColorStop(.55,`rgba(${rgb},${core*.82})`);
-  g.addColorStop(.86,`rgba(${rgb},${core*.34})`);
-  g.addColorStop(1,`rgba(${rgb},0)`);
-  x.fillStyle=g;x.fill();
-  x.restore();
-  for(let i=0;i<feather;i++){
-    const a=rnd()*Math.PI*2;
-    const d=rad*(.72+rnd()*.42);
-    const px=cx+Math.cos(a)*d,py=cy+Math.sin(a)*d*squash;
-    const r=rad*.05*(.3+rnd()*1.5);
-    const al=(1-Math.min(1,(d/rad-.72)/.42))*core*.5;
-    const g2=x.createRadialGradient(px,py,0,px,py,r);
-    g2.addColorStop(0,`rgba(${rgb},${al})`);g2.addColorStop(1,`rgba(${rgb},0)`);
-    x.fillStyle=g2;x.beginPath();x.arc(px,py,r,0,7);x.fill();
-  }
-}
-function cardCon(c){
-  const x=c.getContext('2d'),W=c.width,H=c.height,rnd=mkRnd(48271);
-  x.clearRect(0,0,W,H);
-  inkMass(x,W/2,H*.5,W*.40,'26,48,36',rnd,{core:.94,squash:.96,rough:.30,feather:420});
-  inkMass(x,W*.46,H*.44,W*.28,'16,32,23',rnd,{core:.6,squash:.98,rough:.42,feather:200});
-  const cx=W/2,cy=H*.5;
-  const pts=[[.5,.24,'Books'],[.76,.40,'Dreams'],[.74,.70,'Kindness'],[.5,.84,'Jokes'],[.24,.70,'Songs'],[.24,.40,'Art']];
-  x.strokeStyle='rgba(212,186,132,.5)';x.lineWidth=.9;
-  pts.forEach(p=>{x.beginPath();x.moveTo(cx,cy);x.lineTo(p[0]*W,p[1]*H);x.stroke();});
-  x.save();x.translate(cx,cy);
-  for(let i=0;i<8;i++){const len=i%2===0?W*.09:W*.04;x.rotate(Math.PI/4);
-    x.beginPath();x.moveTo(0,0);x.lineTo(4,-len*.3);x.lineTo(0,-len);x.lineTo(-4,-len*.3);x.closePath();
-    x.fillStyle=i%2===0?'rgba(244,233,206,.94)':'rgba(212,186,132,.6)';x.fill();}
-  x.restore();
-  pts.forEach(p=>{
-    const px=p[0]*W,py=p[1]*H;
-    const g=x.createRadialGradient(px,py,0,px,py,12);
-    g.addColorStop(0,'rgba(244,233,206,.55)');g.addColorStop(1,'rgba(244,233,206,0)');
-    x.fillStyle=g;x.beginPath();x.arc(px,py,12,0,7);x.fill();
-    x.fillStyle='#F0E4C6';x.beginPath();x.arc(px,py,2.4,0,7);x.fill();
-  });
-  for(let i=0;i<120;i++){
-    const a=rnd()*Math.PI*2,d=Math.pow(rnd(),.5)*W*.38;
-    x.fillStyle=`rgba(244,233,206,${.1+rnd()*.42})`;
-    x.beginPath();x.arc(W/2+Math.cos(a)*d,H/2+Math.sin(a)*d*.94,rnd()*.9,0,7);x.fill();
-  }
-  x.textAlign='center';x.fillStyle='rgba(243,238,228,.9)';
-  x.font=`${Math.round(W*.042)}px 'Cormorant Garamond',serif`;
-  pts.forEach(p=>{const oy=p[1]<.5?-14:22;x.fillText(p[2],p[0]*W,p[1]*H+oy);});
-}
-function cardFire(c){ paintFire(c, 20260615, true); }
-
-/* Fireheart artwork — ink + oxblood wash + brass veins. No sword, no flame, no figure. */
-function paintFire(c,seed,compact){
-  const x=c.getContext('2d'),W=c.width,H=c.height,rnd=mkRnd(seed);
-  x.fillStyle='#EFEADF';x.fillRect(0,0,W,H);
-  const S=Math.min(W,H);
-
-  /* diagonal charcoal sweep — a chain of ink masses along an axis */
-  const axis=[[.10,.28],[.26,.36],[.42,.46],[.56,.56],[.68,.66],[.80,.76]];
-  axis.forEach(([ax,ay],i)=>{
-    const t=i/(axis.length-1);
-    inkMass(x,W*ax,H*ay,S*(.30-t*.06),'24,26,23',rnd,
-      {core:.80-t*.12,squash:.72,rough:.40,feather:compact?150:260});
-  });
-  /* darker spine through the middle */
-  inkMass(x,W*.44,H*.48,S*.24,'14,15,13',rnd,{core:.72,squash:.6,rough:.46,feather:compact?110:190});
-  inkMass(x,W*.62,H*.60,S*.20,'18,19,17',rnd,{core:.62,squash:.62,rough:.48,feather:compact?90:160});
-
-  /* oxblood bleed, lower right */
-  inkMass(x,W*.74,H*.74,S*.26,'111,47,43',rnd,{core:.62,squash:.78,rough:.42,feather:compact?130:220});
-  inkMass(x,W*.86,H*.86,S*.19,'132,40,36',rnd,{core:.55,squash:.8,rough:.46,feather:compact?90:150});
-  inkMass(x,W*.66,H*.84,S*.14,'88,28,26',rnd,{core:.44,squash:.85,rough:.5,feather:compact?60:110});
-
-  /* soft ivory reserve so the mass reads as a wash, not a block */
-  inkMass(x,W*.24,H*.70,S*.20,'239,234,223',rnd,{core:.5,squash:.8,rough:.5,feather:compact?70:120});
-
-  /* brass veins — follow the diagonal */
-  x.lineCap='round';
-  for(let k=0;k<5;k++){
-    let px=W*(.02+rnd()*.10),py=H*(.24+k*.10+rnd()*.03);
-    x.beginPath();x.moveTo(px,py);
-    for(let i=0;i<11;i++){
-      const nx=px+W*(.07+rnd()*.06),ny=py+H*(.035+rnd()*.045)+(rnd()-.5)*H*.03;
-      x.quadraticCurveTo(px+(nx-px)*.5,py+(rnd()-.5)*H*.045,nx,ny);px=nx;py=ny;
-    }
-    x.strokeStyle=`rgba(150,116,58,${.85-k*.11})`;x.lineWidth=(compact?2.4:3.6)-k*.45;x.stroke();
-    x.strokeStyle=`rgba(214,182,120,${.9-k*.13})`;x.lineWidth=(compact?1:1.5)-k*.18;x.stroke();
-    x.strokeStyle=`rgba(246,228,184,${.55-k*.09})`;x.lineWidth=(compact?.4:.6);x.stroke();
-  }
-
-  /* spatter */
-  for(let i=0;i<(compact?120:200);i++){
-    const px=rnd()*W,py=H*.18+rnd()*H*.76;
-    x.fillStyle=`rgba(20,22,19,${.03+rnd()*.16})`;
-    x.beginPath();x.arc(px,py,rnd()*1.9,0,7);x.fill();
-  }
-
-  /* faint mountain ridge — line drawing only, per spec */
-  x.strokeStyle='rgba(37,35,31,.3)';x.lineWidth=1;x.lineJoin='round';
-  x.beginPath();
-  x.moveTo(0,H*.93);x.lineTo(W*.09,H*.81);x.lineTo(W*.16,H*.88);
-  x.lineTo(W*.25,H*.76);x.lineTo(W*.35,H*.93);x.stroke();
-  x.beginPath();x.moveTo(W*.06,H*.93);x.lineTo(W*.13,H*.85);x.lineTo(W*.19,H*.91);x.stroke();
-}
-function paintCards(){
-  document.querySelectorAll('.card-canvas').forEach(c=>{
-    if(c.dataset.done)return; c.dataset.done='1';
-    const a=c.dataset.art;
-    if(a==='map')cardMap(c); else if(a==='con')cardCon(c); else cardFire(c);
-  });
-}
-paintCards();
-
-/* ═══════ REVEALS ═══════ */
-function reveal(scope){
-  (scope||document).querySelectorAll('.rv').forEach(el=>{
-    if(REDUCED){gsap.set(el,{opacity:1});return;}
-    gsap.fromTo(el,{opacity:0,y:22},{opacity:1,y:0,duration:1.2,ease:'power3.out',
-      scrollTrigger:{trigger:el,start:'top 92%',once:true,scroller:scope||undefined}});
-  });
-}
-if(!REDUCED){
-  gsap.fromTo('.ch',{opacity:0,y:26},{opacity:1,y:0,duration:1.1,stagger:.09,ease:'power3.out',
-    scrollTrigger:{trigger:'#chapters',start:'top 90%',once:true}});
-  gsap.fromTo('#footline',{opacity:0},{opacity:1,duration:1.2,
-    scrollTrigger:{trigger:'#footline',start:'top 94%',once:true}});
-}
-
-/* ═══════ PAGES ═══════ */
-const PAGES={
- letter:{k:'Chapter I',t:'The Letter',html:()=>`
-  <div class="lt-spread">
-   <div class="lt-col">
-    <div class="lt-rail"><div>15</div><div>06</div><div>2026</div></div>
-    <p>If you ever forget, I want you to come here.</p>
-    <p>You are the kind of person who notices the little things — the colour of the sky before it rains, the way a song can hold a whole memory, the quiet in people that they don't know they carry.</p>
-    <p>I like who I am when I'm around you. I think more carefully. I notice more. You did that without ever asking me to.</p>
-    <p>You have made my world feel less like a battlefield and more like home.</p>
-    <p>Thank you for being the steady in my story, the fire in my heart, and the person I am most proud to love.</p>
-    <span class="lt-sign"><span class="a">Always,</span><span class="a">Yours</span><span class="m">B</span></span>
-   </div>
-   <div class="lt-art">
-    <span class="empty">Add a photograph</span>
-    <div class="lt-seal">
-     <svg width="66" height="66" viewBox="0 0 66 66" fill="none" aria-hidden="true">
-      <circle cx="33" cy="33" r="31" fill="#7C6338"/><circle cx="33" cy="33" r="31" fill="url(#sg)"/>
-      <circle cx="33" cy="33" r="25" stroke="rgba(240,226,192,.45)" stroke-width="1"/>
-      <g stroke="rgba(240,226,192,.78)" stroke-width="1.1" stroke-linecap="round" transform="translate(33,33) scale(.42) translate(-44,-40)">
-       <path d="M44 66 C39.5 66 36.5 62 36 57 C35.6 52.5 37 47 39 43.5 C40.6 40.7 42.2 39 44 39 C45.8 39 47.4 40.7 49 43.5 C51 47 52.4 52.5 52 57 C51.5 62 48.5 66 44 66 Z"/>
-       <path d="M39 40 C36.5 34 34 29 30 24 M36.6 32.6 C33 31 29.5 30.4 26 30.8 M30 24 C29 19.5 27.6 15.6 25.4 12"/>
-       <path d="M49 40 C51.5 34 54 29 58 24 M51.4 32.6 C55 31 58.5 30.4 62 30.8 M58 24 C59 19.5 60.4 15.6 62.6 12"/></g>
-      <defs><radialGradient id="sg" cx=".36" cy=".3" r=".8">
-       <stop offset="0" stop-color="rgba(255,240,204,.5)"/><stop offset="1" stop-color="rgba(58,42,18,.5)"/>
-      </radialGradient></defs></svg>
-    </div>
-    <div class="lt-note"><span class="script">for the one<br/>who makes<br/>ordinary days<br/>extraordinary ♡</span></div>
-   </div>
-  </div>`},
-
- archive:{k:'Chapter II',t:"An Artist's Archive",html:()=>`
-  <div class="ar-grid">
-   <div class="ar-main">
-    <div class="fr" data-art-open="0"><span class="empty">Her at work</span></div>
-    <div class="ar-cap"><span class="it">A few pieces from her world.</span><span class="script">click to explore</span></div>
-   </div>
-   <div class="ar-scatter">
-    <div class="ar-note"><span class="script">she paints<br/>what words<br/>cannot.</span></div>
-    <div class="pol" data-art-open="1" style="left:0;top:14%;width:54%;transform:rotate(-4deg)"><div class="im" style="background:linear-gradient(160deg,#1F2B39,#33465C 45%,#5A6274)"></div></div>
-    <div class="pol" data-art-open="2" style="right:2%;top:4%;width:48%;transform:rotate(4deg)"><div class="im" style="background:linear-gradient(150deg,#6A6353,#8C8168 55%,#A79B80)"></div></div>
-    <div class="pol" data-art-open="3" style="left:14%;bottom:2%;width:50%;transform:rotate(-2deg)"><div class="im" style="background:linear-gradient(140deg,#8E7C60,#6C6046 60%,#4E452F)"></div></div>
-    <div class="pol" data-art-open="4" style="right:0;bottom:12%;width:42%;transform:rotate(3deg)"><div class="im" style="background:linear-gradient(165deg,#B3A88E,#8E856C)"></div></div>
-   </div>
-  </div>
-  <div class="ar-add">
-   <button id="ar-add-btn">Add to the archive</button>
-   <input type="file" id="photo-input" accept="image/*" multiple/>
-  </div>
-  <div id="extra"></div>`},
-
- map:{k:'Chapter III',t:'The Map',html:()=>`
-  <svg id="map-svg" viewBox="0 0 1000 520" fill="none" role="group" aria-label="Map of our places">
-   <path d="M70 300 C110 262 156 268 190 246 C226 222 240 176 288 168 C336 160 372 190 420 178 C470 166 496 118 548 122 C600 126 622 170 672 178 C720 186 758 158 800 172 C836 184 856 216 862 252" stroke="rgba(37,35,31,.32)" stroke-width="1.1" stroke-linecap="round"/>
-   <path d="M88 336 C130 302 178 308 214 286 C254 262 268 220 312 210" stroke="rgba(37,35,31,.14)" stroke-width=".8" stroke-linecap="round"/>
-   <g stroke="rgba(37,35,31,.42)" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M150 296 l24 -32 l16 21 l15 -19 l22 30"/><path d="M174 296 l16 -21 l13 17"/>
-    <path d="M232 306 l20 -27 l14 18 l12 -16 l18 25"/>
-    <path d="M430 244 l26 -36 l17 23 l16 -20 l24 33"/><path d="M456 244 l17 -23 l14 19"/>
-    <path d="M512 258 l22 -30 l15 20 l14 -18 l20 28"/>
-    <path d="M690 292 l22 -30 l15 20 l14 -18 l21 28"/><path d="M714 292 l15 -20 l12 16"/>
-    <path d="M300 366 l18 -25 l13 17 l11 -14 l17 22"/>
-   </g>
-   <path d="M470 150 C462 202 490 240 480 292 C472 332 494 364 486 406" stroke="rgba(36,61,53,.34)" stroke-width="1" stroke-linecap="round"/>
-   <g stroke="rgba(36,61,53,.36)" stroke-width=".85" stroke-linecap="round">
-    <path d="M206 396 l0 -13 M202 390 l4 -5 l4 5"/><path d="M225 404 l0 -13 M221 398 l4 -5 l4 5"/>
-    <path d="M190 410 l0 -13 M186 404 l4 -5 l4 5"/><path d="M241 392 l0 -13 M237 386 l4 -5 l4 5"/>
-    <path d="M778 350 l0 -13 M774 344 l4 -5 l4 5"/><path d="M796 360 l0 -13 M792 354 l4 -5 l4 5"/>
-    <path d="M760 366 l0 -13 M756 360 l4 -5 l4 5"/>
-   </g>
-   <g stroke="rgba(37,35,31,.5)" stroke-width="1" stroke-linejoin="round">
-    <path d="M452 466 l0 -36 l8 0 l0 -11 l7 0 l0 11 l9 0 l0 -16 l7 0 l0 16 l9 0 l0 -11 l7 0 l0 11 l8 0 l0 36 z"/>
-    <path d="M468 466 l0 -16 l11 0 l0 16"/>
-   </g>
-   <g stroke="rgba(37,35,31,.42)" stroke-width=".9" stroke-linecap="round">
-    <path d="M150 430 l26 0 l-4 8 l-18 0 z"/><path d="M163 430 l0 -18"/><path d="M163 414 l10 5 l-10 5 z"/>
-   </g>
-   <path d="M236 268 C300 252 366 232 414 214 M428 210 C486 194 522 208 560 258 M572 262 C620 250 660 234 696 222 M694 232 C664 296 592 342 508 372" stroke="rgba(164,133,77,.75)" stroke-width="1" stroke-dasharray="2 5" stroke-linecap="round"/>
-   <g transform="translate(898,120)">
-    <circle r="24" stroke="rgba(37,35,31,.2)" stroke-width=".8"/><circle r="16" stroke="rgba(37,35,31,.12)" stroke-width=".7"/>
-    <path d="M0 -22 L4.5 0 L0 22 L-4.5 0 Z" fill="rgba(37,35,31,.34)"/>
-    <path d="M-22 0 L0 4.5 L22 0 L0 -4.5 Z" fill="rgba(37,35,31,.16)"/>
-    <text y="-30" text-anchor="middle" font-family="Cormorant,serif" font-size="9" letter-spacing="1.6" fill="rgba(37,35,31,.42)">N</text>
-   </g>
-   <g class="mp" data-k="met" tabindex="0" role="button" aria-label="Where we met">
-    <circle class="h" cx="236" cy="268" r="13"/><circle class="d" cx="236" cy="268" r="3.4"/>
-    <text class="mp-l" x="60" y="238">Where we met</text><text class="mp-s" x="62" y="257">The beginning</text></g>
-   <g class="mp" data-k="spoke" tabindex="0" role="button" aria-label="The first night we spoke properly">
-    <circle class="h" cx="420" cy="212" r="13"/><circle class="d" cx="420" cy="212" r="3.4"/>
-    <text class="mp-l" x="392" y="166">The first night we spoke properly</text><text class="mp-s" x="394" y="185">The spark</text></g>
-   <g class="mp" data-k="realised" tabindex="0" role="button" aria-label="Where I realised">
-    <circle class="h" cx="694" cy="226" r="13"/><circle class="d" cx="694" cy="226" r="3.4"/>
-    <text class="mp-l" x="716" y="272">Where I realised</text><text class="mp-s" x="718" y="291">Everything changed</text></g>
-   <g class="mp" data-k="distance" tabindex="0" role="button" aria-label="The distance between us">
-    <circle class="h" cx="184" cy="374" r="13"/><circle class="d" cx="184" cy="374" r="3.4"/>
-    <text class="mp-l" x="44" y="350">The distance between us</text><text class="mp-s" x="46" y="369">Hard, but worth it</text></g>
-   <g class="mp" data-k="now" tabindex="0" role="button" aria-label="Where we are now">
-    <circle class="h" cx="500" cy="416" r="13"/><circle class="d" cx="500" cy="416" r="3.4"/>
-    <text class="mp-l" x="524" y="452">Where we are now</text><text class="mp-s" x="526" y="471">Home</text></g>
+<!-- Sound: opt-in only, never autoplays -->
+<button class="sound" id="sound" type="button" aria-pressed="false">
+  <svg class="sound__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+    <path class="sound__wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>
   </svg>
-  <div class="mp-foot">
-   <span class="script">Every place.<br/>Every memory.<br/>Every us.</span>
-   <div class="mp-read" id="mp-read" aria-live="polite"><p style="font-style:italic;color:var(--graphite);opacity:.7">Click a place to revisit the memory</p></div>
-  </div>`},
+  <span id="sound-label">Soundtrack: paused</span>
+</button>
 
- constellation:{k:'Chapter IV',t:'Her Constellation',html:()=>`
-  <div style="background:radial-gradient(ellipse 64% 64% at 50% 46%,#22352A,#16241B 62%,#101911);padding:3rem 2rem;border:1px solid var(--hair)">
-   <div class="cn-stage">
-    <div class="cn-wrap">
-     <canvas id="cn-canvas" width="900" height="640"></canvas>
-     <svg id="cn-svg" viewBox="0 0 900 640" role="group" aria-label="Her constellation"><g id="cn-stars"></g></svg>
-    </div>
-    <div class="cn-card" id="cn-card">
-     <div class="ct" id="cn-ct">Art</div>
-     <div class="cb" id="cn-cb" aria-live="polite">She sees beauty others walk past. She turns feeling into something the world can hold.</div>
-    </div>
-   </div>
-   <p class="cn-hint">Click a star</p>
-  </div>`},
-
- fireheart:{k:'Chapter V',t:'Fireheart',html:()=>`
-  <div class="fh-spread">
-   <div class="fh-txt">
-    <p>There are people who survive by becoming harder.</p>
-    <p class="hi">You have somehow remained gentle without ever becoming fragile.</p>
-    <p>I don't think you know how rare that is. It would have been easier to close, and you didn't. You kept making things. You kept paying attention. You stayed soft in the places most people armour first.</p>
-    <p>You are fire, but you are also home.</p>
-    <div style="margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hair)">
-     <span class="script" style="font-size:1.5rem">and you'd have found the light anyway —<br/>you always do</span>
-    </div>
-    <div style="margin-top:2rem;color:var(--graphite);opacity:.55">${STAG_SM}</div>
-   </div>
-   <div class="fh-art">
-    <canvas id="fh-canvas" width="900" height="1100"></canvas>
-    <div class="fh-crest">
-     <svg width="34" height="40" viewBox="0 0 34 40" fill="none" stroke="currentColor" stroke-width=".9" aria-hidden="true">
-      <path d="M4 12 l5 5 l6 -9 l6 9 l5 -5 v13 H4 z"/><circle cx="4" cy="10" r="1.4"/><circle cx="30" cy="10" r="1.4"/><circle cx="17" cy="5" r="1.4"/><path d="M8 29 h18 M11 33 h12"/></svg>
-    </div>
-    <div class="fh-note"><span class="script">To the girl<br/>who would<br/>bow to no one<br/>and change<br/>everything.</span></div>
-   </div>
-  </div>`},
-
- library:{k:'The Library',t:'The Stories We Love',html:()=>`
-  <div style="text-align:center">
-   <div class="lb-shelf" id="lb-shelf"></div>
-   <div class="lb-plank"></div>
-   <div class="lb-foot"><span class="script">To the series that gave us a kingdom of our own. ♡</span></div>
-  </div>`},
-
- marginalia:{k:'Marginalia',t:"Lines I'll Never Forget",html:()=>`
-  <div class="mg-row">
-   <div class="mg-c">
-    <p class="q q-serif">"I am not afraid.<br/>I was born to do this."</p>
-    <p class="attr">— Celaena Sardothien</p>
-    <span class="ic"><svg width="26" height="42" viewBox="0 0 26 42" fill="none" stroke="currentColor" stroke-width=".9" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 l3 8 v18 h-6 V10 z"/><path d="M4 28 h18"/><path d="M13 28 v10"/><path d="M10 38 h6"/></svg></span></div>
-   <div class="mg-c">
-    <p class="q q-serif">"Libraries were full of ideas —<br/>perhaps the most dangerous and<br/>powerful of all weapons."</p>
-    <p class="attr">— Sarah J. Maas</p>
-    <span class="ic"><svg width="30" height="40" viewBox="0 0 30 34" fill="none" stroke="currentColor" stroke-width=".9" aria-hidden="true"><path d="M15 32 C14 24 12 18 8 13 M15 24 C10 21 6 22 3 26 M15 27 C20 24 24 25 27 29"/><circle cx="8" cy="10" r="3"/><path d="M8 7 C6 3 8 1 11 0 M5 10 C1 8 0 5 1 2 M11 12 C15 12 18 9 19 6"/></svg></span></div>
-   <div class="mg-c">
-    <p class="q q-serif">"To whatever end,"<br/>he whispered, "fireheart."</p>
-    <p class="attr">— Dorian Havilliard</p>
-    <span class="ic"><svg width="34" height="40" viewBox="0 0 34 40" fill="none" stroke="currentColor" stroke-width=".9" stroke-linejoin="round" aria-hidden="true"><path d="M4 16 l6 6 l7 -11 l7 11 l6 -6 v14 H4 z"/><circle cx="4" cy="14" r="1.6"/><circle cx="30" cy="14" r="1.6"/><circle cx="17" cy="8" r="1.6"/></svg></span></div>
-  </div>
-  <div class="mg-foot"><span class="script">Some lines feel like they were written for you. ♡</span></div>`},
-
- notes:{k:'Notes From Me',t:'Things I Never Want to Forget',html:()=>`
-  <div class="mg-row">
-   <div class="mg-c"><p class="q">The way you wrinkle<br/>your nose when<br/>you laugh.</p>
-    <span class="ic"><svg width="24" height="32" viewBox="0 0 24 30" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round" aria-hidden="true"><path d="M12 3 C12 10 9 14 7 18 C5.5 21 7 24 10 24 M12 3 C12 10 15 14 17 18 C18.5 21 17 24 14 24"/><path d="M8 20 C9.5 21.5 14.5 21.5 16 20"/></svg></span></div>
-   <div class="mg-c"><p class="q">How you always know<br/>exactly what<br/>to say.</p>
-    <span class="ic"><svg width="40" height="34" viewBox="0 0 40 34" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round" aria-hidden="true"><path d="M20 8 C18 5 14 5 13 8 C12 11 16 14 20 17 C24 14 28 11 27 8 C26 5 22 5 20 8 Z"/><path d="M14 20 C9 20 5 17 4 12 M26 20 C31 20 35 17 36 12"/><path d="M6 12 C4 10 2 10 1 12 M34 12 C36 10 38 10 39 12"/><path d="M12 24 C8 26 5 25 3 22 M28 24 C32 26 35 25 37 22"/></svg></span></div>
-   <div class="mg-c"><p class="q">The way you<br/>believe in me,<br/>even when I don't<br/>believe in myself.</p>
-    <span class="ic"><svg width="26" height="30" viewBox="0 0 26 28" fill="none" stroke="currentColor" stroke-width=".9" aria-hidden="true"><path d="M13 2 l2.6 6 l6.4 1 l-4.6 4.6 l1.2 6.4 l-5.6 -3.2 l-5.6 3.2 l1.2 -6.4 L4 9 l6.4 -1 z"/><path d="M13 22 v4 M9 25 l1.5 -2 M17 25 l-1.5 -2"/></svg></span></div>
-  </div>
-  <div class="mg-foot" style="margin-top:3rem">
-   <p style="font-size:1rem;line-height:1.8;color:var(--charcoal)">There are a million more.<br/>I hope I get a lifetime to write them all.</p>
-  </div>`},
-
- soundtrack:{k:'Our Soundtrack',t:'Songs That Found Us',html:()=>`
-  <div class="st-spread">
-   <div>
-    <div class="st-card"><ol class="st-list" id="st-list"></ol><span class="st-more">and many more…</span></div>
-   </div>
-   <div class="st-art">
-    <svg width="200" height="200" viewBox="0 0 180 180" fill="none" aria-hidden="true">
-     <circle cx="90" cy="90" r="86" fill="#141310"/>
-     <g stroke="rgba(243,238,228,.07)" stroke-width=".8" fill="none">
-      <circle cx="90" cy="90" r="78"/><circle cx="90" cy="90" r="70"/><circle cx="90" cy="90" r="62"/>
-      <circle cx="90" cy="90" r="54"/><circle cx="90" cy="90" r="46"/><circle cx="90" cy="90" r="38"/></g>
-     <circle cx="90" cy="90" r="30" fill="#856A3C"/><circle cx="90" cy="90" r="30" fill="url(#lg)"/>
-     <circle cx="90" cy="90" r="4" fill="#141310"/>
-     <defs><radialGradient id="lg" cx=".35" cy=".3" r=".85">
-      <stop offset="0" stop-color="rgba(255,236,196,.5)"/><stop offset="1" stop-color="rgba(48,36,14,.4)"/>
-     </radialGradient></defs></svg>
-    <div class="st-note"><span class="script">Every song tells<br/>a piece of our story.</span></div>
-   </div>
-  </div>`},
-
- little:{k:'The Little Things',t:'Her, in bits and pieces',html:()=>`
-  <div class="lt-grid">
-   ${[
-    ['<path d="M2 4.5 C5 3 9 3 12 4.5 C15 3 19 3 22 4.5 L22 19.5 C19 18 15 18 12 19.5 C9 18 5 18 2 19.5 Z"/><path d="M12 4.5 L12 19.5"/>','The way she gets lost in books'],
-    ['<path d="M3 8 h13 v6 a5 5 0 0 1 -5 5 h-3 a5 5 0 0 1 -5 -5 z"/><path d="M16 10 h2.5 a2.5 2.5 0 0 1 0 5 H16"/><path d="M7 5 c0 -1 1 -1 1 -2 M11 5 c0 -1 1 -1 1 -2"/>','Her morning coffee rituals'],
-    ['<rect x="2" y="6" width="20" height="14" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6 l1.6 -2.6 h4.8 L16 6"/>','How she sees beauty in everything'],
-    ['<path d="M15.5 3.5 l5 5 L8 21 H3 v-5 z"/><path d="M13.5 5.5 l5 5"/>','Her art, her therapy, her magic'],
-    ['<circle cx="5" cy="7" r="1.3"/><circle cx="13" cy="4" r="1.3"/><circle cx="19" cy="10" r="1.3"/><circle cx="9" cy="14" r="1.3"/><circle cx="16" cy="19" r="1.3"/><path d="M5 7 L13 4 L19 10 L9 14 Z M9 14 L16 19"/>','The stars she talks to at night'],
-    ['<path d="M4 15 v-3 a8 8 0 0 1 16 0 v3"/><path d="M4 14 h3 v6 H5 a1 1 0 0 1 -1 -1 z"/><path d="M20 14 h-3 v6 h2 a1 1 0 0 0 1 -1 z"/>','Songs that become our memories'],
-    ['<path d="M20 13.5 A8.5 8.5 0 1 1 10.5 4 a6.6 6.6 0 0 0 9.5 9.5 z"/>','The kind heart she carries'],
-    ['<path d="M12 21 C12 14 14 9 20 5 C20 12 17 18 12 21 Z"/><path d="M12 21 C12 15 10 11 5 8 C5 14 8 18 12 21 Z"/><path d="M12 21 v-6"/>','Her laugh, my favourite sound'],
-    ['<path d="M2 19 l7 -11 l4.5 6 l3 -4 l5.5 9 z"/><circle cx="17" cy="5.5" r="2"/>',"The dreams she's chasing fearlessly"],
-    ['<path d="M3 8 l4 4 l5 -7 l5 7 l4 -4 v10 H3 z"/><circle cx="3" cy="7" r="1"/><circle cx="21" cy="7" r="1"/><circle cx="12" cy="4" r="1"/>','The queen she was always meant to be'],
-   ].map(([p,t])=>`<div class="lt-cell"><span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">${p}</svg></span><p>${t}</p></div>`).join('')}
-  </div>`},
-
- epilogue:{k:'The End For Now',t:'But Not Really',html:()=>`
-  <div class="ep-spread">
-   <div class="ep-txt">
-    <p>There are still pages missing.<br/>I hope there always will be.</p>
-    <p>Thank you for letting me<br/>write this with you.</p>
-    <span class="ep-sign"><span class="a">Always,</span><span class="m">B</span></span>
-    <span class="ep-date">15 · 06 · 2026</span>
-    <br/><button class="ep-restart" id="ep-restart">Return to the beginning</button>
-   </div>
-   <div class="ep-art">
-    <svg viewBox="0 0 360 400" fill="none" stroke="rgba(37,35,31,.62)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:82%;height:auto" aria-hidden="true">
-     <path d="M20 390 C60 340 90 320 118 300 C150 278 176 268 210 262 C250 256 290 268 330 300 C348 316 356 350 350 390"/>
-     <path d="M60 360 C90 342 120 336 150 340 M200 300 C240 296 276 306 304 326"/>
-     <path d="M110 340 C130 326 156 320 180 322"/>
-     <g stroke-width=".8">
-      <path d="M136 388 l14 -8 M142 378 l14 -8 M148 368 l14 -8 M154 358 l14 -8 M160 348 l14 -8 M166 338 l14 -8 M172 328 l14 -8"/>
-      <path d="M136 388 C152 360 172 336 194 316 M150 392 C166 364 186 340 208 320"/></g>
-     <path d="M150 262 l0 -60 l10 0 l0 -14 l10 0 l0 14 l14 0 l0 -26 l10 0 l0 26 l14 0 l0 -14 l10 0 l0 14 l10 0 l0 60 z"/>
-     <path d="M172 262 l0 -34 l16 0 l0 34"/><path d="M178 236 a3 3 0 0 1 6 0"/>
-     <path d="M128 262 l0 -40 l8 0 l0 -12 l7 0 l0 12 l7 0 l0 40"/>
-     <path d="M212 262 l0 -46 l8 0 l0 -12 l7 0 l0 12 l7 0 l0 46"/>
-     <path d="M194 176 l0 -22 M194 154 l14 5 l-14 5"/>
-     <path d="M136 210 l0 -14 M136 196 l10 4 l-10 4"/>
-     <path d="M226 204 l0 -16 M226 188 l10 4 l-10 4"/>
-     <g stroke-width=".8"><path d="M156 236 h6 v9 h-6 z M200 240 h6 v9 h-6 z M134 240 h5 v8 h-5 z M218 236 h5 v8 h-5 z"/></g>
-     <g stroke-width=".8" opacity=".6">
-      <path d="M60 140 c4 -4 8 -4 12 0 M72 140 c4 -4 8 -4 12 0"/>
-      <path d="M290 110 c3 -3 6 -3 9 0 M299 110 c3 -3 6 -3 9 0"/>
-      <path d="M266 152 c2.5 -2.5 5 -2.5 7.5 0 M273.5 152 c2.5 -2.5 5 -2.5 7.5 0"/></g>
-    </svg>
-    <div class="ep-note"><span class="script">To my<br/>Fireheart.<br/>Forever. ♡</span></div>
-   </div>
-  </div>`},
-};
-const ORDER=['letter','archive','map','constellation','fireheart','library','marginalia','soundtrack','little','notes','epilogue'];
-let current=null, lastFocus=null;
-
-function openPage(k){
-  const p=PAGES[k]; if(!p) return;
-  current=k; lastFocus=document.activeElement;
-  document.getElementById('pg-name').textContent=p.t;
-  document.getElementById('pg-head').innerHTML=
-    `<span class="kicker">${p.k}</span><h2 class="ttl">${p.t}</h2>${ORN}`;
-  document.getElementById('pg-in').innerHTML=p.html();
-  const i=ORDER.indexOf(k);
-  document.getElementById('pg-prev').disabled=i<=0;
-  document.getElementById('pg-next').disabled=i>=ORDER.length-1;
-  const v=document.getElementById('page');
-  v.style.display='block'; v.scrollTop=0;
-  lenis.stop(); document.body.style.overflow='hidden';
-  /* keep the overlay fully opaque so the index never shows through;
-     animate only the contents */
-  gsap.set(v,{opacity:1});
-  if(!REDUCED){
-    gsap.fromTo('#pg-head, #pg-in > *',{opacity:0,y:20},
-      {opacity:1,y:0,duration:1,stagger:.07,delay:.05,ease:'power3.out'});
-  }
-  hydrate(k);
-  document.getElementById('pg-back').focus();
-  history.replaceState(null,'','#'+k);
-}
-function closePage(){
-  const v=document.getElementById('page');
-  const done=()=>{v.style.display='none';gsap.set(v,{opacity:1});
-    document.body.style.overflow='';lenis.start();current=null;
-    if(lastFocus)lastFocus.focus();history.replaceState(null,'',location.pathname);};
-  if(REDUCED){done();return;}
-  gsap.to('#pg-head, #pg-in > *',{opacity:0,y:-10,duration:.3,ease:'power2.in',onComplete:done});
-}
-document.getElementById('pg-back').addEventListener('click',closePage);
-document.getElementById('pg-prev').addEventListener('click',()=>{
-  const i=ORDER.indexOf(current); if(i>0) openPage(ORDER[i-1]);});
-document.getElementById('pg-next').addEventListener('click',()=>{
-  const i=ORDER.indexOf(current); if(i<ORDER.length-1) openPage(ORDER[i+1]);});
-document.addEventListener('click',e=>{
-  const b=e.target.closest('[data-open]'); if(b) openPage(b.dataset.open);});
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Escape')return;
-  if(document.getElementById('lb').classList.contains('open')) closeLb();
-  else if(current) closePage();
-});
-
-/* ═══════ PER-PAGE HYDRATION ═══════ */
-function hydrate(k){
-  if(k==='map'){
-    const R={
-      met:{t:'Where we met',b:'Replace this with the real place — the room, the street, the day of the week. The specific version always beats the poetic one.'},
-      spoke:{t:'The first night we spoke properly',b:'Not the first time we talked. The first time it went past the surface and neither of us wanted it to end.'},
-      realised:{t:'Where I realised',b:'There was a moment it stopped being a question. Write down where you were standing.'},
-      distance:{t:'The distance between us',b:'Every map has a stretch that was harder to cross. This one was ours. Worth marking honestly.'},
-      now:{t:'Where we are now',b:'Still being drawn. That is the point of leaving the edges open.'},
-    };
-    const pick=p=>{
-      document.querySelectorAll('.mp').forEach(x=>x.classList.remove('on'));
-      p.classList.add('on');
-      const d=R[p.dataset.k],el=document.getElementById('mp-read');
-      el.innerHTML=`<p class="rt">${d.t}</p><p class="rb">${d.b}</p>`;
-      if(!REDUCED)gsap.fromTo(el,{opacity:0,y:8},{opacity:1,y:0,duration:.7,ease:'power3.out'});
-    };
-    document.querySelectorAll('.mp').forEach(p=>{
-      p.addEventListener('click',()=>pick(p));
-      p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(p);}});
-    });
-  }
-
-  if(k==='constellation'){
-    const S=[
-      {x:450,y:118,n:'Books',t:'She finishes a book and carries it around for days afterwards. Ask her about the ending — she has a whole argument ready.'},
-      {x:664,y:238,n:'Dreams',t:'She is ambitious in a quiet way. She would rather do the thing properly than tell you she is doing it.'},
-      {x:648,y:432,n:'Kindness',t:'She has stayed gentle in a world that rewards the opposite, and I do not think she knows how rare that is.'},
-      {x:450,y:540,n:'Jokes',t:'The private jokes that make no sense to anyone else. Half of them are one word long by now.'},
-      {x:242,y:432,n:'Songs',t:'The songs she puts on when she works, and the completely different ones for when she does not want to think.'},
-      {x:236,y:238,n:'Art',t:'She sees beauty others walk past. She turns feeling into something the world can hold.'},
-    ];
-    const c=document.getElementById('cn-canvas');
-    const x=c.getContext('2d'),W=c.width,H=c.height,rnd=mkRnd(48271);
-    const bg=x.createRadialGradient(W/2,H*.45,0,W/2,H*.45,W*.62);
-    bg.addColorStop(0,'#22352A');bg.addColorStop(.55,'#16241B');bg.addColorStop(1,'#0F1811');
-    x.fillStyle=bg;x.fillRect(0,0,W,H);
-    for(let i=0;i<520;i++){x.fillStyle=`rgba(238,228,204,${.05+rnd()*.45})`;
-      x.beginPath();x.arc(rnd()*W,rnd()*H,rnd()*1.3,0,7);x.fill();}
-    for(let i=0;i<7;i++){
-      const sx=rnd()*W,sy=rnd()*H*.7,r=1.4+rnd()*1.1;
-      const g=x.createRadialGradient(sx,sy,0,sx,sy,r*7);
-      g.addColorStop(0,'rgba(246,236,208,.5)');g.addColorStop(1,'rgba(246,236,208,0)');
-      x.fillStyle=g;x.beginPath();x.arc(sx,sy,r*7,0,7);x.fill();
-      x.fillStyle='rgba(248,240,216,.9)';x.beginPath();x.arc(sx,sy,r,0,7);x.fill();
+<noscript>
+  <style>
+    .chapter-link__cue, .cover__cta { display: none; }
+    .noscript-note {
+      max-width: 46ch; margin: 0 auto 4rem; padding: 1.2rem 1.4rem;
+      border: 1px solid var(--rule); text-align: center;
+      font-style: italic; color: var(--graphite);
     }
-    x.fillStyle='rgba(11,17,12,.85)';x.beginPath();x.moveTo(0,H);
-    for(let px=0;px<=W;px+=14){const h=H-(22+rnd()*46);x.lineTo(px,h);x.lineTo(px+7,h+(10+rnd()*16));}
-    x.lineTo(W,H);x.closePath();x.fill();
-    const cx=W/2,cy=H*.5;
-    x.strokeStyle='rgba(164,133,77,.22)';x.lineWidth=.8;
-    [90,150,210,270].forEach(r=>{x.beginPath();x.arc(cx,cy,r,0,7);x.stroke();});
-    x.strokeStyle='rgba(164,133,77,.34)';
-    S.forEach(s=>{x.beginPath();x.moveTo(cx,cy);x.lineTo(s.x,s.y);x.stroke();});
-    x.save();x.translate(cx,cy);
-    for(let i=0;i<8;i++){const len=i%2===0?76:34;x.rotate(Math.PI/4);
-      x.beginPath();x.moveTo(0,0);x.lineTo(5,-len*.3);x.lineTo(0,-len);x.lineTo(-5,-len*.3);x.closePath();
-      x.fillStyle=i%2===0?'rgba(244,233,206,.93)':'rgba(212,186,132,.62)';x.fill();}
-    const gl=x.createRadialGradient(0,0,0,0,0,60);
-    gl.addColorStop(0,'rgba(246,236,208,.5)');gl.addColorStop(1,'rgba(246,236,208,0)');
-    x.fillStyle=gl;x.beginPath();x.arc(0,0,60,0,7);x.fill();x.restore();
-    S.forEach(s=>{const g=x.createRadialGradient(s.x,s.y,0,s.x,s.y,22);
-      g.addColorStop(0,'rgba(242,230,200,.5)');g.addColorStop(1,'rgba(242,230,200,0)');
-      x.fillStyle=g;x.beginPath();x.arc(s.x,s.y,22,0,7);x.fill();});
-    const g=document.getElementById('cn-stars');
-    S.forEach(s=>{
-      const el=document.createElementNS('http://www.w3.org/2000/svg','g');
-      el.setAttribute('class','st');el.setAttribute('tabindex','0');
-      el.setAttribute('role','button');el.setAttribute('aria-label',s.n);
-      const ty=s.y<300?s.y-26:s.y+34;
-      el.innerHTML=`<circle class="s" cx="${s.x}" cy="${s.y}" r="3.4"/>
-        <text x="${s.x}" y="${ty}" text-anchor="middle">${s.n}</text>`;
-      const pick=()=>{
-        document.querySelectorAll('.st').forEach(z=>z.classList.remove('on'));
-        el.classList.add('on');
-        document.getElementById('cn-ct').textContent=s.n;
-        document.getElementById('cn-cb').textContent=s.t;
-        if(!REDUCED)gsap.fromTo('#cn-card',{opacity:.35,y:8},{opacity:1,y:0,duration:.7,ease:'power3.out'});
-      };
-      el.addEventListener('click',pick);
-      el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}});
-      g.appendChild(el);
-    });
-  }
+  </style>
+  <p class="noscript-note">
+    This book needs JavaScript to turn its pages. Please enable it to read on.
+  </p>
+</noscript>
 
-  if(k==='fireheart') paintFire(document.getElementById('fh-canvas'),20260615,false);
-
-  if(k==='library'){
-    const B=[['Throne of<br/>Glass','#1B1E27'],['Crown of<br/>Midnight','#6B2A2A'],['Heir of<br/>Fire','#22402E'],
-      ['Queen of<br/>Shadows','#59211E'],['Empire of<br/>Storms','#213450'],['Tower of<br/>Dawn','#1B293D'],
-      ['Kingdom<br/>of Ash','#856632']];
-    const s=document.getElementById('lb-shelf');
-    B.forEach((b,i)=>{
-      const d=document.createElement('div');d.className='bk';
-      d.style.background=b[1];d.style.height=(200+((i*37)%22))+'px';
-      d.innerHTML=`<span class="o"><svg width="13" height="13" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true"><path d="M7.5 0 L9 6 L15 7.5 L9 9 L7.5 15 L6 9 L0 7.5 L6 6 Z"/></svg></span>
-        <span class="t">${b[0]}</span><span class="a">Sarah<br/>J. Maas</span>`;
-      s.appendChild(d);
-    });
-  }
-
-  if(k==='soundtrack'){
-    const SONGS=['Holocene — Bon Iver','You Are the Reason — Calum Scott','Until I Found You — Stephen Sanchez',
-      'Bloom — The Paper Kites','Sparks — Coldplay','Lover — Taylor Swift','The Night We Met — Lord Huron','505 — Arctic Monkeys'];
-    const ul=document.getElementById('st-list');
-    SONGS.forEach(t=>{const li=document.createElement('li');li.textContent=t;ul.appendChild(li);});
-  }
-
-  if(k==='archive'){
-    const META=[
-      {t:'Her at work',d:'Add a date',m:'Photograph',n:'Replace this with the real moment — where you were, what she was making.'},
-      {t:'Untitled study',d:'Add a date',m:'Add the medium',n:'A short note about this piece.'},
-      {t:'Palette',d:'Add a date',m:'Photograph',n:'The colours she keeps returning to.'},
-      {t:'Sketchbook',d:'Add a date',m:'Graphite on paper',n:'Unfinished, and better for it.'},
-      {t:'In progress',d:'Add a date',m:'Add the medium',n:'The light was going and you said wait.'},
-    ];
-    document.querySelectorAll('[data-art-open]').forEach(el=>{
-      el.setAttribute('tabindex','0');el.setAttribute('role','button');
-      const meta=META[+el.dataset.artOpen]||META[0];
-      const go=()=>{const img=el.querySelector('img');openLb(img?img.src:null,meta);};
-      el.addEventListener('click',go);
-      el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
-    });
-    const btn=document.getElementById('ar-add-btn'),inp=document.getElementById('photo-input');
-    btn.addEventListener('click',()=>inp.click());
-    inp.addEventListener('change',function(){
-      const wrap=document.getElementById('extra');
-      Array.from(this.files).forEach(f=>{
-        const url=URL.createObjectURL(f);
-        const d=document.createElement('div');d.className='pol';
-        d.setAttribute('tabindex','0');d.setAttribute('role','button');
-        d.innerHTML=`<div class="im"><img src="${url}" alt="Artwork from the archive"></div>`;
-        const meta={t:'Untitled',d:'Add a date',m:'Add the medium',n:'Add a short note about this piece.'};
-        d.addEventListener('click',()=>openLb(url,meta));
-        d.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLb(url,meta);}});
-        wrap.appendChild(d);
-        if(!REDUCED)gsap.fromTo(d,{opacity:0,y:16},{opacity:1,y:0,duration:.9,ease:'power3.out'});
-      });
-      this.value='';
-    });
-  }
-
-  if(k==='epilogue'){
-    document.getElementById('ep-restart').addEventListener('click',()=>{
-      closePage();
-      setTimeout(()=>lenis.scrollTo(0,{duration:REDUCED?0:1.4}),320);
-    });
-  }
-}
-
-/* ═══════ LIGHTBOX ═══════ */
-function openLb(src,meta){
-  const lb=document.getElementById('lb'),img=document.getElementById('lb-img');
-  if(src){img.src=src;img.style.display='block';}else{img.removeAttribute('src');img.style.display='none';}
-  document.getElementById('lb-meta').innerHTML= meta
-    ? `<div class="t">${meta.t}</div><div class="d">${meta.d} · ${meta.m}</div><div class="n">${meta.n}</div>` : '';
-  lb.classList.add('open');
-  document.getElementById('lb-x').focus();
-}
-function closeLb(){document.getElementById('lb').classList.remove('open');}
-document.getElementById('lb-x').addEventListener('click',closeLb);
-document.getElementById('lb').addEventListener('click',e=>{if(e.target.id==='lb')closeLb();});
-
-/* ═══════ AUDIO (never autoplays) ═══════ */
-const aud=new Audio('https://www.bensound.com/bensound-music/bensound-memories.mp3');
-aud.loop=true;aud.volume=0;let audOn=false;
-document.getElementById('audio').addEventListener('click',()=>{
-  const b=document.getElementById('audio'),l=document.getElementById('audio-label');
-  audOn=!audOn;b.classList.toggle('playing',audOn);
-  if(audOn){aud.play().catch(()=>{});gsap.to(aud,{volume:.26,duration:REDUCED?0:2.2});l.textContent='Sound on';}
-  else{gsap.to(aud,{volume:0,duration:REDUCED?0:1,onComplete:()=>aud.pause()});l.textContent='Sound';}
-});
-
-/* deep link */
-const h=location.hash.replace('#','');
-if(h&&PAGES[h]) setTimeout(()=>openPage(h),400);
-</script>
 </body>
 </html>
