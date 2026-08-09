@@ -493,6 +493,15 @@ const lenis = new Lenis({lerp:.075, smoothWheel:!REDUCED});
 gsap.ticker.add(t=>lenis.raf(t*1000));
 gsap.ticker.lagSmoothing(0);
 
+/* Lenis binds wheel/touch on window. Stop those events inside the overlays
+   during bubble so they never reach it — native scrolling then works. */
+['page','lb'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el)return;
+  ['wheel','touchmove','touchstart'].forEach(evt=>
+    el.addEventListener(evt,e=>e.stopPropagation(),{passive:true}));
+});
+
 const ORN = `<div class="orn" aria-hidden="true"><i></i><svg width="26" height="9" viewBox="0 0 26 9" fill="none" stroke="currentColor" stroke-width=".9"><path d="M13 1.2 L15.6 4.5 L13 7.8 L10.4 4.5 Z"/><path d="M4 4.5 L9.6 4.5 M16.4 4.5 L22 4.5"/><circle cx="2" cy="4.5" r="1"/><circle cx="24" cy="4.5" r="1"/></svg><i></i></div>`;
 const ORN_S = `<div class="orn" aria-hidden="true"><i></i><svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor"><path d="M4.5 0 L5.6 3.4 L9 4.5 L5.6 5.6 L4.5 9 L3.4 5.6 L0 4.5 L3.4 3.4 Z"/></svg><i></i></div>`;
 const STAG_SM = `<svg width="52" height="46" viewBox="0 0 88 76" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M44 66 C39.5 66 36.5 62 36 57 C35.6 52.5 37 47 39 43.5 C40.6 40.7 42.2 39 44 39 C45.8 39 47.4 40.7 49 43.5 C51 47 52.4 52.5 52 57 C51.5 62 48.5 66 44 66 Z"/><path d="M37 45 C33 43 29.5 43.5 27 45.5 M51 45 C55 43 58.5 43.5 61 45.5"/><path d="M39 40 C36.5 34 34 29 30 24 M36.6 32.6 C33 31 29.5 30.4 26 30.8 M30 24 C29 19.5 27.6 15.6 25.4 12"/><path d="M49 40 C51.5 34 54 29 58 24 M51.4 32.6 C55 31 58.5 30.4 62 30.8 M58 24 C59 19.5 60.4 15.6 62.6 12"/></svg>`;
