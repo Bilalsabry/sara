@@ -136,8 +136,33 @@ All colour, type and spacing live as CSS custom properties at the top of
 ## Notes
 
 - **Sound never autoplays.** It is opt-in via the control at lower left, and
-  its state is announced to screen readers. The Bensound attribution in the
-  footer is required by their licence while that track is in use.
+  its state is announced to screen readers.
+
+### The music
+
+`assets/audio/gymnopedie-no1.mp3` — Erik Satie, *Gymnopédie No. 1*.
+
+Free to use with **no obligations whatsoever**. Both layers are clear, which is
+the part people usually miss — a public-domain *composition* played on a
+copyrighted *recording* is still copyrighted:
+
+| Layer | Status |
+|---|---|
+| Composition | Satie died 1925 → public domain worldwide |
+| Recording | [CC0 1.0 Universal](https://commons.wikimedia.org/wiki/File:Gymnopedie_No._1..ogg) — all rights waived |
+
+CC0 requires no attribution, no share-alike, and permits commercial use. The
+file is self-hosted, so there's no hotlinking and no external dependency.
+
+**To swap the track**, drop an MP3 into `assets/audio/` and change `AUDIO.src`
+in `content.js`. If the new track needs a credit (CC-BY, for instance), set
+`attribution` and the credit line reappears in the colophon automatically.
+Leave it `null` for CC0 or public-domain tracks.
+
+Good sources for genuinely free music: [Musopen](https://musopen.org)
+(CC0 and public-domain classical recordings) and
+[Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Piano_music).
+Check the *recording's* licence, not just the composer's death date.
 - **Reduced motion** is respected throughout; animation is an enhancement and
   the page renders fully without it.
 - **If the CDN is blocked**, GSAP and Lenis simply don't load and everything

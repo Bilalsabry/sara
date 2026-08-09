@@ -344,10 +344,26 @@ export const PAGE_META = {
   epilogue:      { folio: 'The End For Now',  title: 'But Not Really' },
 };
 
-/* Audio. Attribution is required by the Bensound free licence and is
-   rendered in the footer — do not remove it while this track is in use. */
+/* ── AUDIO ───────────────────────────────────────────────────────────────
+   Erik Satie, Gymnopédie No. 1.
+
+   Both layers are clear, which is what matters — a public-domain composition
+   played on a copyrighted recording would still be a copyrighted recording:
+
+     composition  Satie died 1925 → public domain worldwide
+     recording    Creative Commons CC0 1.0 Universal, all rights waived
+                  https://commons.wikimedia.org/wiki/File:Gymnopedie_No._1..ogg
+
+   CC0 imposes no obligations at all: no attribution, no share-alike, no
+   restriction on commercial use. The file is self-hosted rather than
+   hotlinked, so there is no external dependency and nothing to break.
+
+   `attribution: null` means no credit line renders. If you ever swap in a
+   CC-BY track, put the credit here and it reappears in the colophon. */
 export const AUDIO = {
-  src: 'https://www.bensound.com/bensound-music/bensound-memories.mp3',
-  attribution: 'Music: “Memories” by Bensound',
-  attributionHref: 'https://www.bensound.com',
+  src: 'assets/audio/gymnopedie-no1.mp3',
+  title: 'Gymnopédie No. 1',
+  composer: 'Erik Satie',
+  attribution: null,
+  attributionHref: null,
 };

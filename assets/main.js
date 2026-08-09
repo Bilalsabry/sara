@@ -137,8 +137,16 @@ function archiveCardArt() {
 function renderColophon() {
   $('#colophon-lines').innerHTML = FOOTER.lines.join('<br>');
   $('#colophon-sig').textContent = FOOTER.signature;
-  $('#colophon-credit').innerHTML =
-    `${AUDIO.attribution} — <a href="${AUDIO.attributionHref}" target="_blank" rel="noopener">bensound.com</a>`;
+  /* Only rendered when the track's licence actually requires a credit.
+     The current track is CC0, so this stays empty. */
+  const credit = $('#colophon-credit');
+  if (AUDIO.attribution) {
+    credit.innerHTML = AUDIO.attributionHref
+      ? `${AUDIO.attribution} — <a href="${AUDIO.attributionHref}" target="_blank" rel="noopener">source</a>`
+      : AUDIO.attribution;
+  } else {
+    credit.remove();
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
