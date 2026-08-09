@@ -661,8 +661,30 @@ if (window.gsap && window.ScrollTrigger) {
   }
 } else {
   /* No animation library: reveal everything immediately. */
-  $$('.anim-in').forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+  revealAll();
 }
+
+/* Watchdog. requestAnimationFrame is paused while a tab is backgrounded, so a
+   reveal that begins just as the reader switches away can freeze part-way and
+   never resume. Nothing may stay invisible: force any stalled element open. */
+function revealAll() {
+  $$('.anim-in').forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  });
+}
+function sweepStalled() {
+  $$('.anim-in').forEach(el => {
+    if (parseFloat(getComputedStyle(el).opacity) < 1) {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    }
+  });
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') setTimeout(sweepStalled, 1400);
+});
+setTimeout(sweepStalled, 6000);
 
 /* Deep link straight into a chapter. */
 const hash = location.hash.replace('#', '');
