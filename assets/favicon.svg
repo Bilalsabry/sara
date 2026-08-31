@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- The heraldic stag from art.js, on the book's ivory ground. -->
+  <rect width="120" height="120" fill="#F3EEE4"/>
+  <g fill="none" stroke="#243D35" stroke-width="4.4"
+     stroke-linecap="round" stroke-linejoin="round" transform="translate(0 6)">
+    <path d="M60 92 L52 84 L48.5 70 L50 58 L54 50 L60 46 L66 50 L70 58 L71.5 70 L68 84 Z"/>
+    <path d="M49.5 61 C43 57 36 57.5 31 61 M70.5 61 C77 57 84 57.5 89 61"/>
+    <path d="M52 52 L44 40 L38 26 L35 12 M44 40 L31 36 M40 31 L28 24 M38 26 L26 25"/>
+    <path d="M68 52 L76 40 L82 26 L85 12 M76 40 L89 36 M80 31 L92 24 M82 26 L94 25"/>
+  </g>
+</svg>

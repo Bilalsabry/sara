@@ -81,6 +81,10 @@ body::before {
 /* Restrained grain. */
 #grain {
   position: fixed; inset: 0; z-index: 9999;
+  /* An SVG is a replaced element: inset alone leaves it at its intrinsic
+     300x150 default, which painted the grain as a rectangle in the top-left
+     corner instead of across the page. Size it explicitly. */
+  width: 100%; height: 100%;
   pointer-events: none; opacity: .34; mix-blend-mode: multiply;
 }
 
@@ -240,7 +244,10 @@ body::before {
 
 /* Paper objects on the right */
 .cover__note {
-  position: absolute; top: 7%; right: 5.5%; width: clamp(130px, 13vw, 168px);
+  /* The card holds four authored lines. Sizing to content keeps those breaks
+     intact if Italianno fails to load and a wider fallback takes over. */
+  position: absolute; top: 7%; right: 5.5%;
+  width: max-content; min-width: clamp(130px, 13vw, 168px); max-width: 46%;
   z-index: 3; background: var(--paper);
   padding: 1.5rem 1.15rem;
   box-shadow: var(--shadow-lift);
@@ -293,6 +300,9 @@ body::before {
     repeating-linear-gradient(   /* whisper-fine proofing hatch */
       45deg, transparent 0 11px, rgba(35,38,31,.028) 11px 12px);
 }
+/* <picture> is inline by default, so the img's percentage height would have
+   nothing to resolve against. Make the wrapper fill the frame. */
+.frame picture { display: block; width: 100%; height: 100%; }
 .frame img { width: 100%; height: 100%; object-fit: cover; }
 .frame__label {
   position: absolute; inset: 0;
@@ -814,8 +824,14 @@ body::before {
   max-width: min(78vw, 900px); max-height: 62vh;
   width: 100%; display: flex; align-items: center; justify-content: center;
 }
-.lightbox__stage .frame { max-height: 62vh; }
-.lightbox__stage img { max-height: 62vh; width: auto; object-fit: contain; }
+/* The frame shrink-wraps the photograph here rather than stretching to the
+   stage, which otherwise left a slab of empty paper beside every portrait. */
+.lightbox__stage .frame { width: auto; max-width: 100%; max-height: 62vh; }
+.lightbox__stage picture { display: inline-block; width: auto; height: auto; }
+.lightbox__stage img {
+  max-height: 62vh; max-width: 100%;
+  width: auto; height: auto; object-fit: contain;
+}
 .lightbox__meta { text-align: center; max-width: 52ch; }
 .lightbox__meta h3 {
   font-family: var(--display); font-weight: 400;
@@ -842,15 +858,23 @@ body::before {
    SOUND — discreet, never reads as a sixth chapter
    ══════════════════════════════════════════════════════════════════════════ */
 .sound {
-  position: fixed; bottom: 1.3rem; left: 1.3rem; z-index: 700;
+  position: fixed; z-index: 700;
+  bottom: calc(1.3rem + env(safe-area-inset-bottom));
+  left:   calc(1.3rem + env(safe-area-inset-left));
   cursor: pointer; min-height: 44px;
   display: inline-flex; align-items: center; gap: .55rem;
-  padding: .5rem .7rem .5rem .2rem;
+  padding: .5rem .8rem;
   font-family: var(--sans); font-size: .62rem;
-  letter-spacing: .14em; text-transform: uppercase; color: var(--graphite-lt);
-  transition: color .3s var(--ease);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--graphite);
+  /* Sits over both ivory pages and the dark cover panel, so it carries its own
+     ground — a faint paper chip rather than a button. */
+  background: rgba(243, 238, 228, .88);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  box-shadow: 0 2px 10px rgba(35, 38, 31, .10);
+  transition: color .3s var(--ease), background .3s var(--ease);
 }
-.sound:hover { color: var(--forest); }
+.sound:hover { color: var(--forest); background: rgba(243, 238, 228, .96); }
 .sound__icon { width: 13px; height: 13px; flex-shrink: 0; }
 .sound__wave { opacity: 0; transition: opacity .3s; }
 .sound[aria-pressed='true'] .sound__wave { opacity: 1; }
@@ -907,14 +931,18 @@ body::before {
 @media (max-width: 700px) {
   .contents { grid-template-columns: 1fr; gap: 0; padding-top: clamp(3rem, 7vh, 4rem); }
   .chapter-link {
-    flex-direction: row; align-items: center; text-align: left;
-    gap: 1.1rem; padding: 1.4rem .2rem;
+    /* folio | body on the first line, cue wrapped onto its own line beneath.
+       Without the wrap the cue is a flex item at its own max-content width and
+       squeezes the blurb into a one-word ribbon. */
+    flex-flow: row wrap; align-items: baseline; text-align: left;
+    gap: 0 1.1rem; padding: 1.4rem .2rem;
     border-bottom: 1px solid var(--rule);
   }
   .chapter-link + .chapter-link::before { display: none; }
-  .chapter-link__folio { margin: 0; min-width: 2.2rem; }
+  .chapter-link__folio { margin: 0; flex: 0 0 2.2rem; }
   .chapter-link__art { display: none; }
-  .chapter-link__body { flex: 1; }
+  .chapter-link__body { flex: 1 1 0; min-width: 0; }
+  .chapter-link__cue { flex: 0 0 100%; margin-left: 3.3rem; margin-top: .5rem; }
   .chapter-link__title { margin-bottom: .3rem; }
   .chapter-link__blurb { margin-bottom: .5rem; max-width: none; font-size: .88rem; }
   .chapter-link__rule { margin: 0 0 .6rem; }

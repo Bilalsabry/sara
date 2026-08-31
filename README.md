@@ -3,12 +3,13 @@
 A private digital artist's book. Static site — no build step, no framework.
 
 ```
-index.html          markup shell only
-assets/styles.css   design tokens + all styling
-assets/content.js   approved copy + image configuration  ← you edit this
-assets/art.js       original line work and generated ink
-assets/main.js      rendering, routing, overlays, accessibility
-COPY.md             the approved wording (source of truth)
+index.html                markup shell only
+assets/styles.css         design tokens + all styling
+assets/content.js         approved copy + image configuration  ← you edit this
+assets/art.js             original line work and generated ink
+assets/main.js            rendering, routing, overlays, accessibility
+tools/optimize-images.py  run after adding photographs
+COPY.md                   the approved wording (source of truth)
 ```
 
 Open `index.html` in a browser, or serve the folder:
@@ -39,8 +40,23 @@ assets/images/her-at-work.jpg
 assets/images/sketchbook-01.jpg
 ```
 
-Any format the browser reads works — `.jpg`, `.png`, `.webp`, `.avif`.
-Aim for roughly 1600px on the long edge; larger than that is wasted bytes.
+Drop the originals straight off the phone — size and rotation are handled for
+you. Then run:
+
+```bash
+pip install pillow          # once
+python3 tools/optimize-images.py
+```
+
+That bakes EXIF rotation into the pixels, caps the long edge at 1600px, and
+writes a `.webp` beside each `.jpg`. The page offers the WebP first and falls
+back to the JPEG on its own, so there is nothing to wire up. It is safe to
+re-run over files it has already processed.
+
+> Baking the rotation matters. Browsers honour the EXIF orientation tag, but
+> plenty of other things don't — a photo that stands upright in the page can
+> still arrive sideways in a share preview. After the script the file is simply
+> correct on disk.
 
 ### 2. Point the entry at the file
 
@@ -61,7 +77,7 @@ the photograph fills the space.
 
 | Field | What it does |
 |---|---|
-| `ratio` | The shape of the frame, e.g. `'4 / 3'`, `'3 / 4'`, `'1 / 1'`. Change it if your photo is a different shape — the layout reflows cleanly. |
+| `ratio` | The shape of the frame, e.g. `'4 / 3'`, `'3 / 4'`, `'1 / 1'`. **Keep it close to the photograph's own shape.** The frame crops to fill, so a portrait photo in a landscape frame loses the top and bottom of the picture — a 4/3 frame holding a 3/4 photo throws away 44% of it. The layout reflows cleanly whatever you choose. |
 | `focal` | Which part stays visible when cropped. `'50% 50%'` is centre; `'50% 25%'` favours the top — useful when a face sits high in frame. |
 | `fit`   | `'cover'` fills the frame and crops. `'contain'` shows the whole image with space around it — better for artwork scans you don't want cropped. |
 | `alt`   | Describe the image for screen readers. Leave `''` for purely decorative pieces. |

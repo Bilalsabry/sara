@@ -35,13 +35,26 @@ const STAR_SM = `<svg width="14" height="14" viewBox="0 0 15 15" fill="currentCo
    One renderer for every image slot. `src: null` yields a proofing frame;
    supplying a src swaps in the photograph at identical dimensions, so the
    layout never shifts. */
-function frame(img, { lazy = true, className = '' } = {}) {
-  const ratio = img.ratio ? `aspect-ratio:${img.ratio};` : 'height:100%;';
+function frame(img, { lazy = true, className = '', reserve = true } = {}) {
+  /* `reserve` holds the slot's dimensions so the page never shifts while an
+     image loads. The lightbox opts out: there the photograph should size
+     itself, not be stretched to a slot shape it was never cut for. */
+  const ratio = reserve
+    ? (img.ratio ? `aspect-ratio:${img.ratio};` : 'height:100%;')
+    : '';
   if (img.src) {
+    /* Every photograph ships as WebP beside its JPEG (see tools/optimize-images.py).
+       The <source> is offered first and browsers that don't take it fall through
+       to the <img>, so there is nothing to keep in sync by hand. */
+    const webp = img.src.replace(/\.(jpe?g|png)$/i, '.webp');
+    const alt  = img.alt || '';
     return `<div class="frame ${className}" style="${ratio}">
-      <img src="${img.src}" alt="${img.alt || ''}"
-        ${lazy ? 'loading="lazy" decoding="async"' : ''}
-        style="object-fit:${img.fit || 'cover'};object-position:${img.focal || '50% 50%'}">
+      <picture>
+        ${webp !== img.src ? `<source srcset="${webp}" type="image/webp">` : ''}
+        <img src="${img.src}" alt="${alt}"
+          ${lazy ? 'loading="lazy" decoding="async"' : 'fetchpriority="high" decoding="async"'}
+          style="object-fit:${img.fit || 'cover'};object-position:${img.focal || '50% 50%'}">
+      </picture>
     </div>`;
   }
   return `<div class="frame frame--empty ${className}" style="${ratio}">
@@ -551,10 +564,11 @@ function openLightbox(i) {
 }
 function paintLightbox() {
   const item = gallery[lbIndex];
-  $('#lightbox-stage').innerHTML = frame(item, { lazy: false });
+  $('#lightbox-stage').innerHTML = frame(item, { lazy: false, reserve: false });
   const meta = [item.year, item.medium].filter(Boolean).join(' · ');
   $('#lightbox-meta').innerHTML =
-    `<h3>${item.title}</h3>${meta ? `<div class="dl">${meta}</div>` : ''}<p>${item.note}</p>`;
+    `<h3>${item.title}</h3>${meta ? `<div class="dl">${meta}</div>` : ''}` +
+    (item.note ? `<p>${item.note}</p>` : '');
   $('#lightbox-prev').disabled = lbIndex <= 0;
   $('#lightbox-next').disabled = lbIndex >= gallery.length - 1;
 }
