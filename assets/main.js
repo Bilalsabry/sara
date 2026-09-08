@@ -1419,6 +1419,9 @@ function revealAll() {
   });
 }
 function sweepStalled() {
+  /* The overture deliberately holds the cover back until it hands over, so the
+     watchdog must not race it and assemble the cover behind the closed book. */
+  if (document.querySelector('.overture')) return;
   $$('.anim-in').forEach(el => {
     if (parseFloat(getComputedStyle(el).opacity) < 1) {
       el.style.opacity = '1';

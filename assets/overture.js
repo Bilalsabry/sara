@@ -27,6 +27,10 @@ export function shouldPlayOverture() {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
   if (!window.gsap) return false;
   if (location.hash) return false;            // deep link — go straight there
+  /* requestAnimationFrame is paused in a background tab, which would stall the
+     timeline mid-open and hold the site behind it. She would not be watching
+     anyway, so open straight onto the cover. */
+  if (document.hidden) return false;
   try {
     const last = +localStorage.getItem(SEEN_KEY) || 0;
     return Date.now() - last > OVERTURE_GAP;
@@ -37,15 +41,22 @@ export function shouldPlayOverture() {
 
 export function playOverture(onDone) {
   let finished = false;
+  let failsafe = 0;
+
   const finish = () => {
     if (finished) return;
     finished = true;
+    clearTimeout(failsafe);
     try { localStorage.setItem(SEEN_KEY, String(Date.now())); } catch (e) {}
     cleanup();
     onDone?.();
   };
 
-  /* Nothing below may strand the reader on a blank page. */
+  /* A hard ceiling. Whatever becomes of the timeline — a stalled frame budget,
+     a slow device, a tab that loses focus — the book opens and the site loads.
+     Nothing here may strand her on a page that never arrives. */
+  failsafe = setTimeout(finish, 9000);
+
   try {
     return build(finish);
   } catch (err) {
@@ -74,6 +85,8 @@ export function playOverture(onDone) {
       <button class="overture__skip" type="button">Skip</button>`;
     document.body.appendChild(root);
     document.body.style.overflow = 'hidden';
+
+    document.addEventListener('visibilitychange', onHide);
 
     const skip = root.querySelector('.overture__skip');
     skip.addEventListener('click', e => { e.stopPropagation(); done(); });
@@ -119,6 +132,8 @@ export function playOverture(onDone) {
     tl.to(root,
       { opacity: 0, duration: .7, ease: 'power2.inOut' }, '-=.55');
 
+    function onHide() { if (document.hidden) done(); }
+
     function onKey(e) {
       if (e.key === 'Tab') return;
       e.preventDefault();
@@ -127,6 +142,7 @@ export function playOverture(onDone) {
 
     cleanup = () => {
       window.removeEventListener('keydown', onKey, true);
+      document.removeEventListener('visibilitychange', onHide);
       dust.stop();
       gsap.killTweensOf(['.overture__book', '.overture__board', '.overture__leaves span',
                          '.overture__glow', '.overture__stage', '.overture__emblem',
