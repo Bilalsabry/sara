@@ -7,7 +7,7 @@ index.html                markup shell only
 assets/styles.css         design tokens + all styling
 assets/content.js         approved copy + image configuration  ← you edit this
 assets/art.js             original line work and generated ink
-assets/main.js            rendering, routing, overlays, accessibility
+assets/main.js            rendering, routing, overlays, games, accessibility
 tools/optimize-images.py  run after adding photographs
 COPY.md                   the approved wording (source of truth)
 ```
@@ -179,6 +179,14 @@ Good sources for genuinely free music: [Musopen](https://musopen.org)
 (CC0 and public-domain classical recordings) and
 [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Piano_music).
 Check the *recording's* licence, not just the composer's death date.
+- **The Word Game** (The Parlour, linked from the colophon) is the paper game
+  digitised: lock in a hidden four-letter word, and the page scores their
+  guesses — how many letters sit in the right place — while a second ledger
+  tracks your own guesses at theirs. State lives in the browser only, so a
+  refresh mid-round loses nothing and the word never leaves the device. Its
+  wording is provisional (marked in `content.js`) and is not yet in COPY.md.
+- **Soundtrack songs link out to Spotify.** The recordings are commercial, so
+  they are linked, never hosted — only the CC0 Satie ships with the site.
 - **Reduced motion** is respected throughout; animation is an enhancement and
   the page renders fully without it.
 - **If the CDN is blocked**, GSAP and Lenis simply don't load and everything

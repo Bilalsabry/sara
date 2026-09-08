@@ -9,7 +9,7 @@
 import {
   IMAGES, ARCHIVE, COVER, INDEX, LETTER, ARCHIVE_TEXT, MAP_CORNER, MAP_PLACES,
   STARS, FIREHEART, LIBRARY, MARGINALIA, SOUNDTRACK, LITTLE_THINGS, NOTES,
-  EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
+  GAME, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
 } from './content.js';
 
 import {
@@ -300,7 +300,14 @@ const PAGES = {
       <div>
         <div class="soundtrack__card">
           <ol class="soundtrack__list">
-            ${SOUNDTRACK.songs.map(s => `<li>${s}</li>`).join('')}
+            ${SOUNDTRACK.songs.map(s => {
+              /* Each title opens in Spotify. The recordings are commercial, so
+                 they are linked, never hosted here - only the CC0 Satie ships
+                 with the site. */
+              const q = encodeURIComponent(s.replace(/\u2014/g, ' ').replace(/\s+/g, ' ').trim());
+              return `<li><a class="soundtrack__link" href="https://open.spotify.com/search/${q}"
+                target="_blank" rel="noopener">${s}</a></li>`;
+            }).join('')}
           </ol>
           <span class="soundtrack__more">${SOUNDTRACK.more}</span>
         </div>
@@ -340,6 +347,58 @@ const PAGES = {
         </div>`).join('')}
     </div>
     <div class="cards__foot"><p>${NOTES.footer.join('<br>')}</p></div>`,
+
+  wordgame: () => `
+    <div class="game">
+      <p class="game__rules">${GAME.rules.join('<br>')}</p>
+      <div class="game__boards">
+        <section class="gboard" aria-labelledby="game-their-title">
+          <h3 class="gboard__title" id="game-their-title">${GAME.theirTitle}</h3>
+          <p class="gboard__hint">${GAME.theirHint}</p>
+          <div class="gboard__secret" id="game-secret-block">
+            <label class="gboard__label" for="game-secret">${GAME.secretLabel}</label>
+            <form class="gboard__row" id="game-secret-form">
+              <input id="game-secret" class="game__input" type="password" inputmode="latin"
+                maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false"
+                aria-describedby="game-secret-hint">
+              <button type="submit" class="game__btn">${GAME.secretSet}</button>
+            </form>
+            <div class="gboard__row gboard__row--locked" hidden>
+              <span class="game__masked" aria-hidden="true">\u2022 \u2022 \u2022 \u2022</span>
+              <button type="button" class="game__btn game__btn--quiet" id="game-secret-peek">${GAME.secretShow}</button>
+              <button type="button" class="game__btn game__btn--quiet" id="game-secret-change">${GAME.secretChange}</button>
+            </div>
+            <p class="gboard__note" id="game-secret-hint">${GAME.secretHint}</p>
+          </div>
+          <form class="gboard__row" id="game-their-form">
+            <input id="game-their-guess" class="game__input" maxlength="4" autocomplete="off"
+              autocapitalize="characters" spellcheck="false" aria-label="Their guess">
+            <button type="submit" class="game__btn">${GAME.theirAction}</button>
+          </form>
+          <ol class="gboard__list" id="game-their-list" aria-live="polite"></ol>
+        </section>
+
+        <section class="gboard" aria-labelledby="game-your-title">
+          <h3 class="gboard__title" id="game-your-title">${GAME.yourTitle}</h3>
+          <p class="gboard__hint">${GAME.yourHint}</p>
+          <form class="gboard__row" id="game-your-form">
+            <input id="game-your-guess" class="game__input" maxlength="4" autocomplete="off"
+              autocapitalize="characters" spellcheck="false" aria-label="Your guess">
+            <select id="game-your-score" class="game__select" aria-label="Letters in place">
+              <option value="0">0</option><option value="1">1</option>
+              <option value="2">2</option><option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+            <button type="submit" class="game__btn">${GAME.yourAction}</button>
+          </form>
+          <ol class="gboard__list" id="game-your-list" aria-live="polite"></ol>
+        </section>
+      </div>
+      <div class="game__foot">
+        <span class="game__msg" id="game-msg" role="status"></span>
+        <button type="button" class="game__btn game__btn--quiet" id="game-new">${GAME.newRound}</button>
+      </div>
+    </div>`,
 
   epilogue: () => `
     <div class="epilogue">
@@ -445,6 +504,104 @@ function lockBackground(on) {
 
 /* ── PER-PAGE WIRING ─────────────────────────────────────────────────────── */
 function hydrate(key) {
+  if (key === 'wordgame') {
+    const KEY = 'kingdom-wordgame-v1';
+    let state = { secret: '', theirs: [], yours: [] };
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) state = Object.assign(state, JSON.parse(raw));
+    } catch (e) { /* storage unavailable - the round just won't survive a refresh */ }
+    const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+    const clean = v => v.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+    const inPlace = (a, b) => [...a].reduce((n, ch, i) => n + (ch === b[i] ? 1 : 0), 0);
+
+    /* The fields show only what a guess can be: letters, upper case. */
+    ['game-secret', 'game-their-guess', 'game-your-guess'].forEach(id => {
+      const el = $('#' + id);
+      el.addEventListener('input', () => {
+        const v = clean(el.value);
+        if (el.value !== v) el.value = v;
+      });
+    });
+
+    const msg = $('#game-msg');
+    let msgTimer = 0;
+    const say = text => {
+      msg.textContent = text;
+      clearTimeout(msgTimer);
+      if (text) msgTimer = setTimeout(() => { msg.textContent = ''; }, 3200);
+    };
+
+    const row = (guess, score) => `
+      <li class="gboard__entry${score === 4 ? ' gboard__entry--won' : ''}">
+        <span class="gboard__tiles">${[...guess].map(c => `<i>${c}</i>`).join('')}</span>
+        <span class="gboard__score">${score === 4
+          ? GAME.found
+          : `<b>${score}</b> ${GAME.inPlace}`}</span>
+      </li>`;
+
+    const secretBlock = $('#game-secret-block');
+    const paint = () => {
+      secretBlock.querySelector('#game-secret-form').hidden = !!state.secret;
+      secretBlock.querySelector('.gboard__row--locked').hidden = !state.secret;
+      $('#game-their-list').innerHTML = state.theirs.map(e => row(e.g, e.s)).join('');
+      $('#game-your-list').innerHTML = state.yours.map(e => row(e.g, e.s)).join('');
+    };
+    paint();
+
+    $('#game-secret-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const w = clean($('#game-secret').value);
+      if (w.length !== 4) return say(GAME.needFour);
+      state.secret = w;
+      $('#game-secret').value = '';
+      persist(); paint();
+    });
+    /* Peek only while held - a glance across the table shouldn't spoil it. */
+    const peek = $('#game-secret-peek');
+    const masked = secretBlock.querySelector('.game__masked');
+    const showSecret = on => { masked.textContent = on && state.secret ? [...state.secret].join(' ') : '\u2022 \u2022 \u2022 \u2022'; };
+    ['pointerdown', 'keydown'].forEach(t => peek.addEventListener(t, e => {
+      if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault(); showSecret(true);
+    }));
+    ['pointerup', 'pointercancel', 'pointerleave', 'keyup', 'blur'].forEach(t =>
+      peek.addEventListener(t, () => showSecret(false)));
+    $('#game-secret-change').addEventListener('click', () => {
+      state.secret = '';
+      persist(); paint();
+      $('#game-secret').focus();
+    });
+
+    $('#game-their-form').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!state.secret) return say(GAME.needSecret);
+      const g = clean($('#game-their-guess').value);
+      if (g.length !== 4) return say(GAME.needFour);
+      state.theirs.unshift({ g, s: inPlace(g, state.secret) });
+      $('#game-their-guess').value = '';
+      persist(); paint();
+    });
+
+    $('#game-your-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const g = clean($('#game-your-guess').value);
+      if (g.length !== 4) return say(GAME.needFour);
+      state.yours.unshift({ g, s: +$('#game-your-score').value });
+      $('#game-your-guess').value = '';
+      $('#game-your-score').value = '0';
+      persist(); paint();
+    });
+
+    $('#game-new').addEventListener('click', () => {
+      if (!confirm(GAME.newRoundConfirm)) return;
+      state = { secret: '', theirs: [], yours: [] };
+      persist(); paint();
+      $('#game-secret').focus();
+    });
+  }
+
   if (key === 'map') {
     const read = $('#map-read');
     const select = pin => {

@@ -38,11 +38,11 @@ export const IMAGES = {
   },
   letterPlate: {
     id: 'letter-plate',
-    src: 'assets/images/letter-plate.jpg',
-    alt: '',
+    src: 'assets/images/archive-shrine.jpg',
+    alt: 'Standing together in the gardens, blue sky above',
     label: 'ADD PHOTO',
     ratio: '4 / 5',
-    focal: '50% 28%',
+    focal: '50% 62%',
     fit: 'cover',
   },
 };
@@ -90,19 +90,6 @@ export const ARCHIVE = [
     ratio: '3 / 4',
     focal: '50% 40%',
     title: 'Robes',
-    year: '',
-    medium: 'Photograph',
-    note: '',
-  },
-  {
-    id: 'archive-04',
-    src: 'assets/images/archive-shrine.jpg',
-    alt: 'Standing together in the gardens, blue sky above',
-    label: 'ARTWORK SCAN',
-    scale: 'detail',
-    ratio: '4 / 5',
-    focal: '50% 62%',
-    title: 'The gardens',
     year: '',
     medium: 'Photograph',
     note: '',
@@ -328,10 +315,40 @@ export const FOOTER = {
   signature: '— for sara, always ♡',
 };
 
+
+/* ── THE WORD GAME ───────────────────────────────────────────────────────
+   The game the two of them play on paper: each writes a hidden four-letter
+   word; guesses are answered only with how many letters sit in their right
+   place. This page is the scorekeeper.
+   Wording here is provisional - functional labels, not yet in COPY.md. */
+export const GAME = {
+  rules: ['You each think of a four-letter word and keep it hidden.',
+          'Take turns guessing each other\u2019s. The only answer you may give:',
+          'how many letters sit in their right place.'],
+  secretLabel: 'Your word',
+  secretHint: 'Kept on this device only \u2014 never shown unless you press and hold.',
+  secretSet: 'Lock it in',
+  secretChange: 'Change word',
+  secretShow: 'Hold to peek',
+  theirTitle: 'Their guesses',
+  theirHint: 'Type each guess they make \u2014 the count is worked out for you.',
+  theirAction: 'Mark',
+  yourTitle: 'Your guesses',
+  yourHint: 'Note each guess you make and the count they give you.',
+  yourAction: 'Note it',
+  inPlace: 'in place',
+  found: 'Found it \u2661',
+  newRound: 'New round',
+  newRoundConfirm: 'Start a new round? Both lists and the hidden word are cleared.',
+  needSecret: 'Lock in your word first.',
+  needFour: 'Four letters.',
+};
+
 /* ── PAGE ORDER (drives Prev/Next) ───────────────────────────────────────── */
 export const PAGE_ORDER = [
   'letter', 'archive', 'map', 'constellation', 'fireheart',
-  'library', 'marginalia', 'soundtrack', 'little', 'notes', 'epilogue',
+  'library', 'marginalia', 'soundtrack', 'little', 'notes', 'wordgame',
+  'epilogue',
 ];
 
 export const PAGE_META = {
@@ -345,6 +362,7 @@ export const PAGE_META = {
   soundtrack:    { folio: 'Our Soundtrack',   title: 'Songs That Found Us' },
   little:        { folio: 'The Little Things',title: 'Her, in bits and pieces' },
   notes:         { folio: 'Notes From Me',    title: 'Things I Never Want to Forget' },
+  wordgame:      { folio: 'The Parlour',     title: 'The Word Game' },
   epilogue:      { folio: 'The End For Now',  title: 'But Not Really' },
 };
 
