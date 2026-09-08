@@ -1321,6 +1321,8 @@ body::before {
   padding: 1.05rem .2rem;
   min-height: 44px;
   cursor: pointer;
+  /* buttons centre their text by default, which left a gap before the arrow */
+  text-align: left;
   border-bottom: 1px solid var(--rule);
   transition: border-color .4s var(--ease);
 }
