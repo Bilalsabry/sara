@@ -855,7 +855,10 @@ soundBtn.addEventListener('click', () => {
       const res = await fetch(`${BELL.server}/${BELL.topic}`, {
         method: 'POST',
         body: cfg.message,
-        headers: { Title: BELL.title, Tags: cfg.tag, Priority: 'high' },
+        /* 'urgent' is ntfy's top priority: on Android it lands on the
+           max-importance channel with an insistent buzz; on iOS it maps to a
+           time-sensitive alert. For a bell like this, that's the point. */
+        headers: { Title: BELL.title, Tags: cfg.tag, Priority: 'urgent' },
       });
       if (!res.ok) throw new Error(res.status);
       stamp(cfg.key);
