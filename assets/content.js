@@ -385,12 +385,13 @@ export const AURORA = {
   firstDelaySeconds: [25, 110],
   chance: 0.30,                 // chance at each later roll
   gapMinutes: [5, 16],          // how long between rolls
-  durationSeconds: 24,
-  opacity: 0.5,
+  durationSeconds: 32,   // long enough to watch them move
+  opacity: 0.62,
   /* `color` takes hue from the lights and luminosity from the page, so the
      paper catches the colour without any text losing contrast. */
   blend: 'color',
   bands: 8,
+  motion: 1,             // raise to make them livelier, lower to calm them
   /* Weighted the way a real sky is: mostly greens, with blue and a violet
      fringe turning up now and then. An even spread of hues reads as a
      rainbow, not as the northern lights. */

@@ -205,6 +205,12 @@ Check the *recording's* licence, not just the composer's death date.
   so nothing on the page loses contrast while they pass. Under
   `prefers-reduced-motion` the curtains hold still and only fade.
 
+  The curtains genuinely flow: a wave travels along each one, the sheet
+  drifts sideways, and the light surges — all three at their own rates, which
+  is what stops it reading as a gradient being slid about. `AURORA.motion`
+  scales all of it at once: raise it to make them livelier, lower it to calm
+  them down.
+
   To call them up deliberately — to show her the first time — click the small
   star under *Open the Book* on the cover. Deliberately undocumented on the
   page itself.

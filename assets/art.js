@@ -109,29 +109,55 @@ export function stagMarkSVG({ size = 52, stroke = 'currentColor', width = 1.1 } 
    blurred hard in CSS, which is both cheaper and far softer than blurring
    in canvas. `lighter` compositing makes overlapping curtains add, the way
    real light does, instead of one painting over another. */
-export function auroraPainter(canvas, { colors, bands = 5, seed = 1 } = {}) {
+export function auroraPainter(canvas, { colors, bands = 5, seed = 1, motion = 1 } = {}) {
   const ctx = canvas.getContext('2d');
   const rnd = seeded(Math.max(1, Math.floor(seed)));
 
-  /* Every appearance is a different sky. */
+  /* Every appearance is a different sky. Real curtains do three things at
+     once: a wave runs along their length, the whole sheet drifts sideways,
+     and the light surges and dims. All three, at their own rates, is what
+     stops this reading as a gradient someone is sliding about. */
   const curtains = Array.from({ length: bands }, (_, i) => ({
     rgb:   colors[i % colors.length],
     x:     0.02 + rnd() * 0.96,        // where it hangs, across the width
-    w:     0.07 + rnd() * 0.17,        // narrow, so they read as curtains
-    amp:   0.02 + rnd() * 0.07,        // how far it sways
-    freq:  1.4 + rnd() * 2.8,
-    speed: (0.07 + rnd() * 0.20) * (rnd() < 0.5 ? -1 : 1),
-    phase: rnd() * Math.PI * 2,
+    w:     0.09 + rnd() * 0.21,        // narrow, so they read as curtains
     top:   rnd() * 0.14,
     reach: 0.50 + rnd() * 0.42,        // how far down it falls
+
+    /* the travelling wave, two octaves so the fold is never a clean sine */
+    amp:    0.05 + rnd() * 0.11,
+    freq:   1.4 + rnd() * 2.6,
+    ripple: (0.30 + rnd() * 0.50) * (rnd() < 0.5 ? -1 : 1) * motion,
+    phase:  rnd() * Math.PI * 2,
+    amp2:   0.015 + rnd() * 0.04,
+    freq2:  3.4 + rnd() * 4.2,
+    ripple2:(0.55 + rnd() * 0.85) * (rnd() < 0.5 ? -1 : 1) * motion,
+    phase2: rnd() * Math.PI * 2,
+
+    /* the whole sheet, wandering */
+    drift: (0.004 + rnd() * 0.013) * (rnd() < 0.5 ? -1 : 1) * motion,
+
+    /* the surge - brightness swelling and falling away. Shallow on purpose:
+       a deep swing makes the whole sky blink out whenever several curtains
+       reach a trough together. */
+    pulse:  (0.32 + rnd() * 0.46) * motion,
+    pulsePhase: rnd() * Math.PI * 2,
   }));
 
-  const STEPS = 16;
-  const edge = (c, k, t, W) =>
-    (c.x + Math.sin(k * c.freq * Math.PI + t * c.speed + c.phase) * c.amp) * W;
-  /* Wide in the middle, tapering at both ends, so a curtain has no hard end. */
-  const halfWidth = (c, k, W) =>
-    c.w * W * 0.5 * (0.35 + 0.65 * Math.sin(Math.PI * Math.min(1, Math.max(0, k))));
+  const STEPS = 22;
+
+  /* Where the middle of the curtain sits at height k, at time t. */
+  const centre = (c, k, t, W) => (
+    c.x + c.drift * t +
+    Math.sin(k * c.freq  * Math.PI + t * c.ripple  + c.phase ) * c.amp +
+    Math.sin(k * c.freq2 * Math.PI + t * c.ripple2 + c.phase2) * c.amp2
+  ) * W;
+
+  /* Wide in the middle, tapering at both ends, and breathing a little. */
+  const halfWidth = (c, k, t, W) =>
+    c.w * W * 0.5 *
+    (0.35 + 0.65 * Math.sin(Math.PI * Math.min(1, Math.max(0, k)))) *
+    (0.86 + 0.14 * Math.sin(t * c.pulse * 0.7 + c.phase));
 
   return function drawAurora(t) {
     const W = canvas.width, H = canvas.height;
@@ -141,22 +167,26 @@ export function auroraPainter(canvas, { colors, bands = 5, seed = 1 } = {}) {
     for (const c of curtains) {
       const yTop = c.top * H, yBot = Math.min(H, (c.top + c.reach) * H);
       const [r, g, b] = c.rgb;
+      /* The surge never quite dies, so a curtain fades rather than blinks. */
+      const surge = 0.76 + 0.24 * Math.sin(t * c.pulse + c.pulsePhase);
+      const a = k => `rgba(${r},${g},${b},${(k * surge).toFixed(3)})`;
+
       const grad = ctx.createLinearGradient(0, yTop, 0, yBot);
-      grad.addColorStop(0,    `rgba(${r},${g},${b},0)`);
-      grad.addColorStop(0.20, `rgba(${r},${g},${b},.90)`);
-      grad.addColorStop(0.55, `rgba(${r},${g},${b},.40)`);
-      grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
+      grad.addColorStop(0,    a(0));
+      grad.addColorStop(0.20, a(1.00));
+      grad.addColorStop(0.55, a(0.60));
+      grad.addColorStop(1,    a(0));
       ctx.fillStyle = grad;
 
       ctx.beginPath();
       for (let i = 0; i <= STEPS; i++) {
         const k = i / STEPS, y = yTop + (yBot - yTop) * k;
-        const x = edge(c, k, t, W) - halfWidth(c, k, W);
+        const x = centre(c, k, t, W) - halfWidth(c, k, t, W);
         i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
       }
       for (let i = STEPS; i >= 0; i--) {
         const k = i / STEPS, y = yTop + (yBot - yTop) * k;
-        ctx.lineTo(edge(c, k, t, W) + halfWidth(c, k, W), y);
+        ctx.lineTo(centre(c, k, t, W) + halfWidth(c, k, t, W), y);
       }
       ctx.closePath();
       ctx.fill();

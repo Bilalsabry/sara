@@ -1087,12 +1087,13 @@ const aurora = (() => {
     addEventListener('resize', size, { passive: true });
 
     const draw = auroraPainter(canvas, {
-      colors: AURORA.colors, bands: AURORA.bands, seed: 1 + Math.random() * 1e6,
+      colors: AURORA.colors, bands: AURORA.bands, motion: AURORA.motion ?? 1,
+      seed: 1 + Math.random() * 1e6,
     });
 
     const started = performance.now();
     const total = AURORA.durationSeconds * 1000;
-    let raf = 0, painted = 0;
+    let raf = 0;
 
     const stop = () => {
       cancelAnimationFrame(raf);
@@ -1107,11 +1108,11 @@ const aurora = (() => {
       /* Arrive slowly, hold, leave more slowly still. */
       const fade = p < 0.26 ? p / 0.26 : p > 0.58 ? (1 - p) / 0.42 : 1;
       canvas.style.opacity = String(Math.max(0, fade) * AURORA.opacity);
-      /* Reduced motion keeps the curtains still; they only fade. */
-      if (now - painted > 32) {
-        painted = now;
-        draw(REDUCED ? 0 : (now - started) / 1000);
-      }
+      /* Every frame: the curtains are the point, and throttling them to 30fps
+         made the flow read as a slideshow. The canvas is a third of viewport
+         size, so this stays cheap.
+         Reduced motion keeps the curtains still; they only fade. */
+      draw(REDUCED ? 0 : (now - started) / 1000);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
