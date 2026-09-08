@@ -1268,3 +1268,106 @@ body::before {
   .sound, .bell, .reader__bar, .colophon__more { display: none; }
   body::before, #grain { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTENTS — a book's table of contents, in two tiers.
+
+   The five numbered chapters sit up top; the seven remaining pages follow as
+   a clearly-labelled second tier. Previously those seven lived in the footer
+   at 12px uppercase, where they read as legal links rather than as half the
+   book — the split was the main reason the scroll felt unintuitive.
+   ══════════════════════════════════════════════════════════════════════════ */
+.contents-wrap { padding: clamp(4rem, 9vh, 7rem) 0 clamp(2rem, 5vh, 3.5rem); }
+
+.contents-head {
+  max-width: 1180px;
+  margin: 0 auto clamp(2rem, 5vh, 3.4rem);
+  padding: 0 var(--gutter);
+  text-align: center;
+}
+.contents-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--ink);
+  line-height: 1.2;
+  margin-top: .5rem;
+}
+
+/* the chapter grid keeps its own padding; drop the duplicated top space */
+.contents-wrap .contents { padding-top: 0; padding-bottom: 0; }
+
+/* ── second tier ── */
+.contents-rest {
+  max-width: 1180px;
+  margin: clamp(3rem, 7vh, 5rem) auto 0;
+  padding: clamp(2.4rem, 5vh, 3.4rem) var(--gutter) 0;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+}
+.rest-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .2rem 2.5rem;
+  margin-top: 1.8rem;
+  text-align: left;
+}
+.rest-link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'name arrow' 'sub arrow';
+  align-items: center;
+  column-gap: 1rem;
+  padding: 1.05rem .2rem;
+  min-height: 44px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--rule);
+  transition: border-color .4s var(--ease);
+}
+.rest-link:hover, .rest-link:focus-visible { border-color: var(--rule-strong); }
+.rest-link__name {
+  grid-area: name;
+  font-family: var(--display);
+  font-size: 1.02rem;
+  letter-spacing: .03em;
+  color: var(--ink);
+  transition: color .3s var(--ease);
+}
+.rest-link__sub {
+  grid-area: sub;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: .88rem;
+  color: var(--graphite);
+  line-height: 1.45;
+  margin-top: .12rem;
+}
+.rest-link__arrow {
+  grid-area: arrow;
+  width: 22px; height: 1px;
+  background: var(--rule-strong);
+  position: relative;
+  transition: width .4s var(--ease), background .3s var(--ease);
+}
+.rest-link__arrow::after {
+  content: '';
+  position: absolute; right: 0; top: -2px;
+  width: 5px; height: 5px;
+  border-top: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  color: var(--rule-strong);
+  transform: rotate(45deg);
+  transition: color .3s var(--ease);
+}
+.rest-link:hover .rest-link__name,
+.rest-link:focus-visible .rest-link__name { color: var(--forest); }
+.rest-link:hover .rest-link__arrow { width: 32px; background: var(--forest); }
+.rest-link:hover .rest-link__arrow::after { color: var(--forest); }
+
+/* The colophon is a colophon again: closing line, signature, credit. */
+.colophon { padding-top: clamp(3rem, 7vh, 4.5rem); }
+
+@media (max-width: 700px) {
+  .rest-list { grid-template-columns: 1fr; gap: 0; margin-top: 1.4rem; }
+  .contents-rest { margin-top: 2.4rem; }
+}

@@ -1,7 +1,12 @@
 # Site Copy — locked
 
 Bilal has approved this wording. **Do not rewrite, "improve", or regenerate any of it**
-without being explicitly asked. Layout, styling and code may change freely; these words
+without being explicitly asked.
+
+*Revised 08.09.2026 at Bilal's request: "her"/"him" replaced with **Sara** and
+**Bilal** in headings, labels, buttons and signatures, so nothing reads as
+cryptic. Pronouns are deliberately kept inside flowing prose — the letter, the
+star notes, Fireheart — where repeating the names would read mechanically.* Layout, styling and code may change freely; these words
 may not.
 
 ---
@@ -9,7 +14,7 @@ may not.
 ## Cover
 
 > **A KINGDOM**
-> *made for her*
+> *made for Sara*
 >
 > A private collection of things
 > I never want us to forget.
@@ -26,10 +31,10 @@ Note card (right panel):
 | № | Title | Blurb | Link |
 |---|-------|-------|------|
 | I. | The Letter | Some things are hard to say out loud. So I wrote them here. For you. For us. For every version of our story. | Read the letter |
-| II. | An Artist's Archive | The colours she loves. The things she creates. The world through her eyes. | Browse the archive |
+| II. | An Artist's Archive | The colours Sara loves. The things she creates. The world through her eyes. | Browse the archive |
 | III. | The Map | Every place. Every moment. Every chapter of us. | Explore the map |
-| IV. | Her Constellation | A universe of everything that makes her, her. | Explore her stars |
-| V. | Fireheart | She is fire and starlight. A rare combination. A force of her own. | Read this chapter |
+| IV. | Sara's Constellation | A universe of everything that makes Sara, Sara. | Explore Sara's stars |
+| V. | Fireheart | Sara is fire and starlight. A rare combination. A force of her own. | Read this chapter |
 
 ---
 
@@ -51,7 +56,7 @@ Note card (right panel):
 >
 > Always,
 > Yours
-> **B**
+> **Bilal**
 
 Margin rail: `15 / 06 / 2026`
 
@@ -62,7 +67,7 @@ Taped note:
 
 ## Chapter II — An Artist's Archive
 
-Caption: *A few pieces from her world.* — `click to explore`
+Caption: *A few pieces from Sara's world.* — `click to explore`
 
 Margin note:
 > she paints what words cannot.
@@ -93,7 +98,7 @@ Corner text:
 
 ---
 
-## Chapter IV — Her Constellation
+## Chapter IV — Sara's Constellation
 
 - **Books** — She finishes a book and carries it around for days afterwards. Ask her about the ending — she has a whole argument ready.
 - **Dreams** — She is ambitious in a quiet way. She would rather do the thing properly than tell you she is doing it.
@@ -167,7 +172,7 @@ Side note:
 
 ---
 
-## The Little Things — Her, in bits and pieces
+## The Little Things — Sara, in bits and pieces
 
 The way she gets lost in books · Her morning coffee rituals · How she sees beauty in
 everything · Her art, her therapy, her magic · The stars she talks to at night · Songs
@@ -198,7 +203,7 @@ The dreams she's chasing fearlessly · The queen she was always meant to be
 > write this with you.
 >
 > Always,
-> **B**
+> **Bilal**
 >
 > `15 · 06 · 2026`
 >
@@ -214,4 +219,4 @@ Corner note:
 > There are still pages missing.
 > I hope there always will be.
 >
-> — for sara, always ♡
+> — for Sara, always ♡

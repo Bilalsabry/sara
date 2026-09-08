@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F3EEE4">
-<title>A Kingdom Made for Her</title>
+<title>A Kingdom Made for Sara</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
@@ -69,13 +69,25 @@
 <!-- ══════════════════════════════════════════════════════════════════════
      CONTENTS
      ══════════════════════════════════════════════════════════════════════ -->
-<nav class="contents" id="contents" aria-label="Chapters"></nav>
+<section class="contents-wrap" aria-labelledby="contents-heading">
+  <div class="contents-head">
+    <span class="eyebrow">Contents</span>
+    <h2 class="contents-title" id="contents-heading">Twelve pages, in order</h2>
+  </div>
+
+  <nav class="contents" id="contents" aria-label="Chapters"></nav>
+
+  <div class="contents-rest">
+    <span class="eyebrow">Also in this book</span>
+    <nav class="rest-list" id="contents-rest" aria-label="More pages"></nav>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════════════════════════════════════════
      COLOPHON
      ══════════════════════════════════════════════════════════════════════ -->
 <!-- The pigeon post — his latest note, when there is one. -->
-<section class="pigeon" id="pigeon" hidden aria-label="A note from him">
+<section class="pigeon" id="pigeon" hidden aria-label="A note from Bilal">
   <div class="pigeon__note">
     <span class="eyebrow pigeon__eyebrow" id="pigeon-eyebrow"></span>
     <p class="pigeon__text hand" id="pigeon-text"></p>
@@ -86,16 +98,6 @@
 <footer class="colophon" id="colophon">
   <p id="colophon-lines"></p>
   <span class="colophon__sig" id="colophon-sig"></span>
-
-  <div class="colophon__more">
-    <button type="button" data-open="library">The Library</button>
-    <button type="button" data-open="marginalia">Marginalia</button>
-    <button type="button" data-open="soundtrack">Soundtrack</button>
-    <button type="button" data-open="little">The Little Things</button>
-    <button type="button" data-open="notes">Notes From Me</button>
-    <button type="button" data-open="wordgame">The Word Game</button>
-    <button type="button" data-open="epilogue">Epilogue</button>
-  </div>
 
   <p class="colophon__credit" id="colophon-credit"></p>
 </footer>

@@ -115,7 +115,7 @@ export const ARCHIVE = [
 /* ── COVER ───────────────────────────────────────────────────────────────── */
 export const COVER = {
   titleTop: 'A Kingdom',
-  titleBottom: 'made for her',
+  titleBottom: 'made for Sara',
   blurb: ['A private collection of things', 'I never want us to forget.'],
   cta: 'Open the Book',
   quoteCard: ['To the stars', 'who listen and', 'the dreams that', 'are answered.'],
@@ -130,7 +130,7 @@ export const INDEX = [
   },
   {
     key: 'archive', folio: 'II', title: "An Artist's Archive",
-    blurb: 'The colours she loves. The things she creates. The world through her eyes.',
+    blurb: 'The colours Sara loves. The things she creates. The world through her eyes.',
     link: 'Browse the archive',
   },
   {
@@ -139,13 +139,13 @@ export const INDEX = [
     link: 'Explore the map',
   },
   {
-    key: 'constellation', folio: 'IV', title: 'Her Constellation',
-    blurb: 'A universe of everything that makes her, her.',
-    link: 'Explore her stars',
+    key: 'constellation', folio: 'IV', title: "Sara's Constellation",
+    blurb: 'A universe of everything that makes Sara, Sara.',
+    link: "Explore Sara's stars",
   },
   {
     key: 'fireheart', folio: 'V', title: 'Fireheart',
-    blurb: 'She is fire and starlight. A rare combination. A force of her own.',
+    blurb: 'Sara is fire and starlight. A rare combination. A force of her own.',
     link: 'Read this chapter',
   },
 ];
@@ -161,13 +161,13 @@ export const LETTER = {
     'Thank you for being the steady in my story, the fire in my heart, and the person I am most proud to love.',
   ],
   signOff: ['Always,', 'Yours'],
-  initial: 'B',
+  initial: 'Bilal',
   tapedNote: ['for the one', 'who makes', 'ordinary days', 'extraordinary ♡'],
 };
 
 /* ── CHAPTER II · AN ARTIST'S ARCHIVE ────────────────────────────────────── */
 export const ARCHIVE_TEXT = {
-  caption: 'A few pieces from her world.',
+  caption: "A few pieces from Sara's world.",
   captionAction: 'click to explore',
   marginNote: ['she paints', 'what words', 'cannot.'],
   addAction: 'Add to the archive',
@@ -306,7 +306,7 @@ export const EPILOGUE = {
     ['Thank you for letting me', 'write this with you.'],
   ],
   signOff: 'Always,',
-  initial: 'B',
+  initial: 'Bilal',
   date: '15 · 06 · 2026',
   restart: 'Return to the beginning',
   cornerNote: ['To my', 'Fireheart.', 'Forever. ♡'],
@@ -315,7 +315,7 @@ export const EPILOGUE = {
 /* ── HOMEPAGE FOOTER ─────────────────────────────────────────────────────── */
 export const FOOTER = {
   lines: ['There are still pages missing.', 'I hope there always will be.'],
-  signature: '— for sara, always ♡',
+  signature: '— for Sara, always ♡',
 };
 
 
@@ -417,7 +417,7 @@ export const PIGEON = {
   topic: 'kingdom-post-128eddf76cddc1a3',
   server: 'https://ntfy.sh',
   eyebrow: 'Left on the desk',
-  from: '\u2014 B',
+  from: '\u2014 Bilal',
   today: 'today', yesterday: 'yesterday',
   pollMinutes: 5,
 };
@@ -451,18 +451,18 @@ export const BELL = {
   topic: 'kingdom-6b7aa2ad5dfefe43',
   server: 'https://ntfy.sh',
   title: 'From Sara',
-  control: 'Ring for him',
-  trayHint: 'He\u2019ll feel it buzz.',
+  control: 'Ring for Bilal',
+  trayHint: 'Bilal will feel it buzz.',
   buttons: [
     { key: 'hug',    label: 'A hug',  message: 'Sara wants a hug \u2661',  tag: 'hugs' },
     { key: 'kiss',   label: 'A kiss', message: 'Sara wants a kiss \u2661', tag: 'kiss' },
     { key: 'coffee', label: 'Coffee', message: 'Coffee, please',            tag: 'coffee' },
   ],
-  lineLabel: 'Or send him a line',
+  lineLabel: 'Or send Bilal a line',
   linePlaceholder: 'anything at all\u2026',
   lineAction: 'Send',
   lineCooldownSeconds: 15,
-  sent: 'On its way to him \u2661',
+  sent: 'On its way to Bilal \u2661',
   cooldownMsg: 'Already rung \u2014 give it a minute.',
   failed: 'It didn\u2019t go through \u2014 try again in a moment.',
   cooldownSeconds: 60,
@@ -479,12 +479,12 @@ export const PAGE_META = {
   letter:        { folio: 'Chapter I',        title: 'The Letter' },
   archive:       { folio: 'Chapter II',       title: "An Artist's Archive" },
   map:           { folio: 'Chapter III',      title: 'The Map' },
-  constellation: { folio: 'Chapter IV',       title: 'Her Constellation' },
+  constellation: { folio: 'Chapter IV',       title: "Sara's Constellation" },
   fireheart:     { folio: 'Chapter V',        title: 'Fireheart' },
   library:       { folio: 'The Library',      title: 'The Stories We Love' },
   marginalia:    { folio: 'Marginalia',       title: "Lines I'll Never Forget" },
   soundtrack:    { folio: 'Our Soundtrack',   title: 'Songs That Found Us' },
-  little:        { folio: 'The Little Things',title: 'Her, in bits and pieces' },
+  little:        { folio: 'The Little Things',title: 'Sara, in bits and pieces' },
   notes:         { folio: 'Notes From Me',    title: 'Things I Never Want to Forget' },
   wordgame:      { folio: 'The Parlour',     title: 'The Word Game' },
   epilogue:      { folio: 'The End For Now',  title: 'But Not Really' },

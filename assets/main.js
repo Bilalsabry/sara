@@ -133,6 +133,29 @@ function renderContents() {
     if (kind === 'fireheart') paintFireheart(c, { compact: true });
     else CARD_PAINTERS[kind]?.(c);
   });
+
+  renderRest();
+}
+
+/* The seven pages beyond the five numbered chapters. These used to sit in the
+   footer at 12px uppercase, where they read as Privacy/Terms rather than as
+   half the book. They now follow the chapters as a clearly-labelled second
+   tier, named from PAGE_META so no new wording is invented. */
+function renderRest() {
+  const rest = $('#contents-rest');
+  if (!rest) return;
+  const keys = PAGE_ORDER.filter(k => !INDEX.some(c => c.key === k));
+  rest.innerHTML = keys.map(k => {
+    const m = PAGE_META[k];
+    if (!m) return '';
+    return `
+    <button class="rest-link anim-in" data-open="${k}"
+            aria-label="Open ${m.folio}, ${m.title}">
+      <span class="rest-link__name">${m.folio}</span>
+      <span class="rest-link__sub">${m.title}</span>
+      <span class="rest-link__arrow" aria-hidden="true"></span>
+    </button>`;
+  }).join('');
 }
 
 /* The archive card is layered paper rather than canvas, so the placeholders
@@ -554,7 +577,7 @@ function closePage() {
 /* Background is inert while the overlay is open: no tab-through, no scroll. */
 function lockBackground(on) {
   document.body.style.overflow = on ? 'hidden' : '';
-  ['#cover', '#contents', '#pigeon', '#colophon'].forEach(sel => {
+  ['#cover', '.contents-wrap', '#pigeon', '#colophon'].forEach(sel => {
     const el = $(sel);
     if (!el) return;
     if (on) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
@@ -1358,6 +1381,14 @@ if (window.gsap && window.ScrollTrigger) {
       { opacity: 0, y: 22 },
       { opacity: 1, y: 0, duration: .85, stagger: .07, ease: 'power3.out',
         scrollTrigger: { trigger: '#contents', start: 'top 88%', once: true } });
+    gsap.fromTo('.rest-link',
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: .7, stagger: .05, ease: 'power3.out',
+        scrollTrigger: { trigger: '.contents-rest', start: 'top 92%', once: true } });
+    gsap.fromTo('.contents-head, .contents-rest .eyebrow',
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: .8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.contents-wrap', start: 'top 85%', once: true } });
     gsap.fromTo('#colophon',
       { opacity: 0 },
       { opacity: 1, duration: 1,
