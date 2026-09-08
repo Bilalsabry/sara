@@ -538,7 +538,7 @@ body::before {
 .letter__plate { position: relative; }
 .letter__seal { position: absolute; top: 5%; left: -28px; z-index: 4; }
 .letter__note {
-  position: absolute; bottom: 7%; left: 7%; width: clamp(150px, 15vw, 180px); z-index: 4;
+  position: absolute; bottom: 7%; left: -26px; width: clamp(150px, 15vw, 180px); z-index: 4;
   background: var(--paper); padding: 1.35rem 1.1rem;
   box-shadow: var(--shadow-lift); transform: rotate(-1.9deg);
   clip-path: polygon(0 1.8%, 48% .3%, 100% 1.4%, 98.6% 54%, 99.2% 98.8%, 50% 100%, .9% 98%, 1.6% 46%);
@@ -947,8 +947,19 @@ body::before {
   .chapter-link__blurb { margin-bottom: .5rem; max-width: none; font-size: .88rem; }
   .chapter-link__rule { margin: 0 0 .6rem; }
   .chapter-link__cue { font-size: 1.16rem; }
-  .library__shelf { gap: .35rem; }
-  .book { width: 68px; padding: 1rem .45rem; }
+  /* Seven spines no longer fit across a phone. Wrapping left half the books
+     floating above the plank, so the shelf stays one row and pans instead.
+     The auto margins centre it while it still fits (e.g. landscape phones)
+     without the clipped-left-edge bug that justify-content: center causes
+     inside a scroller. */
+  .library__shelf {
+    flex-wrap: nowrap; justify-content: flex-start;
+    overflow-x: auto; gap: .35rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .library__shelf .book:first-child { margin-left: auto; }
+  .library__shelf .book:last-child { margin-right: auto; }
+  .book { width: 68px; flex-shrink: 0; padding: 1rem .45rem; }
   .colophon__more { gap: .2rem 1.2rem; }
 }
 
