@@ -26,6 +26,12 @@ const OVERTURE_GAP = 12 * 60 * 60 * 1000;   // 12 hours
 export function shouldPlayOverture() {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
   if (!window.gsap) return false;
+
+  /* ?overture replays it on demand — handy while deciding whether you like it,
+     since otherwise it sleeps for twelve hours. ?overture=off sits it out. */
+  const q = new URLSearchParams(location.search);
+  if (q.has('overture')) return q.get('overture') !== 'off';
+
   if (location.hash) return false;            // deep link — go straight there
   /* requestAnimationFrame is paused in a background tab, which would stall the
      timeline mid-open and hold the site behind it. She would not be watching
