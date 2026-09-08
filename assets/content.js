@@ -338,12 +338,60 @@ export const GAME = {
   yourAction: 'Note it',
   inPlace: 'in place',
   found: 'Found it \u2661',
+  duel: {
+    topic: 'kingdom-duel-bc9b1e52ea37a7c2',
+    server: 'https://ntfy.sh',
+    modeLocal: 'Same room',
+    modeAway: 'Across the distance',
+    awayHint: 'Each of you opens this page on your own phone. Your word never leaves your device \u2014 only guesses and counts travel.',
+    pick: 'Which of you is this?',
+    iAmB: 'I\u2019m B', iAmS: 'I\u2019m S',
+    theirGuessHint: 'Their guesses arrive here on their own and are answered for you.',
+    yourGuessHint: 'Send a guess \u2014 their device answers with the count.',
+    guessAction: 'Send guess',
+    waiting: 'waiting\u2026',
+    listening: 'Listening for them',
+    offline: 'Reconnecting\u2026',
+    lockFirst: 'They\u2019re guessing \u2014 lock your word to answer.',
+    switchSide: 'Switch side',
+  },
   newRound: 'New round',
   newRoundConfirm: 'Start a new round? Both lists and the hidden word are cleared.',
   needSecret: 'Lock in your word first.',
   needFour: 'Four letters.',
 };
 
+
+
+/* ── THE PIGEON POST ─────────────────────────────────────────────────────
+   Notes from Bilal that appear on the site as a paper note left on the
+   desk. He publishes to the topic below (iOS Shortcut or the ntfy.sh web
+   page - see README); the site polls it and shows the newest note.
+   ntfy.sh only caches messages for ~12 hours, so once the site has seen a
+   note it also keeps it in the reader's browser until a newer one arrives.
+   Wording provisional. */
+export const PIGEON = {
+  topic: 'kingdom-post-128eddf76cddc1a3',
+  server: 'https://ntfy.sh',
+  eyebrow: 'Left on the desk',
+  from: '\u2014 B',
+  today: 'today', yesterday: 'yesterday',
+  pollMinutes: 5,
+};
+
+/* ── DAYS OF US ──────────────────────────────────────────────────────────
+   The due-date stamp on the cover. Day 1 = the day they started dating. */
+export const DAYS = {
+  anchor: [2026, 1, 8],        // year, month, day - local time
+  label: 'Day',
+  since: 'since 08 \u00b7 01 \u00b7 2026',
+  milestones: {
+    50: 'fifty days \u2661', 100: 'one hundred days \u2661',
+    200: 'two hundred days \u2661', 365: 'one whole year \u2661',
+    500: 'five hundred days \u2661', 730: 'two years \u2661',
+    1000: 'one thousand days \u2661',
+  },
+};
 
 /* ── THE BELL ────────────────────────────────────────────────────────────
    The small fixed control at lower right. When Sara rings it, a push
@@ -367,6 +415,10 @@ export const BELL = {
     { key: 'kiss',   label: 'A kiss', message: 'Sara wants a kiss \u2661', tag: 'kiss' },
     { key: 'coffee', label: 'Coffee', message: 'Coffee, please',            tag: 'coffee' },
   ],
+  lineLabel: 'Or send him a line',
+  linePlaceholder: 'anything at all\u2026',
+  lineAction: 'Send',
+  lineCooldownSeconds: 15,
   sent: 'On its way to him \u2661',
   cooldownMsg: 'Already rung \u2014 give it a minute.',
   failed: 'It didn\u2019t go through \u2014 try again in a moment.',

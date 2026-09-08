@@ -53,6 +53,7 @@
 
     <button class="cover__cta anim-in" id="cover-cta" type="button"></button>
     <div class="cover__star anim-in" id="cover-star" aria-hidden="true"></div>
+    <div class="days anim-in" id="days" hidden></div>
   </div>
 
   <div class="cover__right">
@@ -73,6 +74,15 @@
 <!-- ══════════════════════════════════════════════════════════════════════
      COLOPHON
      ══════════════════════════════════════════════════════════════════════ -->
+<!-- The pigeon post — his latest note, when there is one. -->
+<section class="pigeon" id="pigeon" hidden aria-label="A note from him">
+  <div class="pigeon__note">
+    <span class="eyebrow pigeon__eyebrow" id="pigeon-eyebrow"></span>
+    <p class="pigeon__text hand" id="pigeon-text"></p>
+    <div class="pigeon__meta"><span id="pigeon-from"></span><span id="pigeon-when"></span></div>
+  </div>
+</section>
+
 <footer class="colophon" id="colophon">
   <p id="colophon-lines"></p>
   <span class="colophon__sig" id="colophon-sig"></span>
@@ -129,6 +139,13 @@
   <div class="bell__tray" id="bell-tray" hidden>
     <p class="bell__hint" id="bell-hint"></p>
     <div class="bell__buttons" id="bell-buttons"></div>
+    <form class="bell__line" id="bell-line-form">
+      <label class="bell__line-label" for="bell-line" id="bell-line-label"></label>
+      <div class="bell__line-row">
+        <input id="bell-line" maxlength="240" autocomplete="off">
+        <button type="submit" class="bell__ring bell__ring--line" id="bell-line-send"></button>
+      </div>
+    </form>
     <p class="bell__status" id="bell-status" role="status"></p>
   </div>
   <button class="bell__pull" id="bell-pull" type="button"

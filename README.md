@@ -194,11 +194,30 @@ Check the *recording's* licence, not just the composer's death date.
   in the app. There's a 60-second per-button cooldown so a double-tap doesn't
   buzz twice. If real SMS is ever wanted instead, swap the endpoint for a
   small Vercel function + Twilio; the front end won't need to change.
+- **The Pigeon Post.** Bilal can leave a note that appears on the site as a
+  taped paper note under the chapter index. Send it by POSTing text to
+  `https://ntfy.sh/<PIGEON.topic>` (topic in `content.js`) — easiest is an
+  iPhone Shortcut: Shortcuts app → + → add action **Get Contents of URL** →
+  URL `https://ntfy.sh/<topic>`, Method POST, Request Body: Text → tap the
+  body field and choose **Ask Each Time** → name it "Note for Sara" and add
+  to the Home Screen. One tap, type, sent. (Or open `ntfy.sh/<topic>` in any
+  browser and use its publish box.) ntfy only caches notes ~12h, but once
+  her browser has seen one it keeps showing it until a newer note arrives.
+- **Days of Us** — the due-date stamp on the cover counts from 08·01·2026
+  (`DAYS` in `content.js`); milestone days add a small hand-written line.
+- **Send him a line** — the bell tray also takes free text, straight to
+  Bilal's phone, 15-second cooldown.
 - **The Word Game** (The Parlour, linked from the colophon) is the paper game
   digitised: lock in a hidden four-letter word, and the page scores their
   guesses — how many letters sit in the right place — while a second ledger
   tracks your own guesses at theirs. State lives in the browser only, so a
-  refresh mid-round loses nothing and the word never leaves the device. Its
+  refresh mid-round loses nothing and the word never leaves the device.
+  **Across the distance** mode makes it two-player on two phones: each of
+  you opens the page, picks your side, locks a word, and guesses — moves
+  travel over a private ntfy topic (`GAME.duel` in `content.js`), scores are
+  answered automatically by the *other* person's device, and secrets never
+  leave their own phone. Don't subscribe the phone apps to the duel topic —
+  only the page listens to it. Its
   wording is provisional (marked in `content.js`) and is not yet in COPY.md.
 - **Soundtrack songs link out to Spotify.** The recordings are commercial, so
   they are linked, never hosted — only the CC0 Satie ships with the site.

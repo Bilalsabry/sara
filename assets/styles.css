@@ -887,6 +887,34 @@ body::before {
 }
 .game__msg { font-size: .9rem; font-style: italic; color: var(--oxblood); min-height: 1.4em; }
 
+/* mode tabs + duel chrome */
+.game__modes {
+  display: flex; justify-content: center; gap: .6rem;
+  margin-bottom: clamp(1.6rem, 4vh, 2.4rem);
+}
+.game__mode {
+  cursor: pointer; min-height: 40px;
+  font-family: var(--sans); font-size: .62rem; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--graphite);
+  padding: .5rem 1rem;
+  border: 1px solid var(--rule-strong);
+  transition: color .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
+}
+.game__mode[aria-pressed='true'] {
+  color: var(--paper); background: var(--forest); border-color: var(--forest);
+}
+.game__mode:hover:not([aria-pressed='true']) { color: var(--forest); border-color: var(--forest); }
+.game__rules--away { font-size: .92rem; margin-bottom: 1.6rem; }
+.duel__pick { text-align: center; padding: 1.6rem 0 .6rem; }
+.duel__pick-row { display: flex; justify-content: center; gap: .8rem; margin-top: .8rem; }
+.duel__pick-row .game__btn { padding: .7rem 1.6rem; }
+.duel__conn {
+  font-family: var(--sans); font-size: .58rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--graphite-lt); white-space: nowrap;
+}
+.gboard__score em { font-style: italic; color: var(--graphite-lt); text-transform: none; letter-spacing: .02em; }
+[hidden] { display: none !important; }
+
 /* ── EPILOGUE ────────────────────────────────────────────────────────────── */
 .epilogue { display: grid; grid-template-columns: 1.02fr 1fr; gap: clamp(2.5rem, 5vw, 4rem); align-items: center; }
 .epilogue__text { text-align: center; }
@@ -979,6 +1007,65 @@ body::before {
 .sound[aria-pressed='true'] .sound__wave { opacity: 1; }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   DAYS OF US — a library due-date stamp on the cover
+   ══════════════════════════════════════════════════════════════════════════ */
+.days {
+  margin-top: 1.7rem;
+  display: inline-flex; flex-direction: column; align-items: center; gap: .1rem;
+  padding: .7rem 1.3rem .8rem;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  transform: rotate(-1.2deg);
+  box-shadow: var(--shadow-paper);
+}
+.days[hidden] { display: none; }
+.days__label {
+  font-family: var(--sans); font-size: .56rem; letter-spacing: .26em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+.days__num {
+  font-family: var(--display); font-size: 1.9rem; line-height: 1.1;
+  color: var(--oxblood); font-variant-numeric: tabular-nums;
+}
+.days__since {
+  font-family: var(--sans); font-size: .56rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+.days__milestone { font-size: 1.25rem; color: var(--brass); margin-top: .15rem; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE PIGEON POST — his note, taped below the contents
+   ══════════════════════════════════════════════════════════════════════════ */
+.pigeon { display: flex; justify-content: center; padding: 0 var(--gutter) clamp(3rem, 7vh, 5rem); }
+.pigeon[hidden] { display: none; }
+.pigeon__note {
+  position: relative;
+  max-width: 420px; width: 100%;
+  background: var(--paper-deep);
+  padding: 1.7rem 1.8rem 1.3rem;
+  box-shadow: var(--shadow-paper);
+  transform: rotate(-.8deg);
+  clip-path: polygon(0 2%, 50% .4%, 100% 1.6%, 99% 55%, 99.5% 98.6%, 48% 100%, 1% 98%, .6% 50%);
+}
+.pigeon__note::before {   /* tape */
+  content: '';
+  position: absolute; top: -11px; left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 64px; height: 22px;
+  background: rgba(196, 172, 120, .30);
+  border-left: 1px solid rgba(164, 133, 77, .2);
+  border-right: 1px solid rgba(164, 133, 77, .2);
+}
+.pigeon__eyebrow { display: block; margin-bottom: .7rem; }
+.pigeon__text { font-size: 1.7rem; color: var(--ink); overflow-wrap: break-word; }
+.pigeon__meta {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-top: .9rem;
+  font-family: var(--sans); font-size: .6rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    THE BELL — mirrors the sound chip at the opposite corner
    ══════════════════════════════════════════════════════════════════════════ */
 .bell {
@@ -1016,6 +1103,22 @@ body::before {
   margin-bottom: .8rem;
 }
 .bell__buttons { display: flex; flex-direction: column; gap: .45rem; }
+.bell__line { margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--rule); }
+.bell__line-label {
+  display: block; margin-bottom: .4rem;
+  font-family: var(--sans); font-size: .6rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+.bell__line-row { display: flex; gap: .45rem; }
+.bell__line-row input {
+  flex: 1; min-width: 0;
+  font-family: var(--serif); font-size: .95rem; color: var(--ink);
+  background: var(--paper-deep); border: 1px solid var(--rule-strong); border-radius: 0;
+  padding: .5rem .6rem;
+}
+.bell__line-row input::placeholder { color: var(--graphite-lt); font-style: italic; }
+.bell__line-row input:focus { outline: 1.5px solid var(--forest); outline-offset: 1px; }
+.bell__ring--line { flex-shrink: 0; padding: .6rem .9rem; }
 .bell__ring {
   cursor: pointer; min-height: 44px;
   font-family: var(--display); font-size: .8rem;

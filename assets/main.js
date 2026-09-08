@@ -9,7 +9,7 @@
 import {
   IMAGES, ARCHIVE, COVER, INDEX, LETTER, ARCHIVE_TEXT, MAP_CORNER, MAP_PLACES,
   STARS, FIREHEART, LIBRARY, MARGINALIA, SOUNDTRACK, LITTLE_THINGS, NOTES,
-  GAME, BELL, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
+  GAME, BELL, PIGEON, DAYS, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
 } from './content.js';
 
 import {
@@ -351,52 +351,111 @@ const PAGES = {
   wordgame: () => `
     <div class="game">
       <p class="game__rules">${GAME.rules.join('<br>')}</p>
-      <div class="game__boards">
-        <section class="gboard" aria-labelledby="game-their-title">
-          <h3 class="gboard__title" id="game-their-title">${GAME.theirTitle}</h3>
-          <p class="gboard__hint">${GAME.theirHint}</p>
-          <div class="gboard__secret" id="game-secret-block">
-            <label class="gboard__label" for="game-secret">${GAME.secretLabel}</label>
-            <form class="gboard__row" id="game-secret-form">
-              <input id="game-secret" class="game__input" type="password" inputmode="latin"
-                maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false"
-                aria-describedby="game-secret-hint">
-              <button type="submit" class="game__btn">${GAME.secretSet}</button>
-            </form>
-            <div class="gboard__row gboard__row--locked" hidden>
-              <span class="game__masked" aria-hidden="true">\u2022 \u2022 \u2022 \u2022</span>
-              <button type="button" class="game__btn game__btn--quiet" id="game-secret-peek">${GAME.secretShow}</button>
-              <button type="button" class="game__btn game__btn--quiet" id="game-secret-change">${GAME.secretChange}</button>
-            </div>
-            <p class="gboard__note" id="game-secret-hint">${GAME.secretHint}</p>
-          </div>
-          <form class="gboard__row" id="game-their-form">
-            <input id="game-their-guess" class="game__input" maxlength="4" autocomplete="off"
-              autocapitalize="characters" spellcheck="false" aria-label="Their guess">
-            <button type="submit" class="game__btn">${GAME.theirAction}</button>
-          </form>
-          <ol class="gboard__list" id="game-their-list" aria-live="polite"></ol>
-        </section>
 
-        <section class="gboard" aria-labelledby="game-your-title">
-          <h3 class="gboard__title" id="game-your-title">${GAME.yourTitle}</h3>
-          <p class="gboard__hint">${GAME.yourHint}</p>
-          <form class="gboard__row" id="game-your-form">
-            <input id="game-your-guess" class="game__input" maxlength="4" autocomplete="off"
-              autocapitalize="characters" spellcheck="false" aria-label="Your guess">
-            <select id="game-your-score" class="game__select" aria-label="Letters in place">
-              <option value="0">0</option><option value="1">1</option>
-              <option value="2">2</option><option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-            <button type="submit" class="game__btn">${GAME.yourAction}</button>
-          </form>
-          <ol class="gboard__list" id="game-your-list" aria-live="polite"></ol>
-        </section>
+      <div class="game__modes" role="group" aria-label="How are you playing?">
+        <button type="button" class="game__mode" id="game-mode-local" aria-pressed="true">${GAME.duel.modeLocal}</button>
+        <button type="button" class="game__mode" id="game-mode-away" aria-pressed="false">${GAME.duel.modeAway}</button>
       </div>
-      <div class="game__foot">
-        <span class="game__msg" id="game-msg" role="status"></span>
-        <button type="button" class="game__btn game__btn--quiet" id="game-new">${GAME.newRound}</button>
+
+      <div id="game-local">
+        <div class="game__boards">
+          <section class="gboard" aria-labelledby="game-their-title">
+            <h3 class="gboard__title" id="game-their-title">${GAME.theirTitle}</h3>
+            <p class="gboard__hint">${GAME.theirHint}</p>
+            <div class="gboard__secret" id="game-secret-block">
+              <label class="gboard__label" for="game-secret">${GAME.secretLabel}</label>
+              <form class="gboard__row" id="game-secret-form">
+                <input id="game-secret" class="game__input" type="password" inputmode="latin"
+                  maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false"
+                  aria-describedby="game-secret-hint">
+                <button type="submit" class="game__btn">${GAME.secretSet}</button>
+              </form>
+              <div class="gboard__row gboard__row--locked" hidden>
+                <span class="game__masked" aria-hidden="true">\u2022 \u2022 \u2022 \u2022</span>
+                <button type="button" class="game__btn game__btn--quiet" id="game-secret-peek">${GAME.secretShow}</button>
+                <button type="button" class="game__btn game__btn--quiet" id="game-secret-change">${GAME.secretChange}</button>
+              </div>
+              <p class="gboard__note" id="game-secret-hint">${GAME.secretHint}</p>
+            </div>
+            <form class="gboard__row" id="game-their-form">
+              <input id="game-their-guess" class="game__input" maxlength="4" autocomplete="off"
+                autocapitalize="characters" spellcheck="false" aria-label="Their guess">
+              <button type="submit" class="game__btn">${GAME.theirAction}</button>
+            </form>
+            <ol class="gboard__list" id="game-their-list" aria-live="polite"></ol>
+          </section>
+
+          <section class="gboard" aria-labelledby="game-your-title">
+            <h3 class="gboard__title" id="game-your-title">${GAME.yourTitle}</h3>
+            <p class="gboard__hint">${GAME.yourHint}</p>
+            <form class="gboard__row" id="game-your-form">
+              <input id="game-your-guess" class="game__input" maxlength="4" autocomplete="off"
+                autocapitalize="characters" spellcheck="false" aria-label="Your guess">
+              <select id="game-your-score" class="game__select" aria-label="Letters in place">
+                <option value="0">0</option><option value="1">1</option>
+                <option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <button type="submit" class="game__btn">${GAME.yourAction}</button>
+            </form>
+            <ol class="gboard__list" id="game-your-list" aria-live="polite"></ol>
+          </section>
+        </div>
+        <div class="game__foot">
+          <span class="game__msg" id="game-msg" role="status"></span>
+          <button type="button" class="game__btn game__btn--quiet" id="game-new">${GAME.newRound}</button>
+        </div>
+      </div>
+
+      <div id="game-away" hidden>
+        <p class="game__rules game__rules--away">${GAME.duel.awayHint}</p>
+        <div class="duel__pick" id="duel-pick">
+          <span class="gboard__label">${GAME.duel.pick}</span>
+          <div class="duel__pick-row">
+            <button type="button" class="game__btn" data-role="B">${GAME.duel.iAmB}</button>
+            <button type="button" class="game__btn" data-role="S">${GAME.duel.iAmS}</button>
+          </div>
+        </div>
+        <div id="duel-play" hidden>
+          <div class="game__boards">
+            <section class="gboard" aria-labelledby="duel-their-title">
+              <h3 class="gboard__title" id="duel-their-title">${GAME.theirTitle}</h3>
+              <p class="gboard__hint">${GAME.duel.theirGuessHint}</p>
+              <div class="gboard__secret" id="duel-secret-block">
+                <label class="gboard__label" for="duel-secret">${GAME.secretLabel}</label>
+                <form class="gboard__row" id="duel-secret-form">
+                  <input id="duel-secret" class="game__input" type="password" inputmode="latin"
+                    maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false">
+                  <button type="submit" class="game__btn">${GAME.secretSet}</button>
+                </form>
+                <div class="gboard__row gboard__row--locked" hidden>
+                  <span class="game__masked" aria-hidden="true">\u2022 \u2022 \u2022 \u2022</span>
+                  <button type="button" class="game__btn game__btn--quiet" id="duel-secret-peek">${GAME.secretShow}</button>
+                  <button type="button" class="game__btn game__btn--quiet" id="duel-secret-change">${GAME.secretChange}</button>
+                </div>
+                <p class="gboard__note">${GAME.secretHint}</p>
+              </div>
+              <ol class="gboard__list" id="duel-their-list" aria-live="polite"></ol>
+            </section>
+
+            <section class="gboard" aria-labelledby="duel-your-title">
+              <h3 class="gboard__title" id="duel-your-title">${GAME.yourTitle}</h3>
+              <p class="gboard__hint">${GAME.duel.yourGuessHint}</p>
+              <form class="gboard__row" id="duel-your-form">
+                <input id="duel-your-guess" class="game__input" maxlength="4" autocomplete="off"
+                  autocapitalize="characters" spellcheck="false" aria-label="Your guess">
+                <button type="submit" class="game__btn">${GAME.duel.guessAction}</button>
+              </form>
+              <ol class="gboard__list" id="duel-your-list" aria-live="polite"></ol>
+            </section>
+          </div>
+          <div class="game__foot">
+            <span class="game__msg" id="duel-msg" role="status"></span>
+            <span class="duel__conn" id="duel-conn"></span>
+            <button type="button" class="game__btn game__btn--quiet" id="duel-switch">${GAME.duel.switchSide}</button>
+            <button type="button" class="game__btn game__btn--quiet" id="duel-new">${GAME.newRound}</button>
+          </div>
+        </div>
       </div>
     </div>`,
 
@@ -473,6 +532,7 @@ function openPage(key, trigger) {
 
 function closePage() {
   if (!currentPage) return;
+  duelTeardown();
 
   /* Restore interactivity synchronously. The fade below is cosmetic only —
      if it stalls (backgrounded tab pauses rAF) the page must still be usable,
@@ -493,7 +553,7 @@ function closePage() {
 /* Background is inert while the overlay is open: no tab-through, no scroll. */
 function lockBackground(on) {
   document.body.style.overflow = on ? 'hidden' : '';
-  ['#cover', '#contents', '#colophon'].forEach(sel => {
+  ['#cover', '#contents', '#pigeon', '#colophon'].forEach(sel => {
     const el = $(sel);
     if (!el) return;
     if (on) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
@@ -503,7 +563,14 @@ function lockBackground(on) {
 }
 
 /* ── PER-PAGE WIRING ─────────────────────────────────────────────────────── */
+/* The duel holds a live SSE connection; it must not outlive the page. */
+let duelES = null;
+function duelTeardown() {
+  if (duelES) { duelES.close(); duelES = null; }
+}
+
 function hydrate(key) {
+  duelTeardown();
   if (key === 'wordgame') {
     const KEY = 'kingdom-wordgame-v1';
     let state = { secret: '', theirs: [], yours: [] };
@@ -600,6 +667,199 @@ function hydrate(key) {
       persist(); paint();
       $('#game-secret').focus();
     });
+  }
+
+  if (key === 'wordgame') {
+    /* ── ACROSS THE DISTANCE ─────────────────────────────────────────────
+       Two phones, one private ntfy topic. Only guesses and counts travel;
+       each secret word stays on its own device, which is also what makes
+       the scoring trustworthy - your opponent's device answers, not you. */
+    const D = GAME.duel;
+    const DKEY = 'kingdom-duel-away-v1';
+    let ds = { mode: 'local', role: null, secret: '', theirs: [], yours: [], pending: [], seen: [] };
+    try {
+      const raw = localStorage.getItem(DKEY);
+      if (raw) ds = Object.assign(ds, JSON.parse(raw));
+    } catch (e) {}
+    const dsave = () => {
+      ds.seen = ds.seen.slice(-200);
+      try { localStorage.setItem(DKEY, JSON.stringify(ds)); } catch (e) {}
+    };
+
+    const clean = v => v.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+    const inPlace = (a, b) => [...a].reduce((n, ch, i) => n + (ch === b[i] ? 1 : 0), 0);
+    const mid = () => Math.random().toString(36).slice(2, 10);
+
+    const dmsg = $('#duel-msg');
+    let dmsgTimer = 0;
+    const dsay = text => {
+      dmsg.textContent = text;
+      clearTimeout(dmsgTimer);
+      if (text) dmsgTimer = setTimeout(() => { dmsg.textContent = ''; }, 3600);
+    };
+    const conn = state => { $('#duel-conn').textContent = state; };
+
+    const row = (guess, score) => `
+      <li class="gboard__entry${score === 4 ? ' gboard__entry--won' : ''}">
+        <span class="gboard__tiles">${[...guess].map(c => `<i>${c}</i>`).join('')}</span>
+        <span class="gboard__score">${
+          score == null ? `<em>${D.waiting}</em>` :
+          score === 4 ? GAME.found : `<b>${score}</b> ${GAME.inPlace}`}</span>
+      </li>`;
+
+    const dpaint = () => {
+      $('#game-local').hidden = ds.mode !== 'local';
+      $('#game-away').hidden = ds.mode !== 'away';
+      $('#game-mode-local').setAttribute('aria-pressed', String(ds.mode === 'local'));
+      $('#game-mode-away').setAttribute('aria-pressed', String(ds.mode === 'away'));
+      if (ds.mode !== 'away') return;
+      $('#duel-pick').hidden = !!ds.role;
+      $('#duel-play').hidden = !ds.role;
+      if (!ds.role) return;
+      const block = $('#duel-secret-block');
+      block.querySelector('#duel-secret-form').hidden = !!ds.secret;
+      block.querySelector('.gboard__row--locked').hidden = !ds.secret;
+      $('#duel-their-list').innerHTML = ds.theirs.map(e => row(e.g, e.s)).join('');
+      $('#duel-your-list').innerHTML = ds.yours.map(e => row(e.g, e.s)).join('');
+    };
+
+    const publish = async body => {
+      const res = await fetch(`${D.server}/${D.topic}`, { method: 'POST', body: JSON.stringify(body) });
+      if (!res.ok) throw new Error(res.status);
+    };
+
+    /* Score one of their guesses against my word and answer it. */
+    const answer = g => {
+      const sc = inPlace(g.word, ds.secret);
+      ds.theirs.unshift({ g: g.word, s: sc });
+      publish({ v: 1, mid: mid(), from: ds.role, t: 'score', gid: g.gid, word: g.word, score: sc })
+        .catch(() => dsay(BELL.failed));
+    };
+
+    const handle = raw => {
+      let m;
+      try { m = JSON.parse(raw); } catch (e) { return; }
+      if (!m || m.v !== 1 || !m.mid || m.from === ds.role) return;
+      if (ds.seen.includes(m.mid)) return;
+      ds.seen.push(m.mid);
+
+      if (m.t === 'guess' && typeof m.word === 'string') {
+        const word = clean(m.word);
+        if (word.length !== 4) return;
+        if (ds.secret) answer({ word, gid: m.gid });
+        else { ds.pending.push({ word, gid: m.gid }); dsay(D.lockFirst); }
+      } else if (m.t === 'score' && typeof m.gid === 'string') {
+        const entry = ds.yours.find(e => e.gid === m.gid);
+        if (entry && entry.s == null) entry.s = Math.max(0, Math.min(4, m.score | 0));
+      } else if (m.t === 'new') {
+        ds.theirs = []; ds.yours = []; ds.pending = []; ds.secret = '';
+        dsay(GAME.newRound);
+      } else {
+        return;
+      }
+      dsave(); dpaint();
+    };
+
+    const connect = () => {
+      if (duelES) return;
+      /* Catch up on anything said while this page was closed (ntfy keeps
+         ~12h), then listen live. */
+      fetch(`${D.server}/${D.topic}/json?poll=1`)
+        .then(r => r.ok ? r.text() : '')
+        .then(text => {
+          for (const line of text.trim().split('\n')) {
+            if (!line) continue;
+            try {
+              const ev = JSON.parse(line);
+              if (ev.event === 'message' && ev.message) handle(ev.message);
+            } catch (e) {}
+          }
+        })
+        .catch(() => {});
+      duelES = new EventSource(`${D.server}/${D.topic}/sse`);
+      duelES.onopen = () => conn(D.listening);
+      duelES.onerror = () => conn(D.offline);
+      duelES.onmessage = e => {
+        try {
+          const ev = JSON.parse(e.data);
+          if (ev.event === 'message' && ev.message) handle(ev.message);
+        } catch (err) {}
+      };
+    };
+
+    const setMode = mode => {
+      ds.mode = mode; dsave(); dpaint();
+      if (mode === 'away') connect();
+      else duelTeardown();
+    };
+    $('#game-mode-local').addEventListener('click', () => setMode('local'));
+    $('#game-mode-away').addEventListener('click', () => setMode('away'));
+
+    $('#duel-pick').addEventListener('click', e => {
+      const btn = e.target.closest('[data-role]');
+      if (!btn) return;
+      ds.role = btn.dataset.role;
+      dsave(); dpaint();
+    });
+
+    $('#duel-secret-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const w = clean($('#duel-secret').value);
+      if (w.length !== 4) return dsay(GAME.needFour);
+      ds.secret = w;
+      $('#duel-secret').value = '';
+      const queued = ds.pending.splice(0);
+      queued.forEach(answer);
+      dsave(); dpaint();
+    });
+    const dpeek = $('#duel-secret-peek');
+    const dmask = $('#duel-secret-block').querySelector('.game__masked');
+    const dshow = on => { dmask.textContent = on && ds.secret ? [...ds.secret].join(' ') : '\u2022 \u2022 \u2022 \u2022'; };
+    ['pointerdown', 'keydown'].forEach(t => dpeek.addEventListener(t, e => {
+      if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault(); dshow(true);
+    }));
+    ['pointerup', 'pointercancel', 'pointerleave', 'keyup', 'blur'].forEach(t =>
+      dpeek.addEventListener(t, () => dshow(false)));
+    $('#duel-secret-change').addEventListener('click', () => {
+      ds.secret = ''; dsave(); dpaint(); $('#duel-secret').focus();
+    });
+
+    $('#duel-your-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const g = clean($('#duel-your-guess').value);
+      if (g.length !== 4) return dsay(GAME.needFour);
+      const gid = mid();
+      ds.yours.unshift({ gid, g, s: null });
+      $('#duel-your-guess').value = '';
+      dsave(); dpaint();
+      try {
+        await publish({ v: 1, mid: mid(), from: ds.role, t: 'guess', gid, word: g });
+      } catch (err) {
+        ds.yours = ds.yours.filter(x => x.gid !== gid);
+        dsave(); dpaint(); dsay(BELL.failed);
+      }
+    });
+
+    $('#duel-new').addEventListener('click', () => {
+      if (!confirm(GAME.newRoundConfirm)) return;
+      ds.theirs = []; ds.yours = []; ds.pending = []; ds.secret = '';
+      dsave(); dpaint();
+      publish({ v: 1, mid: mid(), from: ds.role, t: 'new' }).catch(() => dsay(BELL.failed));
+    });
+    $('#duel-switch').addEventListener('click', () => {
+      ds.role = null; dsave(); dpaint();
+    });
+
+    $('#duel-secret').addEventListener('input', function () {
+      const v = clean(this.value); if (this.value !== v) this.value = v;
+    });
+    $('#duel-your-guess').addEventListener('input', function () {
+      const v = clean(this.value); if (this.value !== v) this.value = v;
+    });
+
+    dpaint();
+    if (ds.mode === 'away') connect();
   }
 
   if (key === 'map') {
@@ -801,6 +1061,82 @@ soundBtn.addEventListener('click', () => {
 });
 
 /* ══════════════════════════════════════════════════════════════════════════
+   DAYS OF US — the due-date stamp on the cover. Day 1 = 01·08·2026.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  const el = $('#days');
+  const [y, m, d] = DAYS.anchor;
+  const start = new Date(y, m - 1, d);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const n = Math.floor((today - start) / 86400000) + 1;
+  if (n >= 1) {
+    const milestone = DAYS.milestones[n]
+      || (today.getMonth() === start.getMonth() && today.getDate() === start.getDate() && n > 1
+          ? `${Math.round(n / 365)} year${n > 550 ? 's' : ''} \u2661` : '');
+    el.innerHTML =
+      `<span class="days__label">${DAYS.label}</span>` +
+      `<span class="days__num">${n.toLocaleString('en')}</span>` +
+      `<span class="days__since">${DAYS.since}</span>` +
+      (milestone ? `<span class="days__milestone hand">${milestone}</span>` : '');
+    el.hidden = false;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE PIGEON POST — his latest note, fetched from its own ntfy topic.
+   ntfy.sh only caches ~12h of messages, so once a note has been seen it is
+   also kept in this browser and shown until a newer one arrives.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  const KEY = 'kingdom-pigeon-last';
+  const box = $('#pigeon');
+
+  const show = note => {
+    if (!note || !note.text) return;
+    $('#pigeon-eyebrow').textContent = PIGEON.eyebrow;
+    /* textContent, deliberately: the note travels over the wire. */
+    $('#pigeon-text').textContent = note.text;
+    $('#pigeon-from').textContent = PIGEON.from;
+    const when = new Date(note.time * 1000);
+    const days = Math.floor((Date.now() - when.getTime()) / 86400000);
+    $('#pigeon-when').textContent =
+      days === 0 ? PIGEON.today :
+      days === 1 ? PIGEON.yesterday :
+      when.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+    box.hidden = false;
+  };
+
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
+  const save = n => { try { localStorage.setItem(KEY, JSON.stringify(n)); } catch (e) {} };
+
+  show(load());
+
+  const poll = async () => {
+    try {
+      const res = await fetch(`${PIGEON.server}/${PIGEON.topic}/json?poll=1`);
+      if (!res.ok) return;
+      const lines = (await res.text()).trim().split('\n').filter(Boolean);
+      let latest = null;
+      for (const line of lines) {
+        try {
+          const ev = JSON.parse(line);
+          if (ev.event === 'message' && ev.message &&
+              (!latest || ev.time > latest.time)) {
+            latest = { text: String(ev.message).slice(0, 500), time: ev.time };
+          }
+        } catch (e) { /* skip malformed line */ }
+      }
+      const held = load();
+      if (latest && (!held || latest.time > held.time)) { save(latest); show(latest); }
+    } catch (e) { /* offline - the held note stays up */ }
+  };
+  poll();
+  setInterval(poll, PIGEON.pollMinutes * 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    THE BELL — a press here becomes a push notification on his phone, sent
    straight from the browser to ntfy.sh. No backend of our own; the topic
    name in content.js is the address.
@@ -813,6 +1149,9 @@ soundBtn.addEventListener('click', () => {
   $('#bell-hint').textContent = BELL.trayHint;
   $('#bell-buttons').innerHTML = BELL.buttons.map(b =>
     `<button type="button" class="bell__ring" data-key="${b.key}">${b.label}</button>`).join('');
+  $('#bell-line-label').textContent = BELL.lineLabel;
+  $('#bell-line').placeholder = BELL.linePlaceholder;
+  $('#bell-line-send').textContent = BELL.lineAction;
 
   const setOpen = open => {
     tray.hidden = !open;
@@ -838,10 +1177,36 @@ soundBtn.addEventListener('click', () => {
      enthusiastic moment doesn't turn into six buzzes. */
   const stampKey = k => 'kingdom-bell-' + k;
   const onCooldown = k => {
-    try { return Date.now() - (+localStorage.getItem(stampKey(k)) || 0) < BELL.cooldownSeconds * 1000; }
+    const secs = k === 'line' ? BELL.lineCooldownSeconds : BELL.cooldownSeconds;
+    try { return Date.now() - (+localStorage.getItem(stampKey(k)) || 0) < secs * 1000; }
     catch (e) { return false; }
   };
   const stamp = k => { try { localStorage.setItem(stampKey(k), String(Date.now())); } catch (e) {} };
+
+  $('#bell-line-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const input = $('#bell-line');
+    const text = input.value.trim();
+    if (!text) return;
+    if (onCooldown('line')) return say(BELL.cooldownMsg);
+    const btn = $('#bell-line-send');
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${BELL.server}/${BELL.topic}`, {
+        method: 'POST',
+        body: text,
+        headers: { Title: BELL.title, Tags: 'love_letter', Priority: 'urgent' },
+      });
+      if (!res.ok) throw new Error(res.status);
+      stamp('line');
+      input.value = '';
+      say(BELL.sent);
+    } catch (err) {
+      say(BELL.failed);
+    } finally {
+      btn.disabled = false;
+    }
+  });
 
   $('#bell-buttons').addEventListener('click', async e => {
     const btn = e.target.closest('.bell__ring');
