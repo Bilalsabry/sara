@@ -20,6 +20,8 @@ import {
   auroraPainter,
 } from './art.js';
 
+import { shouldPlayOverture, playOverture } from './overture.js';
+
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1369,13 +1371,21 @@ if (window.Lenis && !REDUCED) {
 if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
   if (!REDUCED) {
-    gsap.to('#cover-mark',   { opacity: 1, duration: 1.3, delay: .25, ease: 'power2.out' });
-    gsap.to('#cover-title',  { opacity: 1, y: 0, duration: 1.1, delay: .55, ease: 'power3.out' });
-    gsap.to('#cover-orn',    { opacity: 1, duration: .9, delay: .95 });
-    gsap.to('#cover-blurb',  { opacity: 1, y: 0, duration: .95, delay: 1.05, ease: 'power3.out' });
-    gsap.to('#cover-cta',    { opacity: 1, y: 0, duration: .85, delay: 1.3, ease: 'power3.out' });
-    gsap.to('#cover-star',   { opacity: 1, duration: .8, delay: 1.55 });
-    gsap.to('#cover-aside',  { opacity: 1, duration: 1.4, delay: .7 });
+    /* The cover reveal is held until the overture has handed over, otherwise
+       it would play out underneath the closed book and she would arrive to a
+       cover that had already finished assembling itself. */
+    const revealCover = () => {
+      gsap.to('#cover-mark',   { opacity: 1, duration: 1.3, delay: .25, ease: 'power2.out' });
+      gsap.to('#cover-title',  { opacity: 1, y: 0, duration: 1.1, delay: .55, ease: 'power3.out' });
+      gsap.to('#cover-orn',    { opacity: 1, duration: .9, delay: .95 });
+      gsap.to('#cover-blurb',  { opacity: 1, y: 0, duration: .95, delay: 1.05, ease: 'power3.out' });
+      gsap.to('#cover-cta',    { opacity: 1, y: 0, duration: .85, delay: 1.3, ease: 'power3.out' });
+      gsap.to('#cover-star',   { opacity: 1, duration: .8, delay: 1.55 });
+      gsap.to('#cover-aside',  { opacity: 1, duration: 1.4, delay: .7 });
+    };
+
+    if (shouldPlayOverture()) playOverture(revealCover);
+    else revealCover();
 
     gsap.fromTo('.chapter-link',
       { opacity: 0, y: 22 },
