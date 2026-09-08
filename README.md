@@ -194,6 +194,20 @@ Check the *recording's* licence, not just the composer's death date.
   in the app. There's a 60-second per-button cooldown so a double-tap doesn't
   buzz twice. If real SMS is ever wanted instead, swap the endpoint for a
   small Vercel function + Twilio; the front end won't need to change.
+- **The northern lights.** Rarely, and at a random moment, aurora curtains
+  drift across the whole site — her favourite thing in the world, so they are
+  never on demand and never on a schedule she could learn. With the defaults
+  in `AURORA` (`content.js`) a pass arrives for roughly one visit in five soon
+  after she opens the book, and about once every half hour of reading after
+  that; each pass lasts around 24 seconds and fades itself out. **Rarity is
+  the whole point — resist turning those numbers up.** They use the `color`
+  blend mode, which takes hue from the lights and luminosity from the page,
+  so nothing on the page loses contrast while they pass. Under
+  `prefers-reduced-motion` the curtains hold still and only fade.
+
+  To call them up deliberately — to show her the first time — click the small
+  star under *Open the Book* on the cover. Deliberately undocumented on the
+  page itself.
 - **The Pigeon Post.** Bilal can leave a note that appears on the site as a
   taped paper note under the chapter index. Send it by POSTing text to
   `https://ntfy.sh/<PIGEON.topic>` (topic in `content.js`) — easiest is an

@@ -9,7 +9,7 @@
 import {
   IMAGES, ARCHIVE, COVER, INDEX, LETTER, ARCHIVE_TEXT, MAP_CORNER, MAP_PLACES,
   STARS, FIREHEART, LIBRARY, MARGINALIA, SOUNDTRACK, LITTLE_THINGS, NOTES,
-  GAME, BELL, PIGEON, DAYS, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
+  GAME, BELL, PIGEON, DAYS, AURORA, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
 } from './content.js';
 
 import {
@@ -17,6 +17,7 @@ import {
   stagSVG, stagMarkSVG, pressedStemSVG, graphiteSprigSVG,
   paintFireheart, paintConstellation, paintMapCard, paintConstellationCard,
   paintLetterCard, icon, MARKS, sealSVG, castleSVG, mapGroundSVG,
+  auroraPainter,
 } from './art.js';
 
 const $  = (s, r = document) => r.querySelector(s);
@@ -1059,6 +1060,83 @@ soundBtn.addEventListener('click', () => {
     gsap.to(audio, { volume: 0, duration: REDUCED ? 0 : 1, onComplete: () => audio.pause() });
   } else { audio.pause(); }
 });
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE NORTHERN LIGHTS — rare, unannounced, and gone before long.
+   ══════════════════════════════════════════════════════════════════════════ */
+const aurora = (() => {
+  let running = false;
+
+  function show() {
+    if (running || !AURORA.enabled || document.hidden) return;
+    running = true;
+
+    const canvas = document.createElement('canvas');
+    canvas.className = 'aurora';
+    canvas.setAttribute('aria-hidden', 'true');
+    canvas.style.mixBlendMode = AURORA.blend;
+    document.body.appendChild(canvas);
+
+    /* A third of the viewport is plenty: it is about to be blurred to a
+       whisper anyway, and this keeps the whole pass cheap. */
+    const size = () => {
+      canvas.width  = Math.max(120, Math.round(innerWidth  / 3));
+      canvas.height = Math.max(120, Math.round(innerHeight / 3));
+    };
+    size();
+    addEventListener('resize', size, { passive: true });
+
+    const draw = auroraPainter(canvas, {
+      colors: AURORA.colors, bands: AURORA.bands, seed: 1 + Math.random() * 1e6,
+    });
+
+    const started = performance.now();
+    const total = AURORA.durationSeconds * 1000;
+    let raf = 0, painted = 0;
+
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      removeEventListener('resize', size);
+      canvas.remove();
+      running = false;
+    };
+
+    const frame = now => {
+      const p = (now - started) / total;
+      if (p >= 1) return stop();
+      /* Arrive slowly, hold, leave more slowly still. */
+      const fade = p < 0.26 ? p / 0.26 : p > 0.58 ? (1 - p) / 0.42 : 1;
+      canvas.style.opacity = String(Math.max(0, fade) * AURORA.opacity);
+      /* Reduced motion keeps the curtains still; they only fade. */
+      if (now - painted > 32) {
+        painted = now;
+        draw(REDUCED ? 0 : (now - started) / 1000);
+      }
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+  }
+
+  const between = ([lo, hi]) => (lo + Math.random() * (hi - lo));
+
+  function schedule(first) {
+    const wait = first
+      ? between(AURORA.firstDelaySeconds) * 1000
+      : between(AURORA.gapMinutes) * 60000;
+    setTimeout(() => {
+      /* Never while she is looking elsewhere — it would be spent unseen. */
+      if (!document.hidden && Math.random() < (first ? AURORA.firstChance : AURORA.chance)) show();
+      schedule(false);
+    }, wait);
+  }
+
+  if (AURORA.enabled) schedule(true);
+  return { show };
+})();
+
+/* A way to call them up deliberately: the small star under the cover
+   button. Undocumented on the page on purpose. */
+$('#cover-star')?.addEventListener('click', () => aurora.show());
 
 /* ══════════════════════════════════════════════════════════════════════════
    DAYS OF US — the due-date stamp on the cover. Day 1 = 01·08·2026.

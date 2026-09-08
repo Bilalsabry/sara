@@ -366,6 +366,45 @@ export const GAME = {
 
 
 
+
+/* ── THE NORTHERN LIGHTS ─────────────────────────────────────────────────
+   Her favourite thing in the world, so they are never on demand and never
+   on a schedule she could learn. They drift across the page rarely, at a
+   random moment, and leave on their own.
+
+   Rarity is the whole point - resist turning these numbers up. With the
+   defaults, a pass arrives for roughly one visit in five soon after she
+   opens the book, and about once every half hour of reading after that.
+   Set `enabled: false` to retire them.
+
+   Colours are [r, g, b], kept muted so they read as light falling on paper
+   rather than a screensaver. Wording/values provisional. */
+export const AURORA = {
+  enabled: true,
+  firstChance: 0.18,            // chance of a pass shortly after she arrives
+  firstDelaySeconds: [25, 110],
+  chance: 0.30,                 // chance at each later roll
+  gapMinutes: [5, 16],          // how long between rolls
+  durationSeconds: 24,
+  opacity: 0.5,
+  /* `color` takes hue from the lights and luminosity from the page, so the
+     paper catches the colour without any text losing contrast. */
+  blend: 'color',
+  bands: 8,
+  /* Weighted the way a real sky is: mostly greens, with blue and a violet
+     fringe turning up now and then. An even spread of hues reads as a
+     rainbow, not as the northern lights. */
+  colors: [
+    [ 78, 152, 118],   // jade
+    [110, 182, 150],   // sea green
+    [ 88, 164, 128],   // jade, lighter
+    [ 92, 132, 160],   // glacial blue
+    [120, 176, 144],   // green
+    [128, 104, 156],   // faint violet at the fringe
+    [ 84, 158, 124],   // green
+  ],
+};
+
 /* ── THE PIGEON POST ─────────────────────────────────────────────────────
    Notes from Bilal that appear on the site as a paper note left on the
    desk. He publishes to the topic below (iOS Shortcut or the ntfy.sh web

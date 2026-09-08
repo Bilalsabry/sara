@@ -103,6 +103,68 @@ export function stagMarkSVG({ size = 52, stroke = 'currentColor', width = 1.1 } 
 </svg>`;
 }
 
+
+/* ── AURORA ──────────────────────────────────────────────────────────────
+   The northern lights. Curtains are drawn crudely onto a small canvas and
+   blurred hard in CSS, which is both cheaper and far softer than blurring
+   in canvas. `lighter` compositing makes overlapping curtains add, the way
+   real light does, instead of one painting over another. */
+export function auroraPainter(canvas, { colors, bands = 5, seed = 1 } = {}) {
+  const ctx = canvas.getContext('2d');
+  const rnd = seeded(Math.max(1, Math.floor(seed)));
+
+  /* Every appearance is a different sky. */
+  const curtains = Array.from({ length: bands }, (_, i) => ({
+    rgb:   colors[i % colors.length],
+    x:     0.02 + rnd() * 0.96,        // where it hangs, across the width
+    w:     0.07 + rnd() * 0.17,        // narrow, so they read as curtains
+    amp:   0.02 + rnd() * 0.07,        // how far it sways
+    freq:  1.4 + rnd() * 2.8,
+    speed: (0.07 + rnd() * 0.20) * (rnd() < 0.5 ? -1 : 1),
+    phase: rnd() * Math.PI * 2,
+    top:   rnd() * 0.14,
+    reach: 0.50 + rnd() * 0.42,        // how far down it falls
+  }));
+
+  const STEPS = 16;
+  const edge = (c, k, t, W) =>
+    (c.x + Math.sin(k * c.freq * Math.PI + t * c.speed + c.phase) * c.amp) * W;
+  /* Wide in the middle, tapering at both ends, so a curtain has no hard end. */
+  const halfWidth = (c, k, W) =>
+    c.w * W * 0.5 * (0.35 + 0.65 * Math.sin(Math.PI * Math.min(1, Math.max(0, k))));
+
+  return function drawAurora(t) {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+
+    for (const c of curtains) {
+      const yTop = c.top * H, yBot = Math.min(H, (c.top + c.reach) * H);
+      const [r, g, b] = c.rgb;
+      const grad = ctx.createLinearGradient(0, yTop, 0, yBot);
+      grad.addColorStop(0,    `rgba(${r},${g},${b},0)`);
+      grad.addColorStop(0.20, `rgba(${r},${g},${b},.90)`);
+      grad.addColorStop(0.55, `rgba(${r},${g},${b},.40)`);
+      grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
+      ctx.fillStyle = grad;
+
+      ctx.beginPath();
+      for (let i = 0; i <= STEPS; i++) {
+        const k = i / STEPS, y = yTop + (yBot - yTop) * k;
+        const x = edge(c, k, t, W) - halfWidth(c, k, W);
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      for (let i = STEPS; i >= 0; i--) {
+        const k = i / STEPS, y = yTop + (yBot - yTop) * k;
+        ctx.lineTo(edge(c, k, t, W) + halfWidth(c, k, W), y);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  };
+}
+
 /* ── BOTANICALS ──────────────────────────────────────────────────────────
    Two deliberate drawings rather than a scatter of generic florals:
    a pressed stem silhouette and a faint graphite sprig. Asymmetric on purpose. */

@@ -78,6 +78,20 @@ body::before {
     radial-gradient(ellipse 70% 55% at 18% 12%, rgba(213,201,178,.30), transparent 62%),
     radial-gradient(ellipse 60% 50% at 86% 78%, rgba(206,193,168,.26), transparent 60%);
 }
+/* The northern lights. Drawn small, blurred hard, and blended into the page
+   so they read as light falling across paper rather than a picture on top of
+   it. Sits just under the grain, above everything else including the reader. */
+.aurora {
+  position: fixed; inset: 0; z-index: 9990;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(clamp(12px, 2.6vw, 30px)) saturate(1.2);
+  will-change: opacity;
+}
+/* The cover star doubles as the way to call them up. */
+.cover__star { cursor: pointer; }
+
 /* Restrained grain. */
 #grain {
   position: fixed; inset: 0; z-index: 9999;
