@@ -124,6 +124,24 @@
 </div>
 
 <!-- Sound: opt-in only, never autoplays -->
+<!-- The bell — rings Bilal's phone. Configured in content.js (BELL). -->
+<div class="bell" id="bell">
+  <div class="bell__tray" id="bell-tray" hidden>
+    <p class="bell__hint" id="bell-hint"></p>
+    <div class="bell__buttons" id="bell-buttons"></div>
+    <p class="bell__status" id="bell-status" role="status"></p>
+  </div>
+  <button class="bell__pull" id="bell-pull" type="button"
+          aria-expanded="false" aria-controls="bell-tray">
+    <svg class="bell__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/>
+      <path d="M13.7 20a2 2 0 0 1-3.4 0"/>
+    </svg>
+    <span id="bell-label"></span>
+  </button>
+</div>
+
 <button class="sound" id="sound" type="button" aria-pressed="false">
   <svg class="sound__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
        stroke-width="1.4" stroke-linecap="round" aria-hidden="true">

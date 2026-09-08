@@ -179,6 +179,21 @@ Good sources for genuinely free music: [Musopen](https://musopen.org)
 (CC0 and public-domain classical recordings) and
 [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Piano_music).
 Check the *recording's* licence, not just the composer's death date.
+- **The Bell** (the control at lower right) sends a push notification to
+  Bilal's phone when Sara rings it — a hug, a kiss, or coffee. It goes
+  browser → [ntfy.sh](https://ntfy.sh) → phone; no server of our own, free,
+  no account.
+
+  **Setup, once:** install the ntfy app
+  ([iOS](https://apps.apple.com/us/app/ntfy/id1625396347) /
+  [Android](https://play.google.com/store/apps/details?id=io.heckel.ntfy)),
+  tap **+ / Subscribe to topic**, and enter the topic exactly as it appears
+  in `BELL.topic` in `content.js`. Then open the live site and ring once to
+  test. The topic name is the only secret — anyone who knows it can ring the
+  bell, so don't share it; to rotate it, change `BELL.topic` and re-subscribe
+  in the app. There's a 60-second per-button cooldown so a double-tap doesn't
+  buzz twice. If real SMS is ever wanted instead, swap the endpoint for a
+  small Vercel function + Twilio; the front end won't need to change.
 - **The Word Game** (The Parlour, linked from the colophon) is the paper game
   digitised: lock in a hidden four-letter word, and the page scores their
   guesses — how many letters sit in the right place — while a second ledger

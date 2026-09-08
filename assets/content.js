@@ -344,6 +344,35 @@ export const GAME = {
   needFour: 'Four letters.',
 };
 
+
+/* ── THE BELL ────────────────────────────────────────────────────────────
+   The small fixed control at lower right. When Sara rings it, a push
+   notification lands on Bilal's phone within a second or two, via ntfy.sh
+   (a free public push relay - no account, no server of our own).
+
+   SETUP, once, on Bilal's phone: install the ntfy app (iOS/Android),
+   subscribe to the topic below, done. The topic name is the only secret:
+   anyone who knows it could ring the bell, so it is random and must not be
+   shared outside the two of you. To rotate it, change `topic` here and
+   re-subscribe in the app.
+   Wording is provisional - functional labels, not yet in COPY.md. */
+export const BELL = {
+  topic: 'kingdom-6b7aa2ad5dfefe43',
+  server: 'https://ntfy.sh',
+  title: 'From Sara',
+  control: 'Ring for him',
+  trayHint: 'He\u2019ll feel it buzz.',
+  buttons: [
+    { key: 'hug',    label: 'A hug',  message: 'Sara wants a hug \u2661',  tag: 'hugs' },
+    { key: 'kiss',   label: 'A kiss', message: 'Sara wants a kiss \u2661', tag: 'kiss' },
+    { key: 'coffee', label: 'Coffee', message: 'Coffee, please',            tag: 'coffee' },
+  ],
+  sent: 'On its way to him \u2661',
+  cooldownMsg: 'Already rung \u2014 give it a minute.',
+  failed: 'It didn\u2019t go through \u2014 try again in a moment.',
+  cooldownSeconds: 60,
+};
+
 /* ── PAGE ORDER (drives Prev/Next) ───────────────────────────────────────── */
 export const PAGE_ORDER = [
   'letter', 'archive', 'map', 'constellation', 'fireheart',

@@ -9,7 +9,7 @@
 import {
   IMAGES, ARCHIVE, COVER, INDEX, LETTER, ARCHIVE_TEXT, MAP_CORNER, MAP_PLACES,
   STARS, FIREHEART, LIBRARY, MARGINALIA, SOUNDTRACK, LITTLE_THINGS, NOTES,
-  GAME, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
+  GAME, BELL, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
 } from './content.js';
 
 import {
@@ -799,6 +799,74 @@ soundBtn.addEventListener('click', () => {
     gsap.to(audio, { volume: 0, duration: REDUCED ? 0 : 1, onComplete: () => audio.pause() });
   } else { audio.pause(); }
 });
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE BELL — a press here becomes a push notification on his phone, sent
+   straight from the browser to ntfy.sh. No backend of our own; the topic
+   name in content.js is the address.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  const pull = $('#bell-pull');
+  const tray = $('#bell-tray');
+  const status = $('#bell-status');
+  $('#bell-label').textContent = BELL.control;
+  $('#bell-hint').textContent = BELL.trayHint;
+  $('#bell-buttons').innerHTML = BELL.buttons.map(b =>
+    `<button type="button" class="bell__ring" data-key="${b.key}">${b.label}</button>`).join('');
+
+  const setOpen = open => {
+    tray.hidden = !open;
+    pull.setAttribute('aria-expanded', String(open));
+    if (open) status.textContent = '';
+  };
+  pull.addEventListener('click', () => setOpen(tray.hidden));
+  document.addEventListener('click', e => {
+    if (!tray.hidden && !e.target.closest('.bell')) setOpen(false);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !tray.hidden) { setOpen(false); pull.focus(); }
+  });
+
+  let statusTimer = 0;
+  const say = text => {
+    status.textContent = text;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => { status.textContent = ''; }, 4000);
+  };
+
+  /* One ring per button per cooldown window, so a double-tap or an
+     enthusiastic moment doesn't turn into six buzzes. */
+  const stampKey = k => 'kingdom-bell-' + k;
+  const onCooldown = k => {
+    try { return Date.now() - (+localStorage.getItem(stampKey(k)) || 0) < BELL.cooldownSeconds * 1000; }
+    catch (e) { return false; }
+  };
+  const stamp = k => { try { localStorage.setItem(stampKey(k), String(Date.now())); } catch (e) {} };
+
+  $('#bell-buttons').addEventListener('click', async e => {
+    const btn = e.target.closest('.bell__ring');
+    if (!btn) return;
+    const cfg = BELL.buttons.find(b => b.key === btn.dataset.key);
+    if (!cfg) return;
+    if (onCooldown(cfg.key)) return say(BELL.cooldownMsg);
+
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${BELL.server}/${BELL.topic}`, {
+        method: 'POST',
+        body: cfg.message,
+        headers: { Title: BELL.title, Tags: cfg.tag, Priority: 'high' },
+      });
+      if (!res.ok) throw new Error(res.status);
+      stamp(cfg.key);
+      say(BELL.sent);
+    } catch (err) {
+      say(BELL.failed);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
 
 /* ══════════════════════════════════════════════════════════════════════════
    BOOT
