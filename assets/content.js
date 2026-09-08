@@ -24,7 +24,10 @@ export const IMAGES = {
     alt: 'Sara laughing, seated in a candlelit room with stained glass behind her',
     label: 'HER PHOTOGRAPH',
     ratio: null,          // fills the cover panel
-    focal: '58% 38%',
+    /* The file is pre-cropped (top 30% of the original removed) so she reads
+       large in the panel rather than sitting under a wall of architecture.
+       The x focal keeps the stained glass at the left edge in shot. */
+    focal: '42% 50%',
     fit: 'cover',
   },
   coverSnapshot: {
