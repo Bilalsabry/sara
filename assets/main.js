@@ -1145,13 +1145,18 @@ $('#cover-star')?.addEventListener('click', () => aurora.show());
 {
   const el = $('#days');
   const [y, m, d] = DAYS.anchor;
-  const start = new Date(y, m - 1, d);
+  /* Compare the two dates in UTC. Local-midnight arithmetic drifts by an hour
+     whenever the anchor and today sit on opposite sides of a daylight-saving
+     change, which floors the division down and loses a whole day. UTC has no
+     DST, so the day count is exact year-round. */
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const n = Math.floor((today - start) / 86400000) + 1;
+  const start = Date.UTC(y, m - 1, d);
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const n = Math.round((today - start) / 86400000) + 1;
   if (n >= 1) {
+    const anniversary = now.getMonth() === m - 1 && now.getDate() === d;
     const milestone = DAYS.milestones[n]
-      || (today.getMonth() === start.getMonth() && today.getDate() === start.getDate() && n > 1
+      || (anniversary && n > 1
           ? `${Math.round(n / 365)} year${n > 550 ? 's' : ''} \u2661` : '');
     el.innerHTML =
       `<span class="days__label">${DAYS.label}</span>` +
