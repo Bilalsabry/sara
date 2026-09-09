@@ -21,6 +21,8 @@ import {
   auroraPainter,
 } from './art.js';
 
+import { shouldPlayOverture, playOverture } from './overture.js';
+
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -134,6 +136,29 @@ function renderContents() {
     if (kind === 'fireheart') paintFireheart(c, { compact: true });
     else CARD_PAINTERS[kind]?.(c);
   });
+
+  renderRest();
+}
+
+/* The seven pages beyond the five numbered chapters. These used to sit in the
+   footer at 12px uppercase, where they read as Privacy/Terms rather than as
+   half the book. They now follow the chapters as a clearly-labelled second
+   tier, named from PAGE_META so no new wording is invented. */
+function renderRest() {
+  const rest = $('#contents-rest');
+  if (!rest) return;
+  const keys = ORDER.filter(k => !INDEX.some(c => c.key === k));
+  rest.innerHTML = keys.map(k => {
+    const m = PAGE_META[k];
+    if (!m) return '';
+    return `
+    <button class="rest-link anim-in" data-open="${k}"
+            aria-label="Open ${m.folio}, ${m.title}">
+      <span class="rest-link__name">${m.folio}</span>
+      <span class="rest-link__sub">${m.title}</span>
+      <span class="rest-link__arrow" aria-hidden="true"></span>
+    </button>`;
+  }).join('');
 }
 
 /* The archive card is layered paper rather than canvas, so the placeholders
@@ -520,7 +545,6 @@ const roman = n => ROMAN[(n - 1) % 12];
    ══════════════════════════════════════════════════════════════════════════ */
 /* The drawer only joins the book once there is something in it. */
 const ORDER = PAGE_ORDER.filter(k => k !== 'openwhen' || writtenLetters().length);
-if (!writtenLetters().length) $('[data-open="openwhen"]')?.remove();
 
 const reader = $('#reader');
 let currentPage = null;
@@ -582,7 +606,7 @@ function closePage() {
 /* Background is inert while the overlay is open: no tab-through, no scroll. */
 function lockBackground(on) {
   document.body.style.overflow = on ? 'hidden' : '';
-  ['#cover', '#contents', '#pigeon', '#colophon'].forEach(sel => {
+  ['#cover', '.contents-wrap', '#pigeon', '#colophon'].forEach(sel => {
     const el = $(sel);
     if (!el) return;
     if (on) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
@@ -1212,13 +1236,18 @@ $('#cover-star')?.addEventListener('click', () => aurora.show());
 {
   const el = $('#days');
   const [y, m, d] = DAYS.anchor;
-  const start = new Date(y, m - 1, d);
+  /* Compare the two dates in UTC. Local-midnight arithmetic drifts by an hour
+     whenever the anchor and today sit on opposite sides of a daylight-saving
+     change, which floors the division down and loses a whole day. UTC has no
+     DST, so the day count is exact year-round. */
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const n = Math.floor((today - start) / 86400000) + 1;
+  const start = Date.UTC(y, m - 1, d);
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const n = Math.round((today - start) / 86400000) + 1;
   if (n >= 1) {
+    const anniversary = now.getMonth() === m - 1 && now.getDate() === d;
     const milestone = DAYS.milestones[n]
-      || (today.getMonth() === start.getMonth() && today.getDate() === start.getDate() && n > 1
+      || (anniversary && n > 1
           ? `${Math.round(n / 365)} year${n > 550 ? 's' : ''} \u2661` : '');
     el.innerHTML =
       `<span class="days__label">${DAYS.label}</span>` +
@@ -1463,18 +1492,34 @@ if (window.Lenis && !REDUCED) {
 if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
   if (!REDUCED) {
-    gsap.to('#cover-mark',   { opacity: 1, duration: 1.3, delay: .25, ease: 'power2.out' });
-    gsap.to('#cover-title',  { opacity: 1, y: 0, duration: 1.1, delay: .55, ease: 'power3.out' });
-    gsap.to('#cover-orn',    { opacity: 1, duration: .9, delay: .95 });
-    gsap.to('#cover-blurb',  { opacity: 1, y: 0, duration: .95, delay: 1.05, ease: 'power3.out' });
-    gsap.to('#cover-cta',    { opacity: 1, y: 0, duration: .85, delay: 1.3, ease: 'power3.out' });
-    gsap.to('#cover-star',   { opacity: 1, duration: .8, delay: 1.55 });
-    gsap.to('#cover-aside',  { opacity: 1, duration: 1.4, delay: .7 });
+    /* The cover reveal is held until the overture has handed over, otherwise
+       it would play out underneath the closed book and she would arrive to a
+       cover that had already finished assembling itself. */
+    const revealCover = () => {
+      gsap.to('#cover-mark',   { opacity: 1, duration: 1.3, delay: .25, ease: 'power2.out' });
+      gsap.to('#cover-title',  { opacity: 1, y: 0, duration: 1.1, delay: .55, ease: 'power3.out' });
+      gsap.to('#cover-orn',    { opacity: 1, duration: .9, delay: .95 });
+      gsap.to('#cover-blurb',  { opacity: 1, y: 0, duration: .95, delay: 1.05, ease: 'power3.out' });
+      gsap.to('#cover-cta',    { opacity: 1, y: 0, duration: .85, delay: 1.3, ease: 'power3.out' });
+      gsap.to('#cover-star',   { opacity: 1, duration: .8, delay: 1.55 });
+      gsap.to('#cover-aside',  { opacity: 1, duration: 1.4, delay: .7 });
+    };
+
+    if (shouldPlayOverture()) playOverture(revealCover);
+    else revealCover();
 
     gsap.fromTo('.chapter-link',
       { opacity: 0, y: 22 },
       { opacity: 1, y: 0, duration: .85, stagger: .07, ease: 'power3.out',
         scrollTrigger: { trigger: '#contents', start: 'top 88%', once: true } });
+    gsap.fromTo('.rest-link',
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: .7, stagger: .05, ease: 'power3.out',
+        scrollTrigger: { trigger: '.contents-rest', start: 'top 92%', once: true } });
+    gsap.fromTo('.contents-head, .contents-rest .eyebrow',
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: .8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.contents-wrap', start: 'top 85%', once: true } });
     gsap.fromTo('#colophon',
       { opacity: 0 },
       { opacity: 1, duration: 1,
@@ -1495,6 +1540,9 @@ function revealAll() {
   });
 }
 function sweepStalled() {
+  /* The overture deliberately holds the cover back until it hands over, so the
+     watchdog must not race it and assemble the cover behind the closed book. */
+  if (document.querySelector('.overture')) return;
   $$('.anim-in').forEach(el => {
     if (parseFloat(getComputedStyle(el).opacity) < 1) {
       el.style.opacity = '1';
