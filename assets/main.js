@@ -9,7 +9,8 @@
 import {
   IMAGES, ARCHIVE, COVER, INDEX, LETTER, ARCHIVE_TEXT, MAP_CORNER, MAP_PLACES,
   STARS, FIREHEART, LIBRARY, MARGINALIA, SOUNDTRACK, LITTLE_THINGS, NOTES,
-  GAME, BELL, PIGEON, DAYS, AURORA, EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
+  GAME, BELL, PIGEON, DAYS, AURORA, OPEN_WHEN, EPILOGUE, FOOTER, PAGE_ORDER,
+  PAGE_META, AUDIO,
 } from './content.js';
 
 import {
@@ -146,7 +147,7 @@ function renderContents() {
 function renderRest() {
   const rest = $('#contents-rest');
   if (!rest) return;
-  const keys = PAGE_ORDER.filter(k => !INDEX.some(c => c.key === k));
+  const keys = ORDER.filter(k => !INDEX.some(c => c.key === k));
   rest.innerHTML = keys.map(k => {
     const m = PAGE_META[k];
     if (!m) return '';
@@ -374,6 +375,25 @@ const PAGES = {
     </div>
     <div class="cards__foot"><p>${NOTES.footer.join('<br>')}</p></div>`,
 
+  openwhen: () => `
+    <div class="drawer">
+      <p class="drawer__intro">${OPEN_WHEN.intro}</p>
+      <ul class="drawer__letters">
+        ${writtenLetters().map(l => `
+          <li class="envelope" data-key="${l.key}">
+            <div class="envelope__face">
+              <span class="envelope__when">Open ${l.when}</span>
+              <span class="envelope__seal" aria-hidden="true">${sealSVG(52)}</span>
+              <span class="envelope__state" data-state="sealed">${OPEN_WHEN.sealed}</span>
+              <button type="button" class="envelope__open">${OPEN_WHEN.openAction}</button>
+            </div>
+            <div class="envelope__letter" hidden>
+              ${l.body.map(para => `<p>${para}</p>`).join('')}
+            </div>
+          </li>`).join('')}
+      </ul>
+    </div>`,
+
   wordgame: () => `
     <div class="game">
       <p class="game__rules">${GAME.rules.join('<br>')}</p>
@@ -513,12 +533,19 @@ function plate(item, index) {
     </figcaption>
   </figure>`;
 }
+/* Only letters he has actually written exist. An unwritten one is not an
+   empty envelope on the page — it simply is not there yet. */
+const writtenLetters = () => OPEN_WHEN.letters.filter(l => l.body && l.body.length);
+
 const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
 const roman = n => ROMAN[(n - 1) % 12];
 
 /* ══════════════════════════════════════════════════════════════════════════
    READER OVERLAY
    ══════════════════════════════════════════════════════════════════════════ */
+/* The drawer only joins the book once there is something in it. */
+const ORDER = PAGE_ORDER.filter(k => k !== 'openwhen' || writtenLetters().length);
+
 const reader = $('#reader');
 let currentPage = null;
 let lastTrigger = null;
@@ -536,9 +563,9 @@ function openPage(key, trigger) {
     `<span class="folio">${meta.folio}</span><h2 class="title">${meta.title}</h2>${ORN_LG}`;
   $('#reader-body').innerHTML = build();
 
-  const i = PAGE_ORDER.indexOf(key);
+  const i = ORDER.indexOf(key);
   $('#reader-prev').disabled = i <= 0;
-  $('#reader-next').disabled = i >= PAGE_ORDER.length - 1;
+  $('#reader-next').disabled = i >= ORDER.length - 1;
 
   /* Opaque before content animates — the index must never show through. */
   reader.dataset.open = 'true';
@@ -597,6 +624,45 @@ function duelTeardown() {
 
 function hydrate(key) {
   duelTeardown();
+  if (key === 'openwhen') {
+    /* A broken seal stays broken, like a real letter. Kept on her device. */
+    const KEY = 'kingdom-open-when';
+    const read = () => {
+      try { return new Set(JSON.parse(localStorage.getItem(KEY)) || []); }
+      catch (e) { return new Set(); }
+    };
+    const opened = read();
+    const remember = k => {
+      opened.add(k);
+      try { localStorage.setItem(KEY, JSON.stringify([...opened])); } catch (e) {}
+    };
+
+    const reveal = (li, animate) => {
+      const letter = li.querySelector('.envelope__letter');
+      const state = li.querySelector('.envelope__state');
+      li.classList.add('envelope--open');
+      li.querySelector('.envelope__open').hidden = true;
+      state.textContent = OPEN_WHEN.opened;
+      state.dataset.state = 'opened';
+      letter.hidden = false;
+      if (animate && !REDUCED && window.gsap) {
+        gsap.fromTo(letter, { opacity: 0, y: -10 },
+          { opacity: 1, y: 0, duration: .7, ease: 'power3.out' });
+      }
+    };
+
+    $$('.envelope').forEach(li => {
+      if (opened.has(li.dataset.key)) reveal(li, false);
+    });
+
+    $$('.envelope__open').forEach(btn => btn.addEventListener('click', () => {
+      const li = btn.closest('.envelope');
+      if (!confirm(OPEN_WHEN.confirm)) return;
+      remember(li.dataset.key);
+      reveal(li, true);
+    }));
+  }
+
   if (key === 'wordgame') {
     const KEY = 'kingdom-wordgame-v1';
     let state = { secret: '', theirs: [], yours: [] };
@@ -1033,12 +1099,12 @@ document.addEventListener('click', e => {
 });
 $('#reader-back').addEventListener('click', closePage);
 $('#reader-prev').addEventListener('click', () => {
-  const i = PAGE_ORDER.indexOf(currentPage);
-  if (i > 0) openPage(PAGE_ORDER[i - 1], lastTrigger);
+  const i = ORDER.indexOf(currentPage);
+  if (i > 0) openPage(ORDER[i - 1], lastTrigger);
 });
 $('#reader-next').addEventListener('click', () => {
-  const i = PAGE_ORDER.indexOf(currentPage);
-  if (i < PAGE_ORDER.length - 1) openPage(PAGE_ORDER[i + 1], lastTrigger);
+  const i = ORDER.indexOf(currentPage);
+  if (i < ORDER.length - 1) openPage(ORDER[i + 1], lastTrigger);
 });
 
 document.addEventListener('keydown', e => {
@@ -1165,7 +1231,7 @@ const aurora = (() => {
 $('#cover-star')?.addEventListener('click', () => aurora.show());
 
 /* ══════════════════════════════════════════════════════════════════════════
-   DAYS OF US — the due-date stamp on the cover. Day 1 = 01·08·2026.
+   DAYS OF US — the due-date stamp on the cover. Day 1 is DAYS.anchor.
    ══════════════════════════════════════════════════════════════════════════ */
 {
   const el = $('#days');
@@ -1193,52 +1259,107 @@ $('#cover-star')?.addEventListener('click', () => aurora.show());
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   THE PIGEON POST — his latest note, fetched from its own ntfy topic.
-   ntfy.sh only caches ~12h of messages, so once a note has been seen it is
-   also kept in this browser and shown until a newer one arrives.
+   THE PIGEON POST — his notes, fetched from their own ntfy topic.
+   ntfy holds a note for about twelve hours, so once her browser has seen
+   one it keeps it: the newest sits on the desk and the ones before it fold
+   away underneath. The collection is hers, on her own device.
    ══════════════════════════════════════════════════════════════════════════ */
 {
-  const KEY = 'kingdom-pigeon-last';
+  const KEY = 'kingdom-pigeon-notes';
+  const OLD_KEY = 'kingdom-pigeon-last';   /* what the single-note version kept */
   const box = $('#pigeon');
+  const moreBtn = $('#pigeon-more');
+  const earlier = $('#pigeon-earlier');
 
-  const show = note => {
-    if (!note || !note.text) return;
-    $('#pigeon-eyebrow').textContent = PIGEON.eyebrow;
-    /* textContent, deliberately: the note travels over the wire. */
-    $('#pigeon-text').textContent = note.text;
-    $('#pigeon-from').textContent = PIGEON.from;
-    const when = new Date(note.time * 1000);
-    const days = Math.floor((Date.now() - when.getTime()) / 86400000);
-    $('#pigeon-when').textContent =
-      days === 0 ? PIGEON.today :
-      days === 1 ? PIGEON.yesterday :
-      when.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
-    box.hidden = false;
+  const load = () => {
+    try {
+      const kept = JSON.parse(localStorage.getItem(KEY));
+      if (Array.isArray(kept)) return kept;
+      const one = JSON.parse(localStorage.getItem(OLD_KEY));   /* carry the old one over */
+      return one && one.text ? [one] : [];
+    } catch (e) { return []; }
+  };
+  const save = ns => {
+    try { localStorage.setItem(KEY, JSON.stringify(ns.slice(0, PIGEON.keep))); } catch (e) {}
   };
 
-  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
-  const save = n => { try { localStorage.setItem(KEY, JSON.stringify(n)); } catch (e) {} };
+  const when = time => {
+    const d = new Date(time * 1000);
+    const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    return days === 0 ? PIGEON.today
+         : days === 1 ? PIGEON.yesterday
+         : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+  };
 
-  show(load());
+  let notes = load();
+
+  const paint = () => {
+    if (!notes.length) return;
+    const [latest, ...rest] = notes;
+    $('#pigeon-eyebrow').textContent = PIGEON.eyebrow;
+    /* textContent, deliberately: the note travels over the wire. */
+    $('#pigeon-text').textContent = latest.text;
+    $('#pigeon-from').textContent = PIGEON.from;
+    $('#pigeon-when').textContent = when(latest.time);
+    box.hidden = false;
+
+    earlier.replaceChildren(...rest.map(n => {
+      const li = document.createElement('li');
+      const p = document.createElement('p');
+      p.className = 'hand';
+      p.textContent = n.text;
+      const t = document.createElement('span');
+      t.className = 'pigeon__when';
+      t.textContent = when(n.time);
+      li.append(p, t);
+      return li;
+    }));
+
+    moreBtn.hidden = rest.length === 0;
+    if (!rest.length) {
+      earlier.hidden = true;
+      moreBtn.setAttribute('aria-expanded', 'false');
+    } else if (moreBtn.getAttribute('aria-expanded') !== 'true') {
+      moreBtn.textContent = rest.length === 1 ? PIGEON.earlierOne : PIGEON.earlierMany;
+    }
+  };
+  paint();
+
+  moreBtn.addEventListener('click', () => {
+    const open = moreBtn.getAttribute('aria-expanded') === 'true';
+    moreBtn.setAttribute('aria-expanded', String(!open));
+    earlier.hidden = open;
+    const count = Math.max(0, notes.length - 1);
+    moreBtn.textContent = open
+      ? (count === 1 ? PIGEON.earlierOne : PIGEON.earlierMany)
+      : PIGEON.earlierHide;
+  });
 
   const poll = async () => {
     try {
       const res = await fetch(`${PIGEON.server}/${PIGEON.topic}/json?poll=1`);
       if (!res.ok) return;
-      const lines = (await res.text()).trim().split('\n').filter(Boolean);
-      let latest = null;
-      for (const line of lines) {
+      const seen = new Set(notes.map(n => n.time + '|' + n.text));
+      let added = false;
+      for (const line of (await res.text()).trim().split('\n')) {
+        if (!line) continue;
         try {
           const ev = JSON.parse(line);
-          if (ev.event === 'message' && ev.message &&
-              (!latest || ev.time > latest.time)) {
-            latest = { text: String(ev.message).slice(0, 500), time: ev.time };
-          }
-        } catch (e) { /* skip malformed line */ }
+          if (ev.event !== 'message' || !ev.message) continue;
+          const note = { text: String(ev.message).slice(0, 500), time: ev.time };
+          const id = note.time + '|' + note.text;
+          if (seen.has(id)) continue;
+          seen.add(id);
+          notes.push(note);
+          added = true;
+        } catch (e) { /* skip a malformed line */ }
       }
-      const held = load();
-      if (latest && (!held || latest.time > held.time)) { save(latest); show(latest); }
-    } catch (e) { /* offline - the held note stays up */ }
+      if (!added) return;
+      notes.sort((a, b) => b.time - a.time);
+      notes = notes.slice(0, PIGEON.keep);
+      save(notes);
+      paint();
+    } catch (e) { /* offline — the notes she already has stay on the desk */ }
   };
   poll();
   setInterval(poll, PIGEON.pollMinutes * 60000);

@@ -367,6 +367,35 @@ export const GAME = {
 
 
 
+
+/* ── OPEN WHEN ───────────────────────────────────────────────────────────
+   A drawer of sealed letters. She breaks a seal when the moment on the
+   envelope arrives, and a broken seal stays broken — like a real letter.
+
+   THE WORDS HERE ARE BILAL'S TO WRITE. `body` is an array of paragraphs
+   and is deliberately empty. An envelope with an empty body does not
+   render at all, and while every body is empty the whole page stays out of
+   the book — so she never sees an empty drawer. Fill one in and it appears.
+   Do not invent these; they are the most personal thing on the site.
+
+   The `when` lines are structural labels rather than his voice, so they are
+   provisional and can be changed freely. */
+export const OPEN_WHEN = {
+  intro: 'Some of these are for a day that has not happened yet. Break the seal when it does.',
+  sealed: 'Sealed',
+  opened: 'Opened',
+  openAction: 'Break the seal',
+  confirm: 'Once a seal is broken it stays broken. Open this one now?',
+  letters: [
+    { key: 'miss',    when: 'when you miss me',                body: [] },
+    { key: 'doubt',   when: 'when you are doubting your work', body: [] },
+    { key: 'bad-day', when: 'when the day has been unkind',    body: [] },
+    { key: 'sleep',   when: 'when you cannot sleep',           body: [] },
+    { key: 'angry',   when: 'when you are angry with me',      body: [] },
+    { key: 'proud',   when: 'when something wonderful happens', body: [] },
+  ],
+};
+
 /* ── THE NORTHERN LIGHTS ─────────────────────────────────────────────────
    Her favourite thing in the world, so they are never on demand and never
    on a schedule she could learn. They drift across the page rarely, at a
@@ -420,6 +449,12 @@ export const PIGEON = {
   from: '\u2014 Bilal',
   today: 'today', yesterday: 'yesterday',
   pollMinutes: 5,
+  /* ntfy only holds a note for about twelve hours, so once her browser has
+     seen one it keeps it. These are the ones she has kept. */
+  keep: 12,
+  earlierOne: 'one note before this',
+  earlierMany: 'the notes before this',
+  earlierHide: 'put them away',
 };
 
 /* ── DAYS OF US ──────────────────────────────────────────────────────────
@@ -471,8 +506,8 @@ export const BELL = {
 /* ── PAGE ORDER (drives Prev/Next) ───────────────────────────────────────── */
 export const PAGE_ORDER = [
   'letter', 'archive', 'map', 'constellation', 'fireheart',
-  'library', 'marginalia', 'soundtrack', 'little', 'notes', 'wordgame',
-  'epilogue',
+  'library', 'marginalia', 'soundtrack', 'little', 'notes', 'openwhen',
+  'wordgame', 'epilogue',
 ];
 
 export const PAGE_META = {
@@ -486,6 +521,7 @@ export const PAGE_META = {
   soundtrack:    { folio: 'Our Soundtrack',   title: 'Songs That Found Us' },
   little:        { folio: 'The Little Things',title: 'Sara, in bits and pieces' },
   notes:         { folio: 'Notes From Me',    title: 'Things I Never Want to Forget' },
+  openwhen:      { folio: 'The Drawer',      title: 'Open When' },
   wordgame:      { folio: 'The Parlour',     title: 'The Word Game' },
   epilogue:      { folio: 'The End For Now',  title: 'But Not Really' },
 };

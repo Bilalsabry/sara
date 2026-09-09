@@ -214,8 +214,18 @@ Check the *recording's* licence, not just the composer's death date.
   To call them up deliberately — to show her the first time — click the small
   star under *Open the Book* on the cover. Deliberately undocumented on the
   page itself.
+- **Open When.** A drawer of sealed letters (The Drawer, between Notes and the
+  Word Game). She breaks a wax seal when the moment on the envelope arrives,
+  and it stays broken, on her device, like a real letter. **The words are
+  Bilal's to write** — `OPEN_WHEN.letters` in `content.js` holds a `body`
+  array of paragraphs per envelope, deliberately empty. An envelope with an
+  empty body does not render, and while every one is empty the page stays out
+  of the book entirely, so she never meets an empty drawer. Add paragraphs to
+  one and it appears, in the drawer and in the colophon.
 - **The Pigeon Post.** Bilal can leave a note that appears on the site as a
-  taped paper note under the chapter index. Send it by POSTing text to
+  taped paper note under the chapter index. She keeps the last `PIGEON.keep`
+  notes on her own device — the newest is on the desk, earlier ones fold away
+  beneath it. Send it by POSTing text to
   `https://ntfy.sh/<PIGEON.topic>` (topic in `content.js`) — easiest is an
   iPhone Shortcut: Shortcuts app → + → add action **Get Contents of URL** →
   URL `https://ntfy.sh/<topic>`, Method POST, Request Body: Text → tap the

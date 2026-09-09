@@ -824,6 +824,63 @@ body::before {
 .little__cell svg { color: var(--graphite); opacity: .8; }
 .little__cell p { font-size: .9rem; line-height: 1.58; color: var(--graphite); text-wrap: pretty; }
 
+/* ── OPEN WHEN — a drawer of sealed letters ──────────────────────────────── */
+.drawer { max-width: 880px; margin: 0 auto; }
+.drawer__intro {
+  text-align: center; font-style: italic; color: var(--graphite);
+  max-width: 46ch; margin: 0 auto clamp(2rem, 5vh, 3rem);
+}
+.drawer__letters {
+  list-style: none;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1.2rem, 3vw, 2rem);
+}
+.envelope { display: flex; flex-direction: column; }
+.envelope__face {
+  position: relative;
+  background: var(--paper-deep);
+  box-shadow: var(--shadow-paper);
+  padding: 2rem 1.6rem 1.5rem;
+  display: flex; flex-direction: column; align-items: center; gap: .9rem;
+  text-align: center;
+  /* the flap */
+  background-image: linear-gradient(160deg, rgba(35,38,31,.05) 0 50%, transparent 50%),
+                    linear-gradient(200deg, rgba(35,38,31,.05) 0 50%, transparent 50%);
+  background-size: 50% 42%, 50% 42%;
+  background-position: left top, right top;
+  background-repeat: no-repeat;
+}
+.envelope__when {
+  font-family: var(--display); font-size: 1.06rem; letter-spacing: .04em;
+  color: var(--ink); text-wrap: balance;
+}
+.envelope__seal { display: block; line-height: 0; transition: transform .5s var(--ease); }
+.envelope--open .envelope__seal { transform: rotate(-8deg) scale(.9); opacity: .55; }
+.envelope__state {
+  font-family: var(--sans); font-size: .56rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+.envelope__state[data-state='opened'] { color: var(--brass); }
+.envelope__open {
+  cursor: pointer; min-height: 44px;
+  font-family: var(--sans); font-size: .62rem; letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--paper); background: var(--forest);
+  padding: .6rem 1.2rem;
+  transition: background .3s var(--ease);
+}
+.envelope__open:hover { background: var(--ink); }
+.envelope__open[hidden] { display: none; }
+.envelope__letter {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: none;
+  padding: 1.5rem 1.6rem;
+}
+.envelope__letter[hidden] { display: none; }
+.envelope__letter p { margin-bottom: 1em; text-wrap: pretty; }
+.envelope__letter p:last-child { margin-bottom: 0; }
+
 /* ── THE WORD GAME ───────────────────────────────────────────────────────── */
 .game { max-width: 880px; margin: 0 auto; }
 .game__rules {
@@ -1092,6 +1149,32 @@ body::before {
   font-family: var(--sans); font-size: .6rem; letter-spacing: .16em;
   text-transform: uppercase; color: var(--graphite-lt);
 }
+.pigeon { flex-direction: column; align-items: center; gap: .9rem; }
+.pigeon__more {
+  cursor: pointer; min-height: 40px;
+  font-family: var(--sans); font-size: .6rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--graphite-lt);
+  border-bottom: 1px solid var(--rule); padding: .35rem .2rem;
+  transition: color .3s var(--ease), border-color .3s var(--ease);
+}
+.pigeon__more:hover { color: var(--forest); border-bottom-color: var(--brass); }
+.pigeon__more[hidden] { display: none; }
+.pigeon__earlier {
+  list-style: none; max-width: 420px; width: 100%;
+  display: flex; flex-direction: column; gap: .7rem;
+}
+.pigeon__earlier[hidden] { display: none; }
+.pigeon__earlier li {
+  background: var(--paper); border: 1px solid var(--rule);
+  padding: .9rem 1.1rem;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+}
+.pigeon__earlier .hand { font-size: 1.24rem; color: var(--graphite); }
+.pigeon__when {
+  flex-shrink: 0;
+  font-family: var(--sans); font-size: .55rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
 
 /* ══════════════════════════════════════════════════════════════════════════
    THE BELL — mirrors the sound chip at the opposite corner
@@ -1204,6 +1287,7 @@ body::before {
   .archive__details .plate:nth-child(n) { transform: none !important; }
   .little { grid-template-columns: repeat(2, 1fr); }
   .game__boards { grid-template-columns: 1fr; }
+  .drawer__letters { grid-template-columns: 1fr; }
   .cards { grid-template-columns: 1fr; }
   .map__foot { flex-direction: column; gap: 1.4rem; }
   .map__read { text-align: left; max-width: none; }
