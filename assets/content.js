@@ -368,6 +368,52 @@ export const GAME = {
 
 
 
+
+/* ── THE WISH LIST & THE CALENDAR ────────────────────────────────────────
+   The only two pages both of them write to, so they live in a real store
+   rather than on one device (see api/board.js and assets/board.js).
+   Wording here is functional and provisional — not yet in COPY.md. */
+export const BOARD = {
+  /* who is using this browser; she picks once and it is remembered */
+  askWho: 'Before you add anything — which of you is this?',
+  iAmS: 'I\u2019m Sara', iAmB: 'I\u2019m Bilal',
+  changeWho: 'not you?',
+  offline: 'Saved here for now \u2014 it will sync when the connection returns.',
+  noStore: 'Saved on this device. Once the shared store is connected these appear on both phones.',
+  live: 'Shared with him',
+  liveB: 'Shared with her',
+};
+
+export const WISHES = {
+  intro: 'Things to have, and things to do together. Add anything \u2014 however small, however far off.',
+  placeholder: 'a wish\u2026',
+  kindHave: 'to have', kindDo: 'to do together',
+  add: 'Add it',
+  filterAll: 'Everything', filterHave: 'To have', filterDo: 'To do together',
+  openTitle: 'Still wishing', doneTitle: 'Granted',
+  granted: 'Granted',
+  markDone: 'Mark as granted', markUndone: 'Not yet after all',
+  remove: 'Remove',
+  removeConfirm: 'Take this off the list?',
+  emptyAll: 'Nothing on the list yet. The first one is the hardest.',
+  emptyDone: 'Nothing granted yet.',
+  toCalendar: 'Granted things can go in the calendar as the day they happened.',
+};
+
+export const CALENDAR = {
+  intro: 'The days worth keeping. Add them as they happen, or long afterwards \u2014 the calendar does not mind.',
+  onThisDay: 'On this day',
+  addTitle: 'Add a day',
+  fieldDate: 'When', fieldWhat: 'What happened', fieldNote: 'Anything else',
+  placeholderWhat: 'the day we\u2026',
+  placeholderNote: 'optional \u2014 where you were, what was said, what you ate',
+  add: 'Keep this day',
+  remove: 'Remove',
+  removeConfirm: 'Remove this day from the calendar?',
+  empty: 'No days kept yet. Start with the one you would hate to forget.',
+  countOne: 'day kept', countMany: 'days kept',
+};
+
 /* ── OPEN WHEN ───────────────────────────────────────────────────────────
    A drawer of sealed letters. She breaks a seal when the moment on the
    envelope arrives, and a broken seal stays broken — like a real letter.
@@ -507,7 +553,7 @@ export const BELL = {
 export const PAGE_ORDER = [
   'letter', 'archive', 'map', 'constellation', 'fireheart',
   'library', 'marginalia', 'soundtrack', 'little', 'notes', 'openwhen',
-  'wordgame', 'epilogue',
+  'wishes', 'calendar', 'wordgame', 'epilogue',
 ];
 
 export const PAGE_META = {
@@ -522,6 +568,8 @@ export const PAGE_META = {
   little:        { folio: 'The Little Things',title: 'Sara, in bits and pieces' },
   notes:         { folio: 'Notes From Me',    title: 'Things I Never Want to Forget' },
   openwhen:      { folio: 'The Drawer',      title: 'Open When' },
+  wishes:        { folio: 'The Wish List',   title: 'Things We Want' },
+  calendar:      { folio: 'The Calendar',    title: 'Days Worth Keeping' },
   wordgame:      { folio: 'The Parlour',     title: 'The Word Game' },
   epilogue:      { folio: 'The End For Now',  title: 'But Not Really' },
 };

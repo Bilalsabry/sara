@@ -9,8 +9,8 @@
 import {
   IMAGES, ARCHIVE, COVER, INDEX, LETTER, ARCHIVE_TEXT, MAP_CORNER, MAP_PLACES,
   STARS, FIREHEART, LIBRARY, MARGINALIA, SOUNDTRACK, LITTLE_THINGS, NOTES,
-  GAME, BELL, PIGEON, DAYS, AURORA, OPEN_WHEN, EPILOGUE, FOOTER, PAGE_ORDER,
-  PAGE_META, AUDIO,
+  GAME, BELL, PIGEON, DAYS, AURORA, OPEN_WHEN, BOARD, WISHES, CALENDAR,
+  EPILOGUE, FOOTER, PAGE_ORDER, PAGE_META, AUDIO,
 } from './content.js';
 
 import {
@@ -20,6 +20,8 @@ import {
   paintLetterCard, icon, MARKS, sealSVG, castleSVG, mapGroundSVG,
   auroraPainter,
 } from './art.js';
+
+import * as board from './board.js';
 
 import { shouldPlayOverture, playOverture } from './overture.js';
 
@@ -394,6 +396,54 @@ const PAGES = {
       </ul>
     </div>`,
 
+  wishes: () => `
+    <div class="board" id="wishes">
+      <p class="board__intro">${WISHES.intro}</p>
+      <div class="board__who" id="wish-who" hidden></div>
+      <form class="wish__add" id="wish-add">
+        <input id="wish-text" maxlength="240" autocomplete="off"
+               placeholder="${WISHES.placeholder}" aria-label="${WISHES.placeholder}">
+        <div class="wish__kind" role="radiogroup" aria-label="Kind of wish">
+          <button type="button" class="wish__kind-btn" data-kind="have" aria-pressed="true">${WISHES.kindHave}</button>
+          <button type="button" class="wish__kind-btn" data-kind="do" aria-pressed="false">${WISHES.kindDo}</button>
+        </div>
+        <button type="submit" class="board__btn">${WISHES.add}</button>
+      </form>
+      <div class="board__filters" role="group" aria-label="Show">
+        <button type="button" class="board__filter" data-filter="all" aria-pressed="true">${WISHES.filterAll}</button>
+        <button type="button" class="board__filter" data-filter="have" aria-pressed="false">${WISHES.filterHave}</button>
+        <button type="button" class="board__filter" data-filter="do" aria-pressed="false">${WISHES.filterDo}</button>
+      </div>
+      <div id="wish-lists" aria-live="polite"></div>
+      <p class="board__state" id="wish-state"></p>
+    </div>`,
+
+  calendar: () => `
+    <div class="board" id="calendar">
+      <p class="board__intro">${CALENDAR.intro}</p>
+      <div class="board__who" id="cal-who" hidden></div>
+      <div class="cal__today" id="cal-today" hidden></div>
+      <form class="cal__add" id="cal-add">
+        <div class="cal__row">
+          <label class="board__label" for="cal-date">${CALENDAR.fieldDate}</label>
+          <input type="date" id="cal-date" required>
+        </div>
+        <div class="cal__row cal__row--wide">
+          <label class="board__label" for="cal-what">${CALENDAR.fieldWhat}</label>
+          <input id="cal-what" maxlength="160" autocomplete="off" required
+                 placeholder="${CALENDAR.placeholderWhat}">
+        </div>
+        <div class="cal__row cal__row--wide">
+          <label class="board__label" for="cal-note">${CALENDAR.fieldNote}</label>
+          <textarea id="cal-note" maxlength="600" rows="2"
+                    placeholder="${CALENDAR.placeholderNote}"></textarea>
+        </div>
+        <button type="submit" class="board__btn">${CALENDAR.add}</button>
+      </form>
+      <div id="cal-list" aria-live="polite"></div>
+      <p class="board__state" id="cal-state"></p>
+    </div>`,
+
   wordgame: () => `
     <div class="game">
       <p class="game__rules">${GAME.rules.join('<br>')}</p>
@@ -616,14 +666,229 @@ function lockBackground(on) {
 }
 
 /* ── PER-PAGE WIRING ─────────────────────────────────────────────────────── */
-/* The duel holds a live SSE connection; it must not outlive the page. */
+/* The duel holds a live SSE connection, and the shared pages hold a store
+   subscription; neither must outlive the page that opened it. */
 let duelES = null;
+let readerUnsub = null;
 function duelTeardown() {
   if (duelES) { duelES.close(); duelES = null; }
+  if (readerUnsub) { readerUnsub(); readerUnsub = null; }
 }
 
 function hydrate(key) {
   duelTeardown();
+  if (key === 'wishes' || key === 'calendar') {
+    /* Both pages share a store, a "who is this" and a status line. */
+    const WHO = 'kingdom-board-who';
+    const getWho = () => { try { return localStorage.getItem(WHO) || ''; } catch (e) { return ''; } };
+    const setWho = v => { try { localStorage.setItem(WHO, v); } catch (e) {} };
+
+    const whoBox = $(key === 'wishes' ? '#wish-who' : '#cal-who');
+    const stateLine = $(key === 'wishes' ? '#wish-state' : '#cal-state');
+
+    const paintWho = () => {
+      const me = getWho();
+      whoBox.hidden = false;
+      whoBox.innerHTML = me
+        ? `<span class="board__mine">${me === 'S' ? BOARD.iAmS : BOARD.iAmB}</span>` +
+          `<button type="button" class="board__link" data-who="">${BOARD.changeWho}</button>`
+        : `<span>${BOARD.askWho}</span>` +
+          `<button type="button" class="board__btn board__btn--quiet" data-who="S">${BOARD.iAmS}</button>` +
+          `<button type="button" class="board__btn board__btn--quiet" data-who="B">${BOARD.iAmB}</button>`;
+    };
+    whoBox.addEventListener('click', e => {
+      const btn = e.target.closest('[data-who]');
+      if (!btn) return;
+      setWho(btn.dataset.who);
+      paintWho();
+    });
+    paintWho();
+
+    const paintState = mode => {
+      stateLine.textContent =
+        mode === 'live' ? (getWho() === 'B' ? BOARD.liveB : BOARD.live)
+        : mode === 'nostore' ? BOARD.noStore
+        : mode === 'local' ? BOARD.offline
+        : '';
+      stateLine.dataset.mode = mode;
+    };
+
+    const esc = v => String(v == null ? '' : v)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    /* ── the wish list ─────────────────────────────────────────────────── */
+    if (key === 'wishes') {
+      let filter = 'all';
+      let kind = 'have';
+
+      const lists = $('#wish-lists');
+
+      const item = w => `
+        <li class="wish${w.done ? ' wish--done' : ''}" data-id="${w.id}">
+          <button type="button" class="wish__tick" aria-pressed="${!!w.done}"
+                  aria-label="${w.done ? WISHES.markUndone : WISHES.markDone}"></button>
+          <span class="wish__body">
+            <span class="wish__text">${esc(w.text)}</span>
+            <span class="wish__meta">${w.kind === 'do' ? WISHES.kindDo : WISHES.kindHave}${
+              w.done ? ` \u00b7 ${WISHES.granted} ${new Date(w.done).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}` : ''
+            }${w.by ? ` \u00b7 ${w.by}` : ''}</span>
+          </span>
+          <button type="button" class="wish__remove board__link" data-act="remove">${WISHES.remove}</button>
+        </li>`;
+
+      const paint = (data, mode) => {
+        const all = data.wishes.filter(w => filter === 'all' || w.kind === filter);
+        const open = all.filter(w => !w.done);
+        const done = all.filter(w => w.done);
+        lists.innerHTML =
+          `<section class="wish__group">
+             <h3 class="board__group-title">${WISHES.openTitle}</h3>
+             ${open.length ? `<ul class="wish__list">${open.map(item).join('')}</ul>`
+                           : `<p class="board__empty">${WISHES.emptyAll}</p>`}
+           </section>` +
+          (done.length ? `<section class="wish__group">
+             <h3 class="board__group-title">${WISHES.doneTitle}</h3>
+             <ul class="wish__list">${done.map(item).join('')}</ul>
+             <p class="board__hint">${WISHES.toCalendar}</p>
+           </section>` : '');
+        paintState(mode);
+      };
+
+      $$('.wish__kind-btn').forEach(b => b.addEventListener('click', () => {
+        kind = b.dataset.kind;
+        $$('.wish__kind-btn').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      }));
+      $$('.board__filter').forEach(b => b.addEventListener('click', () => {
+        filter = b.dataset.filter;
+        $$('.board__filter').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        paint(board.snapshot(), board.status());
+      }));
+
+      $('#wish-add').addEventListener('submit', e => {
+        e.preventDefault();
+        const input = $('#wish-text');
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        const local = {
+          id: 'tmp-' + Date.now().toString(36), text, kind,
+          by: getWho(), at: Date.now(), done: null,
+        };
+        board.change({ op: 'add-wish', text, kind, by: getWho() },
+          st => st.wishes.unshift(local));
+      });
+
+      lists.addEventListener('click', e => {
+        const li = e.target.closest('.wish');
+        if (!li) return;
+        const id = li.dataset.id;
+        if (e.target.closest('[data-act="remove"]')) {
+          if (!confirm(WISHES.removeConfirm)) return;
+          return board.change({ op: 'remove-wish', id },
+            st => { st.wishes = st.wishes.filter(w => w.id !== id); });
+        }
+        if (e.target.closest('.wish__tick')) {
+          return board.change({ op: 'toggle-wish', id }, st => {
+            const w = st.wishes.find(x => x.id === id);
+            if (w) w.done = w.done ? null : Date.now();
+          });
+        }
+      });
+
+      readerUnsub = board.subscribe(paint);
+      board.refresh();
+    }
+
+    /* ── the calendar ──────────────────────────────────────────────────── */
+    if (key === 'calendar') {
+      const list = $('#cal-list');
+      const todayBox = $('#cal-today');
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      $('#cal-date').value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
+      const long = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      /* Parsed as local time on purpose: a kept day is the day it says. */
+      const parse = iso => {
+        const [y, m, d] = iso.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      };
+
+      const entry = d => `
+        <li class="cal__entry" data-id="${d.id}">
+          <div class="cal__date">
+            <span class="cal__day">${parse(d.date).getDate()}</span>
+            <span class="cal__mon">${parse(d.date).toLocaleDateString('en-GB', { month: 'short' })}</span>
+          </div>
+          <div class="cal__body">
+            <p class="cal__what">${esc(d.title)}</p>
+            ${d.note ? `<p class="cal__note">${esc(d.note)}</p>` : ''}
+            <span class="cal__meta">${long(parse(d.date))}${d.by ? ` \u00b7 ${d.by}` : ''}</span>
+          </div>
+          <button type="button" class="board__link" data-act="remove">${CALENDAR.remove}</button>
+        </li>`;
+
+      const paint = (data, mode) => {
+        const days = [...data.days].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+        /* On this day: same day and month, any earlier year. */
+        const md = `${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        const anniversaries = days.filter(d => d.date.slice(5) === md && d.date.slice(0, 4) < String(now.getFullYear()));
+        todayBox.hidden = anniversaries.length === 0;
+        if (anniversaries.length) {
+          todayBox.innerHTML = `<span class="board__label">${CALENDAR.onThisDay}</span>` +
+            anniversaries.map(d => {
+              const years = now.getFullYear() - Number(d.date.slice(0, 4));
+              return `<p class="cal__anniv"><em>${years} ${years === 1 ? 'year' : 'years'} ago</em> \u2014 ${esc(d.title)}</p>`;
+            }).join('');
+        }
+
+        if (!days.length) {
+          list.innerHTML = `<p class="board__empty">${CALENDAR.empty}</p>`;
+          return paintState(mode);
+        }
+
+        /* Grouped by year, newest first. */
+        const years = [...new Set(days.map(d => d.date.slice(0, 4)))];
+        list.innerHTML =
+          `<p class="board__count">${days.length} ${days.length === 1 ? CALENDAR.countOne : CALENDAR.countMany}</p>` +
+          years.map(y => `
+            <section class="cal__year">
+              <h3 class="board__group-title">${y}</h3>
+              <ul class="cal__list">${days.filter(d => d.date.startsWith(y)).map(entry).join('')}</ul>
+            </section>`).join('');
+        paintState(mode);
+      };
+
+      $('#cal-add').addEventListener('submit', e => {
+        e.preventDefault();
+        const date = $('#cal-date').value;
+        const title = $('#cal-what').value.trim();
+        const note = $('#cal-note').value.trim();
+        if (!date || !title) return;
+        $('#cal-what').value = ''; $('#cal-note').value = '';
+        const local = {
+          id: 'tmp-' + Date.now().toString(36), date, title, note,
+          by: getWho(), at: Date.now(),
+        };
+        board.change({ op: 'add-day', date, title, note, by: getWho() },
+          st => st.days.push(local));
+      });
+
+      list.addEventListener('click', e => {
+        if (!e.target.closest('[data-act="remove"]')) return;
+        const li = e.target.closest('.cal__entry');
+        if (!li || !confirm(CALENDAR.removeConfirm)) return;
+        const id = li.dataset.id;
+        board.change({ op: 'remove-day', id },
+          st => { st.days = st.days.filter(d => d.id !== id); });
+      });
+
+      readerUnsub = board.subscribe(paint);
+      board.refresh();
+    }
+  }
+
   if (key === 'openwhen') {
     /* A broken seal stays broken, like a real letter. Kept on her device. */
     const KEY = 'kingdom-open-when';
@@ -1469,6 +1734,7 @@ $('#cover-star')?.addEventListener('click', () => aurora.show());
 /* ══════════════════════════════════════════════════════════════════════════
    BOOT
    ══════════════════════════════════════════════════════════════════════════ */
+board.start();
 injectTearDefs();
 renderCover();
 renderContents();

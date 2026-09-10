@@ -214,6 +214,26 @@ Check the *recording's* licence, not just the composer's death date.
   To call them up deliberately — to show her the first time — click the small
   star under *Open the Book* on the cover. Deliberately undocumented on the
   page itself.
+- **The Wish List and The Calendar** are the only two pages both of them
+  write to, so they need storage that is shared and lasts — which localStorage
+  and ntfy cannot do. They talk to `/api/board.js`, a dependency-free
+  serverless function backed by a Vercel-connected Redis store.
+
+  **Setup, once:** Vercel dashboard → the project → **Storage** → **Create
+  Database** → **Upstash Redis** (free tier) → connect it to this project.
+  Vercel injects `KV_REST_API_URL` and `KV_REST_API_TOKEN` itself; the
+  function reads either those or the `UPSTASH_REDIS_REST_*` pair. Redeploy and
+  it is live. No key ever reaches the browser.
+
+  Until that is done nothing breaks: the endpoint answers 503, both pages keep
+  a local copy, and they say *"Saved on this device"* rather than promising a
+  sync that cannot happen. Anything added meanwhile is queued and lands the
+  moment a store is connected. The same queue covers a dropped connection
+  mid-use.
+
+  Like the ntfy topics, the endpoint is as private as the site's URL. The caps
+  in `api/board.js` are there so a stranger who found it could not use it as
+  free storage — they are not what makes it private.
 - **Open When.** A drawer of sealed letters (The Drawer, between Notes and the
   Word Game). She breaks a wax seal when the moment on the envelope arrives,
   and it stays broken, on her device, like a real letter. **The words are

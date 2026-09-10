@@ -824,6 +824,161 @@ body::before {
 .little__cell svg { color: var(--graphite); opacity: .8; }
 .little__cell p { font-size: .9rem; line-height: 1.58; color: var(--graphite); text-wrap: pretty; }
 
+/* ── THE SHARED PAGES — wish list and calendar ───────────────────────────── */
+.board { max-width: 760px; margin: 0 auto; }
+.board__intro {
+  text-align: center; font-style: italic; color: var(--graphite);
+  max-width: 52ch; margin: 0 auto clamp(1.6rem, 4vh, 2.2rem);
+}
+.board__who {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6rem;
+  justify-content: center; margin-bottom: 1.4rem;
+  font-family: var(--sans); font-size: .64rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+.board__who[hidden] { display: none; }
+.board__mine { color: var(--brass); }
+.board__label {
+  font-family: var(--sans); font-size: .58rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+.board__btn {
+  cursor: pointer; min-height: 44px; flex-shrink: 0;
+  font-family: var(--sans); font-size: .62rem; letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--paper); background: var(--forest); padding: .6rem 1.1rem;
+  transition: background .3s var(--ease);
+}
+.board__btn:hover { background: var(--ink); }
+.board__btn--quiet {
+  background: none; color: var(--graphite);
+  border: 1px solid var(--rule-strong); padding: .5rem .8rem; min-height: 38px;
+}
+.board__btn--quiet:hover { background: none; color: var(--forest); border-color: var(--forest); }
+.board__link {
+  cursor: pointer; background: none; border: none;
+  font-family: var(--sans); font-size: .58rem; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--graphite-lt);
+  padding: .4rem .2rem; min-height: 36px;
+  transition: color .25s var(--ease);
+}
+.board__link:hover { color: var(--oxblood); }
+.board__filters { display: flex; gap: .5rem; justify-content: center; margin-bottom: 1.4rem; flex-wrap: wrap; }
+.board__filter {
+  cursor: pointer; min-height: 38px;
+  font-family: var(--sans); font-size: .58rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--graphite);
+  padding: .45rem .9rem; border: 1px solid var(--rule-strong);
+  transition: color .3s var(--ease), background .3s var(--ease), border-color .3s var(--ease);
+}
+.board__filter[aria-pressed='true'] { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+.board__group-title {
+  font-family: var(--display); font-weight: 400; font-size: 1.02rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--brass);
+  margin: 1.8rem 0 .8rem;
+}
+.board__empty, .board__hint, .board__count {
+  font-style: italic; color: var(--graphite-lt); font-size: .92rem;
+}
+.board__count { text-align: center; margin-bottom: .6rem; }
+.board__hint { margin-top: .7rem; font-size: .86rem; }
+.board__state {
+  margin-top: 1.6rem; text-align: center;
+  font-family: var(--sans); font-size: .58rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--graphite-lt); min-height: 1.2em;
+}
+.board__state[data-mode='local'] { color: var(--oxblood); }
+/* Not an error, just not connected yet. */
+.board__state[data-mode='nostore'] { color: var(--graphite); text-transform: none; letter-spacing: .02em; font-family: var(--serif); font-style: italic; font-size: .88rem; }
+
+/* inputs shared by both pages */
+.board input[type='text'], .board input:not([type]), .board input[type='date'], .board textarea {
+  font-family: var(--serif); font-size: 1rem; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--rule-strong); border-radius: 0;
+  padding: .58rem .7rem; width: 100%; resize: vertical;
+}
+.board input::placeholder, .board textarea::placeholder { color: var(--graphite-lt); font-style: italic; }
+.board input:focus, .board textarea:focus { outline: 1.5px solid var(--forest); outline-offset: 1px; }
+
+/* ── the wish list ───────────────────────────────────────────────────────── */
+.wish__add {
+  display: flex; flex-wrap: wrap; gap: .6rem; align-items: center;
+  background: var(--paper-deep); box-shadow: var(--shadow-paper);
+  padding: 1rem 1.1rem; margin-bottom: 1.4rem;
+}
+.wish__add > input { flex: 1 1 14rem; }
+.wish__kind { display: flex; gap: .4rem; }
+.wish__kind-btn {
+  cursor: pointer; min-height: 38px;
+  font-family: var(--sans); font-size: .56rem; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--graphite);
+  padding: .4rem .7rem; border: 1px solid var(--rule-strong);
+  transition: color .3s var(--ease), background .3s var(--ease), border-color .3s var(--ease);
+}
+.wish__kind-btn[aria-pressed='true'] { background: var(--brass); color: var(--paper); border-color: var(--brass); }
+.wish__list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+.wish {
+  display: flex; align-items: flex-start; gap: .8rem;
+  background: var(--paper); border: 1px solid var(--rule);
+  padding: .8rem .9rem;
+}
+.wish__tick {
+  flex-shrink: 0; cursor: pointer; margin-top: .1rem;
+  width: 20px; height: 20px; min-height: 20px; padding: 0;
+  border: 1px solid var(--rule-strong); background: var(--paper-deep);
+  transition: background .3s var(--ease), border-color .3s var(--ease);
+}
+.wish__tick[aria-pressed='true'] { background: var(--brass); border-color: var(--brass); }
+.wish__tick[aria-pressed='true']::after {
+  content: ''; display: block; width: 6px; height: 10px;
+  margin: 1px auto 0; border: solid var(--paper);
+  border-width: 0 1.5px 1.5px 0; transform: rotate(42deg);
+}
+.wish__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .25rem; }
+.wish__text { color: var(--ink); overflow-wrap: break-word; }
+.wish--done .wish__text { color: var(--graphite-lt); text-decoration: line-through; text-decoration-thickness: 1px; }
+.wish__meta {
+  font-family: var(--sans); font-size: .55rem; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+
+/* ── the calendar ────────────────────────────────────────────────────────── */
+.cal__today {
+  background: var(--paper-deep); border-left: 2px solid var(--brass);
+  padding: 1rem 1.2rem; margin-bottom: 1.5rem;
+}
+.cal__today[hidden] { display: none; }
+.cal__anniv { margin-top: .4rem; color: var(--ink); }
+.cal__anniv em { color: var(--brass); font-style: italic; }
+.cal__add {
+  background: var(--paper-deep); box-shadow: var(--shadow-paper);
+  padding: 1.1rem 1.2rem; margin-bottom: 1.6rem;
+  display: grid; grid-template-columns: auto 1fr; gap: .7rem 1rem; align-items: center;
+}
+.cal__row { display: contents; }
+.cal__add .board__btn { grid-column: 2; justify-self: start; }
+.cal__list { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+.cal__entry {
+  display: flex; gap: 1rem; align-items: flex-start;
+  background: var(--paper); border: 1px solid var(--rule); padding: .9rem 1rem;
+}
+.cal__date {
+  flex-shrink: 0; width: 3rem; text-align: center;
+  display: flex; flex-direction: column; line-height: 1.1;
+}
+.cal__day { font-family: var(--display); font-size: 1.5rem; color: var(--oxblood); font-variant-numeric: tabular-nums; }
+.cal__mon {
+  font-family: var(--sans); font-size: .54rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+.cal__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
+.cal__what { color: var(--ink); overflow-wrap: break-word; }
+.cal__note { font-size: .94rem; color: var(--graphite); font-style: italic; overflow-wrap: break-word; }
+.cal__meta {
+  font-family: var(--sans); font-size: .54rem; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--graphite-lt);
+}
+
 /* ── OPEN WHEN — a drawer of sealed letters ──────────────────────────────── */
 .drawer { max-width: 880px; margin: 0 auto; }
 .drawer__intro {
@@ -1288,6 +1443,10 @@ body::before {
   .little { grid-template-columns: repeat(2, 1fr); }
   .game__boards { grid-template-columns: 1fr; }
   .drawer__letters { grid-template-columns: 1fr; }
+  .cal__add { grid-template-columns: 1fr; }
+  .cal__add .board__btn { grid-column: 1; }
+  .wish__add { flex-direction: column; align-items: stretch; }
+  .wish__kind { justify-content: center; }
   .cards { grid-template-columns: 1fr; }
   .map__foot { flex-direction: column; gap: 1.4rem; }
   .map__read { text-align: left; max-width: none; }
