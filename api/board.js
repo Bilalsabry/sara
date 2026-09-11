@@ -28,12 +28,41 @@ const LIMITS = {
   body: 16 * 1024,      // a request larger than this is not one of ours
 };
 
+/* The connected integration decides these names, and a custom prefix in the
+   Vercel dialog changes them, so try the known pairs and then fall back to
+   finding any *_REST_API_URL that has a matching *_REST_API_TOKEN beside it.
+   The read-only token is never picked up: it does not end in _REST_API_URL,
+   and the token name is derived from the URL name rather than searched. */
+const KNOWN_PAIRS = [
+  ['KV_REST_API_URL', 'KV_REST_API_TOKEN'],
+  ['UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_REST_TOKEN'],
+  ['STORAGE_REST_API_URL', 'STORAGE_REST_API_TOKEN'],
+];
+
 function store() {
-  const url =
-    process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token =
-    process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  return url && token ? { url: url.replace(/\/$/, ''), token } : null;
+  const take = (u, t) =>
+    process.env[u] && process.env[t]
+      ? { url: process.env[u].replace(/\/$/, ''), token: process.env[t] }
+      : null;
+
+  for (const [u, t] of KNOWN_PAIRS) {
+    const found = take(u, t);
+    if (found) return found;
+  }
+  for (const key of Object.keys(process.env)) {
+    if (!key.endsWith('_REST_API_URL')) continue;
+    const found = take(key, key.replace(/_URL$/, '_TOKEN'));
+    if (found) return found;
+  }
+  return null;
+}
+
+/* Names only — never a value. Enough to see at a glance whether the store is
+   connected and under what prefix, without putting a token in a response. */
+function envNamesSeen() {
+  return Object.keys(process.env)
+    .filter(k => /(_REST_API_|^KV_|^REDIS_|UPSTASH)/.test(k))
+    .sort();
 }
 
 async function read(s, key) {
@@ -157,6 +186,7 @@ module.exports = async function handler(req, res) {
       ok: false,
       reason: 'no-store',
       error: 'No store is connected to this project yet.',
+      looked: envNamesSeen(),
     });
   }
 
