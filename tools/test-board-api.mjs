@@ -53,7 +53,10 @@ let handler = require('/home/user/sara/api/board.js');
 let r = await call(handler, 'GET');
 check('no store -> 503 no-store', r.code === 503 && r.body.reason === 'no-store', JSON.stringify(r.body));
 check('diagnostic lists names only, no values',
-  Array.isArray(r.body.looked) && !JSON.stringify(r.body.looked).includes('secret'));
+  Array.isArray(r.body.looked) && !JSON.stringify(r.body).includes('secret'));
+process.env.VERCEL_ENV = 'production';
+r = await call(handler, 'GET');
+check('diagnostic names the environment', r.body.env === 'production', JSON.stringify(r.body));
 
 /* ── connected, exactly as Vercel named them ─────────────────────────────── */
 process.env.KV_REST_API_URL = 'https://fake.upstash.io';
