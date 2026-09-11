@@ -62,7 +62,11 @@ commit messages, PR titles and anywhere else they would outlive the file.
 
 ## Check it in a browser before pushing
 
-There are no tests. The check is the real page, and it has caught every bug
+`node tools/test-board-api.mjs` covers the one piece a browser cannot reach —
+the serverless function behind the wish list and calendar — against a fake
+Redis, with no network and no Vercel. Run it after touching `api/board.js`.
+
+Everything else has no tests. The check is the real page, and it has caught every bug
 that mattered here — a grain overlay painting a 300×150 rectangle, a
 bookshelf floating off its plank, an aurora that measured as "moving" while
 actually fading out. Screenshots at both widths, every time:
