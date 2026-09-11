@@ -57,12 +57,18 @@ function store() {
   return null;
 }
 
-/* Names only — never a value. Enough to see at a glance whether the store is
-   connected and under what prefix, without putting a token in a response. */
-function envNamesSeen() {
-  return Object.keys(process.env)
-    .filter(k => /(_REST_API_|^KV_|^REDIS_|UPSTASH)/.test(k))
-    .sort();
+/* Shown only when no store is found, and only to say why. Variable NAMES,
+   never a value; the two Vercel fields are public facts about the
+   deployment (which environment, which project) and identify a store that
+   was connected to the wrong one — the failure this is most likely to be. */
+function diagnose() {
+  return {
+    looked: Object.keys(process.env)
+      .filter(k => /(_REST_API_|^KV_|^REDIS_|UPSTASH)/.test(k))
+      .sort(),
+    env: process.env.VERCEL_ENV || null,
+    project: process.env.VERCEL_PROJECT_PRODUCTION_URL || null,
+  };
 }
 
 async function read(s, key) {
@@ -186,7 +192,7 @@ module.exports = async function handler(req, res) {
       ok: false,
       reason: 'no-store',
       error: 'No store is connected to this project yet.',
-      looked: envNamesSeen(),
+      ...diagnose(),
     });
   }
 
