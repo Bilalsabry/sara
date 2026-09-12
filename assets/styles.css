@@ -33,6 +33,9 @@
   --serif:  'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --display:'Cormorant', Georgia, serif;
   --hand:   'Italianno', cursive;
+  /* A long letter needs a hand you can actually read. Italianno is for
+     flourishes; this is for paragraphs. */
+  --script: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
   --sans:   'Inter', system-ui, -apple-system, sans-serif;
 
   /* rhythm */
@@ -548,17 +551,51 @@ body::before {
 }
 
 /* ── I · LETTER ──────────────────────────────────────────────────────────── */
-.letter { display: grid; grid-template-columns: 1fr .88fr; gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
-.letter__col { position: relative; max-width: 46ch; margin: 0 auto; }
-.letter__col p { font-size: 1.02rem; line-height: 1.94; margin-bottom: 1.3em; text-wrap: pretty; }
+/* The letter is long, so the plate sits at the top of it rather than being
+   centred against a sheet three times its height. */
+.letter { display: grid; grid-template-columns: 1.12fr .82fr; gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
+
+/* A real sheet of ruled kraft paper, laid on the page. The rule spacing and
+   the line-height are the same variable, so the writing sits on the lines
+   instead of drifting across them. */
+.letter__col {
+  --rule-step: 2.15rem;
+  position: relative;
+  max-width: 54ch; margin: 0 auto;
+  background-color: #E9DFC9;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--rule-step) - 1px),
+    rgba(35, 38, 31, .13) calc(var(--rule-step) - 1px),
+    rgba(35, 38, 31, .13) var(--rule-step));
+  background-position: 0 .55rem;
+  padding: 2.4rem clamp(1.6rem, 3vw, 2.6rem) 2.8rem;
+  box-shadow: var(--shadow-lift);
+}
+.letter__col p {
+  font-family: var(--script);
+  font-size: 1.52rem;
+  line-height: var(--rule-step);
+  letter-spacing: .004em;
+  color: #1F2A33;                 /* gel-pen blue-black, not printing ink */
+  margin-bottom: var(--rule-step);
+  text-wrap: pretty;
+}
+.letter__salutation p { margin-bottom: calc(var(--rule-step) * .5); }
+.letter__salutation p:last-child { margin-bottom: var(--rule-step); }
 .letter__folio {
-  position: absolute; left: -4.6rem; top: .2rem;
+  position: absolute; left: -4.6rem; top: 2.4rem;
   display: flex; flex-direction: column; gap: .1rem;
   font-family: var(--display); font-size: .8rem; letter-spacing: .14em;
   color: var(--graphite-lt); text-align: center;
 }
-.letter__sign { margin-top: 2rem; }
-.letter__sign span { display: block; font-size: 1.02rem; }
+.letter__sign { margin-top: var(--rule-step); }
+.letter__sign span {
+  display: block;
+  font-family: var(--script); font-size: 1.52rem;
+  line-height: var(--rule-step); color: #1F2A33;
+}
 .letter__initial {
   font-family: var(--hand); font-size: 2.7rem; color: var(--ink);
   line-height: 1; margin-top: .2rem;

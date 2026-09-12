@@ -6,7 +6,12 @@
 
    No dependencies, no network, no Vercel. Exits non-zero on failure. */
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 const require = createRequire(import.meta.url);
+/* Resolved from this file rather than an absolute path, so the test runs
+   wherever the repo is checked out. */
+const API = join(dirname(fileURLToPath(import.meta.url)), '..', 'api', 'board.js');
 
 const REDIS = new Map();
 let failNext = null;
@@ -49,7 +54,7 @@ const check = (name, cond, extra = '') => {
 
 /* ── with no store connected ─────────────────────────────────────────────── */
 delete process.env.KV_REST_API_URL; delete process.env.KV_REST_API_TOKEN;
-let handler = require('/home/user/sara/api/board.js');
+let handler = require(API);
 let r = await call(handler, 'GET');
 check('no store -> 503 no-store', r.code === 503 && r.body.reason === 'no-store', JSON.stringify(r.body));
 check('diagnostic lists names only, no values',

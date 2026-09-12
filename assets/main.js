@@ -199,6 +199,7 @@ const PAGES = {
     <div class="letter">
       <div class="letter__col prose">
         <div class="letter__folio" aria-hidden="true">${LETTER.folioDate.map(d => `<span>${d}</span>`).join('')}</div>
+        <div class="letter__salutation">${LETTER.salutation.map(l => `<p>${l}</p>`).join('')}</div>
         ${LETTER.paragraphs.map(p => `<p>${p}</p>`).join('')}
         <div class="letter__sign">
           ${LETTER.signOff.map(s => `<span>${s}</span>`).join('')}

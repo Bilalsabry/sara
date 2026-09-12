@@ -153,14 +153,16 @@ export const INDEX = [
 /* ── CHAPTER I · THE LETTER ──────────────────────────────────────────────── */
 export const LETTER = {
   folioDate: ['15', '06', '2026'],
+  salutation: ['My Darling Sara,', 'Happy Birthday, Baba ♡'],
   paragraphs: [
-    'If you ever forget, I want you to come here.',
-    'You are the kind of person who notices the little things — the colour of the sky before it rains, the way a song can hold a whole memory, the quiet in people that they don’t know they carry.',
-    'I like who I am when I’m around you. I think more carefully. I notice more. You did that without ever asking me to.',
-    'You have made my world feel less like a battlefield and more like home.',
-    'Thank you for being the steady in my story, the fire in my heart, and the person I am most proud to love.',
+    'I am not one for writing, so this may be a little rough. You deserve far more than a little letter, yet here I am, asking simple words to carry a feeling meant for something far greater than paper.',
+    'There has always been an easy pull toward you. I know you roll your eyes when I claim I always had feelings, but at least this much is true: I loved being in your presence, loved just talking to you, and trying to make you laugh. I was able to trust you before I trusted anyone else. Something deep down reassured me that we were meant to be together, almost like it was out there and we were catching up to it. It was all just fun & games back then, but December genuinely changed my life forever.',
+    'I get goosebumps thinking back to every moment we shared together in December. I had never felt so happy or so certain that I was exactly where I belonged. Your smile makes me feel something I am yet to grasp, and when you laugh, I am a kid again without a worry in the world. Just your voice, nice or angry, gives me butterflies, it took 2 weeks for it to be my favorite sound in the world. The way your eyes light up when you talk about something you love, especially your books, is my favorite sight in the world. I hope you never stop telling me those stories, even when it looks like I’ve lost the thread, because I promise I’m always listening.',
+    'My favorite memories are already consumed by you, and with each passing day they will only become more & more you. Holding your hand in the car, a whole day of just us at the hot springs, and most of all just waking up next to you. God is testament to the fact that there is nothing more I yearn for than being with you.',
+    'I promise to love you the way you love Throne of Glass & to make you feel the way you feel when you’re watching Brother Bear. No accomplishment or ambition will ever eclipse the feeling I get seeing you happy. One day, soon enough, you’ll be a part of my family & eventually my entire world & the thought of that carries me through bad days.',
+    'Happy Birthday my beautiful girl. You are the greatest thing that has ever happened to me. I love you far beyond what ink can hold, but fortunately, I have a lifetime left to show you.',
   ],
-  signOff: ['Always,', 'Yours'],
+  signOff: ['Forever yours,'],
   initial: 'Bilal',
   tapedNote: ['for the one', 'who makes', 'ordinary days', 'extraordinary ♡'],
 };
